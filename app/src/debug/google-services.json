@@ -1,0 +1,99 @@
+{
+  "project_info": {
+    "project_number": "414490802515",
+    "firebase_url": "https://cine-kancha.firebaseio.com",
+    "project_id": "cine-kancha",
+    "storage_bucket": "cine-kancha.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:414490802515:android:bcd66a1ac7f3e85c",
+        "android_client_info": {
+          "package_name": "com.cinekancha"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "414490802515-s6pvaur9ls1fjapk2g0hguh1dcekqq04.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cinekancha",
+            "certificate_hash": "4fbd808bf81a9dd5934eb7a502848d25de40e5cd"
+          }
+        },
+        {
+          "client_id": "414490802515-qognauqe4ookc2c7hajsc143kqlgfhhn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHPjkhkEjex9AfGbh1g-RKG5ravYJ2y98"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "414490802515-qognauqe4ookc2c7hajsc143kqlgfhhn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:414490802515:android:755eb00393299025",
+        "android_client_info": {
+          "package_name": "com.cinekancha.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "414490802515-mlcujsgc0b72u1e73o8fpacjrapdglj4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cinekancha.debug",
+            "certificate_hash": "00fb2efc79026b8433abc9955de705497dbf50da"
+          }
+        },
+        {
+          "client_id": "414490802515-qognauqe4ookc2c7hajsc143kqlgfhhn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHPjkhkEjex9AfGbh1g-RKG5ravYJ2y98"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "414490802515-qognauqe4ookc2c7hajsc143kqlgfhhn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
