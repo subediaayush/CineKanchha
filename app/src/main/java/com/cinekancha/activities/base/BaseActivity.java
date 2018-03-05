@@ -13,14 +13,14 @@ import com.cinekancha.bus.EventBus;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-
-
+import io.reactivex.disposables.CompositeDisposable;
 
 
 public abstract class BaseActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     private Unbinder mUnbinder;
+    protected CompositeDisposable compositeDisposable;
 
     protected abstract int getLayoutId();
 
@@ -29,6 +29,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutId());
         mUnbinder = ButterKnife.bind(this);
+        if (compositeDisposable == null)
+            compositeDisposable = new CompositeDisposable();
 
         if (toolbar != null)
             setSupportActionBar(toolbar);
@@ -69,8 +71,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
 
-
-
     @Override
     protected void onStart() {
         if (isRegisterForEvents())
@@ -79,7 +79,6 @@ public abstract class BaseActivity extends AppCompatActivity {
             EventBus.registerRestObject(this);
         super.onStart();
     }
-
 
 
     @Override
@@ -93,8 +92,17 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        cancelRequest();
+
         if (isButterKnifeUnbind())
             mUnbinder.unbind();
         super.onDestroy();
+    }
+
+    protected void cancelRequest(){
+        //dispose subscriptions
+        if (compositeDisposable != null && !compositeDisposable.isDisposed()) {
+            compositeDisposable.clear();
+        }
     }
 }

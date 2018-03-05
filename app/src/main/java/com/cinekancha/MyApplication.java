@@ -36,7 +36,7 @@ public class MyApplication extends Application {
         if (mFirebaseAnalytics == null)
             mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
-        mFirebaseAnalytics.setAnalyticsCollectionEnabled(false);
+        mFirebaseAnalytics.setAnalyticsCollectionEnabled(true);
         AnalyticsUtil.logAppOpenEvent(getAnalytics());
         Logger.setWriteLog(BuildConfig.DEBUG);
         super.onCreate();
