@@ -7,12 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import butterknife.ButterKnife;
 
 /**
  * Abstract class for easy layout inflate and data binding for list operation adapters
  */
-public abstract class BaseRecyclerAdapter<VH extends BaseRecyclerAdapter.BaseViewHolder> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public abstract class BaseRecyclerAdapter<VH extends BaseViewHolder> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
     private RecyclerViewClickListener onClickListener;
@@ -95,7 +94,13 @@ public abstract class BaseRecyclerAdapter<VH extends BaseRecyclerAdapter.BaseVie
             lastPosition = position;
         }
     }
-
+    
+    public void onClick(View view, int position) {
+        if (onClickListener != null) {
+            onClickListener.onClick(view, position);
+        }
+    }
+    
     /**
      * Interface definition for a callback to be invoked when an item in a
      * RecyclerView has been clicked.
@@ -111,24 +116,5 @@ public abstract class BaseRecyclerAdapter<VH extends BaseRecyclerAdapter.BaseVie
          */
         void onClick(View v, int position);
     }
-
-    public abstract class BaseViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-        public BaseViewHolder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
-            for (int clickViewId : getClickViewIdList()) {
-                view.findViewById(clickViewId).setOnClickListener(this);
-            }
-        }
-
-        @Override
-        public void onClick(View view) {
-            if (onClickListener != null) {
-                onClickListener.onClick(view, getLayoutPosition());
-            }
-        }
-
-        public abstract int[] getClickViewIdList();
-    }
+    
 }

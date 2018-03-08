@@ -1,6 +1,7 @@
 package com.cinekancha.entities.rest;
 
 import com.cinekancha.BuildConfig;
+import com.cinekancha.entities.model.HomeData;
 import com.cinekancha.entities.model.Movie;
 
 import java.util.concurrent.TimeUnit;
@@ -64,6 +65,13 @@ public class RestAPI {
 
     public Observable<Movie> getMovie() {
         return getApiService().getMovie()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .retry(1);
+    }
+    
+    public Observable<HomeData> getHomeData() {
+        return getApiService().getHomeData()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .retry(1);

@@ -1,5 +1,6 @@
 package com.cinekancha.entities.rest;
 
+import com.cinekancha.entities.model.HomeData;
 import com.cinekancha.entities.model.Movie;
 
 import io.reactivex.Observable;
@@ -12,4 +13,7 @@ import retrofit2.http.GET;
 public interface ApiService {
     @GET("bins/rt8nt")
     Observable<Movie> getMovie();
+    
+    @GET("api/home")
+    Observable<HomeData> getHomeData();
 }
