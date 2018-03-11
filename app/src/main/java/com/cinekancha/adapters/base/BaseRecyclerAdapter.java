@@ -57,10 +57,45 @@ public abstract class BaseRecyclerAdapter<VH extends BaseViewHolder> extends Rec
             case 5:
                 setViewOfTypeFive(baseHolder, position);
                 break;
+            case 6:
+                setViewOfTypeSix(baseHolder, position);
+                break;
+            case 7:
+                setViewOfTypeSeven(baseHolder, position);
+                break;
+            case 8:
+                setViewOfTypeEight(baseHolder, position);
+                break;
+            case 9:
+                setViewOfTypeNine(baseHolder, position);
+                break;
+    
+            case 10:
+                setViewOfTypeTen(baseHolder, position);
+                break;
         }
-
     }
-
+    
+    private void setViewOfTypeNine(BaseViewHolder baseHolder, int position) {
+        setViewOfTypeZero(baseHolder, position);
+    }
+    
+    private void setViewOfTypeTen(BaseViewHolder baseHolder, int position) {
+        setViewOfTypeZero(baseHolder, position);
+    }
+    
+    protected void setViewOfTypeEight(BaseViewHolder baseHolder, int position) {
+        setViewOfTypeZero(baseHolder, position);
+    }
+    
+    protected void setViewOfTypeSeven(BaseViewHolder baseHolder, int position) {
+        setViewOfTypeZero(baseHolder, position);
+    }
+    
+    protected void setViewOfTypeSix(BaseViewHolder baseHolder, int position) {
+        setViewOfTypeZero(baseHolder, position);
+    }
+    
     protected void setViewOfTypeFive(BaseViewHolder baseHolder, int position) {
         setViewOfTypeZero(baseHolder, position);
     }

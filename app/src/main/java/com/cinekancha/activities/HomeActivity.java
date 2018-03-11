@@ -1,5 +1,6 @@
 package com.cinekancha.activities;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,7 +9,7 @@ import android.widget.Toast;
 
 import com.cinekancha.R;
 import com.cinekancha.activities.base.BaseNavigationActivity;
-import com.cinekancha.adapters.HomeDataAdapter;
+import com.cinekancha.home.HomeDataAdapter;
 import com.cinekancha.entities.model.HomeData;
 import com.cinekancha.entities.rest.RestAPI;
 import com.cinekancha.view.CineHomeViewModel;
@@ -33,6 +34,8 @@ public class HomeActivity extends BaseNavigationActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        mCineHomeViewModel = ViewModelProviders.of(this).get(CineHomeViewModel.class);
         
         mAdapter = new HomeDataAdapter();
         

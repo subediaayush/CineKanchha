@@ -34,4 +34,40 @@ public class HomeData {
 		
 		return count;
 	}
+	
+	public List<FeaturedItem> getFeaturedItems() {
+		return featuredItems;
+	}
+	
+	public List<Movie> getNewReleases() {
+		return newReleases;
+	}
+	
+	public List<Movie> getUpcomingMovies() {
+		return upcomingMovies;
+	}
+	
+	public NewsItem getFeaturedArticle() {
+		return featuredArticle;
+	}
+	
+	public List<NewsItem> getTopArticles() {
+		return topArticles;
+	}
+	
+	public Poll getFeaturedPoll() {
+		return featuredPoll;
+	}
+	
+	public Trivia getFeaturedTrivia() {
+		return featuredTrivia;
+	}
+	
+	public List<Troll> getFeaturedTrolls() {
+		return featuredTrolls;
+	}
+	
+	public List<Movie> getMovies() {
+		return movies;
+	}
 }
