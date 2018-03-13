@@ -12,7 +12,6 @@ import java.util.List;
 
 import static com.cinekancha.home.HomeDataWrapper.FEATURED_ARTICLE;
 import static com.cinekancha.home.HomeDataWrapper.FEATURED_ARTICLE_HIGHLIGHTED;
-import static com.cinekancha.home.HomeDataWrapper.FEATURED_ITEMS;
 import static com.cinekancha.home.HomeDataWrapper.FEATURED_MOVIE;
 import static com.cinekancha.home.HomeDataWrapper.FEATURED_POLL;
 import static com.cinekancha.home.HomeDataWrapper.FEATURED_TRIVIA;
@@ -30,9 +29,6 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
 	@Override
 	public HomeItemHolder onCreateView(int viewType, View view) {
 		switch (viewType) {
-			case FEATURED_ITEMS: {
-				return new FeaturedItemHolder(this, view);
-			}
 			case NEW_MOVIES: {
 				return new NewReleaseHolder(this, view);
 			}
@@ -73,7 +69,6 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
 	public int[] getLayoutsForViewType() {
 		return new int[]{
 				R.layout.layout_home_header,
-				R.layout.layout_featured_items,
 				R.layout.layout_featured_movies,
 				R.layout.layout_featured_movies,
 				R.layout.layout_article_top,

@@ -34,7 +34,6 @@ public class HomeDataWrapper {
 	public static HomeDataWrapper wrap(HomeData data) {
 		HomeDataWrapper wrapper = new HomeDataWrapper();
 		
-		wrapper.add(data.getFeaturedItems(), FEATURED_ITEMS);
 		wrapper.add("New Releases", HEADERS);
 		wrapper.add(data.getNewReleases(), NEW_MOVIES);
 		wrapper.add("Upcoming Releases", HEADERS);
