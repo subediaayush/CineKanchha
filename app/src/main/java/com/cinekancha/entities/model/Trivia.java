@@ -5,4 +5,8 @@ package com.cinekancha.entities.model;
  */
 
 public class Trivia {
+	String trivia;
+	public String getTrivia() {
+		return trivia;
+	}
 }

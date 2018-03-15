@@ -1,7 +1,7 @@
 package com.cinekancha.home;
 
+import android.support.v7.widget.AppCompatImageView;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cinekancha.R;
@@ -16,7 +16,7 @@ import butterknife.BindView;
 public class FeaturedMoviesHolder extends HomeItemHolder {
 	
 	@BindView(R.id.image)
-	public ImageView image;
+	public AppCompatImageView image;
 	
 	@BindView(R.id.title)
 	public TextView title;

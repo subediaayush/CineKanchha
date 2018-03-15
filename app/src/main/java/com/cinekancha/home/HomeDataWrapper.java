@@ -17,15 +17,15 @@ import java.util.List;
 
 public class HomeDataWrapper {
 	
-	public static final int FEATURED_ITEMS = 1;
-	public static final int NEW_MOVIES = 2;
-	public static final int UPCOMING_MOVIES = 3;
-	public static final int FEATURED_ARTICLE_HIGHLIGHTED = 4;
-	public static final int FEATURED_ARTICLE = 5;
-	public static final int FEATURED_POLL = 6;
-	public static final int FEATURED_TRIVIA = 7;
-	public static final int FEATURED_TROLL = 8;
-	public static final int FEATURED_MOVIE = 9;
+	public static final int NEW_MOVIES = 1;
+	public static final int UPCOMING_MOVIES = 2;
+	public static final int FEATURED_ARTICLE_HIGHLIGHTED = 3;
+	public static final int FEATURED_ARTICLE = 4;
+	public static final int FEATURED_POLL = 5;
+	public static final int FEATURED_TRIVIA = 6;
+	public static final int FEATURED_TROLL = 7;
+	public static final int FEATURED_MOVIE = 8;
+	public static final int FEATURED_ITEMS = 9;
 	public static final int HEADERS = 0;
 	
 	List<Object> items = new ArrayList<>();
@@ -93,6 +93,10 @@ public class HomeDataWrapper {
 		
 		add(movie, FEATURED_MOVIE);
 		return initialSize;
+	}
+	
+	public <T> T getItem(int position) {
+		return (T) items.get(position);
 	}
 	
 	public int addMovies(List<Movie> movies) {

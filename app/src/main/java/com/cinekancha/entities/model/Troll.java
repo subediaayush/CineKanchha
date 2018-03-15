@@ -5,4 +5,9 @@ package com.cinekancha.entities.model;
  */
 
 public class Troll {
+	private String image;
+	
+	public String getImage() {
+		return image;
+	}
 }
