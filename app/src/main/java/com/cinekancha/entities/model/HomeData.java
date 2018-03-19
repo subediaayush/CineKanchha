@@ -13,12 +13,12 @@ public class HomeData {
 	private List<FeaturedItem> featuredItems = new ArrayList<>();
 	private List<Movie> newReleases = new ArrayList<>();
 	private List<Movie> upcomingMovies = new ArrayList<>();
-	private NewsItem featuredArticle;
-	private List<NewsItem> topArticles = new ArrayList<>();
+	private Article featuredArticle;
+	private List<Article> topArticles = new ArrayList<>();
 	private Poll featuredPoll;
 	private Trivia featuredTrivia;
 	private List<Troll> featuredTrolls;
-	private List<Movie> movies = new ArrayList<>();
+	private List<Movie> featuredMovies = new ArrayList<>();
 	
 	public int getItemCount(){
 		int count = 0;
@@ -30,7 +30,7 @@ public class HomeData {
 		if (featuredPoll != null) count += 1;
 		if (featuredTrivia != null) count += 1;
 		if (!ListUtils.isEmpty(featuredTrolls)) count += 1;
-		if (!ListUtils.isEmpty(movies)) count += movies.size();
+		if (!ListUtils.isEmpty(featuredMovies)) count += featuredMovies.size();
 		
 		return count;
 	}
@@ -47,11 +47,11 @@ public class HomeData {
 		return upcomingMovies;
 	}
 	
-	public NewsItem getFeaturedArticle() {
+	public Article getFeaturedArticle() {
 		return featuredArticle;
 	}
 	
-	public List<NewsItem> getTopArticles() {
+	public List<Article> getTopArticles() {
 		return topArticles;
 	}
 	
@@ -67,7 +67,7 @@ public class HomeData {
 		return featuredTrolls;
 	}
 	
-	public List<Movie> getMovies() {
-		return movies;
+	public List<Movie> getFeaturedMovies() {
+		return featuredMovies;
 	}
 }

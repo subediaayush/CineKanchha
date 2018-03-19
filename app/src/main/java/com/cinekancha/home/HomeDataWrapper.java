@@ -4,7 +4,7 @@ import android.util.SparseIntArray;
 
 import com.cinekancha.entities.model.HomeData;
 import com.cinekancha.entities.model.Movie;
-import com.cinekancha.entities.model.NewsItem;
+import com.cinekancha.entities.model.Article;
 import com.cinekancha.entities.model.Troll;
 import com.cinekancha.utils.ListUtils;
 
@@ -39,7 +39,7 @@ public class HomeDataWrapper {
 		wrapper.add("Upcoming Releases", HEADERS);
 		wrapper.add(data.getUpcomingMovies(), UPCOMING_MOVIES);
 		
-		List<NewsItem> topArticles = data.getTopArticles();
+		List<Article> topArticles = data.getTopArticles();
 		if (!ListUtils.isEmpty(topArticles)) {
 			wrapper.add("Top stories", HEADERS);
 			wrapper.add(topArticles.get(0), FEATURED_ARTICLE_HIGHLIGHTED);
@@ -58,7 +58,7 @@ public class HomeDataWrapper {
 			}
 		}
 		
-		List<Movie> movies = data.getMovies();
+		List<Movie> movies = data.getFeaturedMovies();
 		wrapper.add("Watch movies", HEADERS);
 		if (!ListUtils.isEmpty(movies)) {
 			for (Movie movie : movies) {

@@ -9,7 +9,7 @@ import com.cinekancha.adapters.base.BaseRecyclerAdapter;
 import com.cinekancha.adapters.base.BaseViewHolder;
 import com.cinekancha.entities.model.HomeData;
 import com.cinekancha.entities.model.Movie;
-import com.cinekancha.entities.model.NewsItem;
+import com.cinekancha.entities.model.Article;
 import com.cinekancha.entities.model.Poll;
 import com.cinekancha.entities.model.Trivia;
 import com.cinekancha.entities.model.Troll;
@@ -111,7 +111,7 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
 	@Override
 	protected void setViewOfTypeThree(BaseViewHolder baseHolder, int position) {
 		FeaturedNewsHolder holder = (FeaturedNewsHolder) baseHolder;
-		NewsItem news = mData.getItem(position);
+		Article news = mData.getItem(position);
 		if (TextUtils.isEmpty(news.getImage())) {
 			holder.image.setImageResource(R.drawable.placeholder_movie);
 		} else {
@@ -127,7 +127,7 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
 	@Override
 	protected void setViewOfTypeFour(BaseViewHolder baseHolder, int position) {
 		FeaturedNewsListHolder holder = (FeaturedNewsListHolder) baseHolder;
-		NewsItem news = mData.getItem(position);
+		Article news = mData.getItem(position);
 		if (TextUtils.isEmpty(news.getImage())) {
 			holder.image.setImageResource(R.drawable.placeholder_movie);
 		} else {
