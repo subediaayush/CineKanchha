@@ -6,6 +6,8 @@ import android.support.annotation.NonNull;
 
 import com.cinekancha.entities.model.Article;
 
+import java.util.List;
+
 /**
  * Created by aayushsubedi on 3/8/18.
  */
@@ -14,6 +16,8 @@ public class CineArticleViewModel extends AndroidViewModel {
 	
 	private Article mArticle;
 	private int mArticleId;
+	
+	private List<Article> mArticles;
 	
 	public CineArticleViewModel(@NonNull Application application) {
 		super(application);
@@ -33,5 +37,13 @@ public class CineArticleViewModel extends AndroidViewModel {
 	
 	public int getArticleId() {
 		return mArticleId;
+	}
+	
+	public List<Article> getArticles() {
+		return mArticles;
+	}
+	
+	public void setArticles(List<Article> articles) {
+		this.mArticles = articles;
 	}
 }

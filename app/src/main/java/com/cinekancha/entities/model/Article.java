@@ -9,6 +9,7 @@ public class Article {
 	private String title;
 	private String summary;
 	private String content;
+	private long id;
 	
 	public String getImage() {
 		return image;
@@ -24,5 +25,9 @@ public class Article {
 	
 	public String getContent() {
 		return content;
+	}
+	
+	public long getId() {
+		return id;
 	}
 }

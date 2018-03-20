@@ -37,7 +37,7 @@ public class ArticleDetailActivity extends BaseNavigationActivity {
 		
 		mCineArticleViewModel = ViewModelProviders.of(this).get(CineArticleViewModel.class);
 		
-		mCineArticleViewModel.setArticleId(getIntent().getIntExtra("article_id", -1));
+		mCineArticleViewModel.setArticleId(getIntent().getIntExtra("article", -1));
 	}
 	
 	@Override
