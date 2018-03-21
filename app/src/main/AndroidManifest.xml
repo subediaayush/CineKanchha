@@ -22,6 +22,7 @@
         </activity>
 	    <activity android:name=".article.ArticleDetailActivity"/>
         <activity android:name=".article.ArticleListActivity"/>
+	    <activity android:name=".trivia.TriviaListActivity"/>
     </application>
 
 </manifest>

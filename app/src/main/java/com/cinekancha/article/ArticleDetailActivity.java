@@ -3,6 +3,7 @@ package com.cinekancha.article;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -57,7 +58,7 @@ public class ArticleDetailActivity extends BaseNavigationActivity {
 	}
 	
 	private void renderArticle(Article article) {
-		Picasso.with(this)
+		if (!TextUtils.isEmpty(article.getImage())) Picasso.with(this)
 				.load(article.getImage())
 				.into(mArticleImage);
 		mTitle.setText(article.getTitle());

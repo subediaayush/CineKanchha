@@ -1,7 +1,6 @@
-package com.cinekancha.article;
+package com.cinekancha.trivia;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,7 +10,7 @@ import android.view.View;
 import com.cinekancha.R;
 import com.cinekancha.activities.base.BaseNavigationActivity;
 import com.cinekancha.adapters.base.BaseRecyclerAdapter;
-import com.cinekancha.view.CineArticleViewModel;
+import com.cinekancha.view.CineTriviaViewModel;
 
 import butterknife.BindView;
 
@@ -19,20 +18,20 @@ import butterknife.BindView;
  * Created by aayushsubedi on 3/19/18.
  */
 
-public class ArticleListActivity extends BaseNavigationActivity implements BaseRecyclerAdapter.RecyclerViewClickListener {
+public class TriviaListActivity extends BaseNavigationActivity implements BaseRecyclerAdapter.RecyclerViewClickListener {
 	@BindView(R.id.list_view)
 	public RecyclerView mArticleList;
 	
-	private CineArticleViewModel mCineArticleViewModel;
-	private ArticleAdapter mArticleAdapter;
+	private CineTriviaViewModel mCineTriviaViewModel;
+	private TriviaAdapter mArticleAdapter;
 	
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		mCineArticleViewModel = ViewModelProviders.of(this).get(CineArticleViewModel.class);
+		mCineTriviaViewModel = ViewModelProviders.of(this).get(CineTriviaViewModel.class);
 		
-		mArticleAdapter = new ArticleAdapter();
+		mArticleAdapter = new TriviaAdapter();
 		
 		mArticleList.setLayoutManager(new LinearLayoutManager(this));
 		mArticleList.setAdapter(mArticleAdapter);
@@ -48,10 +47,10 @@ public class ArticleListActivity extends BaseNavigationActivity implements BaseR
 	protected void onResume() {
 		super.onResume();
 		
-		if (mCineArticleViewModel.getArticles() == null) {
+		if (mCineTriviaViewModel.getTrivias() == null) {
 			requestArticles(null, 50);
 		} else {
-			mArticleAdapter.setArticles(mCineArticleViewModel.getArticles());
+			mArticleAdapter.setTrivias(mCineTriviaViewModel.getTrivias());
 		}
 	}
 	
@@ -61,9 +60,6 @@ public class ArticleListActivity extends BaseNavigationActivity implements BaseR
 	
 	@Override
 	public void onClick(View v, int position) {
-		long id = mArticleAdapter.getArticle(position).getId();
-		Intent detail = new Intent(this, ArticleDetailActivity.class);
-		detail.putExtra("article", id);
-		startActivity(detail);
+		// Nothing to do, copied from above
 	}
 }
