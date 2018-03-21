@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatDelegate;
 
 import com.cinekancha.utils.AnalyticsUtil;
 import com.cinekancha.utils.Logger;
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 /**
@@ -40,5 +41,7 @@ public class MyApplication extends Application {
         AnalyticsUtil.logAppOpenEvent(getAnalytics());
         Logger.setWriteLog(BuildConfig.DEBUG);
         super.onCreate();
+    
+        Fresco.initialize(this);
     }
 }
