@@ -1,6 +1,7 @@
 package com.cinekancha.home;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.RadioButton;
 
@@ -33,6 +34,7 @@ import static com.cinekancha.home.HomeDataWrapper.UPCOMING_MOVIES;
  */
 
 public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
+	private static final String TAG = "HomeDataAdapter";
 	private HomeDataWrapper mData;
 	
 	@Override
@@ -210,12 +212,13 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
 	
 	@Override
 	public int getItemCount() {
-		return mData.getItemCount();
+		return mData == null ? 0 : mData.getItemCount();
 	}
 	
 	
 	public void setHomeData(HomeData data) {
 		this.mData = HomeDataWrapper.wrap(data);
+		Log.i(TAG, "Total items in home: " + mData.getItemCount());
 		notifyDataSetChanged();
 	}
 	

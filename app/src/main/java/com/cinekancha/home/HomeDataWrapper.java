@@ -29,7 +29,7 @@ public class HomeDataWrapper {
 	public static final int HEADERS = 0;
 	
 	List<Object> items = new ArrayList<>();
-	SparseIntArray itemTypes;
+	SparseIntArray itemTypes = new SparseIntArray();
 	
 	public static HomeDataWrapper wrap(HomeData data) {
 		HomeDataWrapper wrapper = new HomeDataWrapper();

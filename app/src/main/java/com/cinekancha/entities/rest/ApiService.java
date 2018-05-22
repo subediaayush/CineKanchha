@@ -16,4 +16,7 @@ public interface ApiService {
     
     @GET("api/home")
     Observable<HomeData> getHomeData();
+    
+    @GET("bins/jb07u")
+    Observable<HomeData> getHomeTestData();
 }

@@ -3,7 +3,6 @@ package com.cinekancha.activities;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -25,8 +24,8 @@ import butterknife.BindView;
 public class HomeActivity extends BaseNavigationActivity implements OnSlideClickListener {
     private static final String TAG = "HomeActivity";
     
-    @BindView(R.id.swipeRefreshLayout)
-    protected SwipeRefreshLayout mSwipeRefreshLayout;
+//    @BindView(R.id.swipeRefreshLayout)
+//    protected SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.home_list_view)
     protected RecyclerView mHomeListView;
     @BindView(R.id.featured_pager)
@@ -69,11 +68,7 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
         });
         mSlideAdapter.setOnSlideClickListener(this);
         
-        mSwipeRefreshLayout.setOnRefreshListener(this::requestHomeData);
-        HomeData data = mCineHomeViewModel.getHomeData();
-        if (data == null) requestHomeData();
-        else mCineHomeViewModel.setHomeData(data);
-        setHomeData();
+//        mSwipeRefreshLayout.setOnRefreshListener(this::requestHomeData);
         
         mHomeListView.setLayoutManager(new LinearLayoutManager(this));
         mHomeListView.setAdapter(mHomeDataAdapter);
@@ -89,9 +84,9 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
     private void requestHomeData() {
         compositeDisposable.add(RestAPI.getInstance().getHomeData()
                 .doOnSubscribe(disposable -> {
-                    mSwipeRefreshLayout.setRefreshing(true);
+//                    mSwipeRefreshLayout.setRefreshing(true);
                 })
-                .doFinally(() -> mSwipeRefreshLayout.setRefreshing(false))
+//                .doFinally(() -> mSwipeRefreshLayout.setRefreshing(false))
                 .subscribe(this::handleHomeData, this::handleHomeFetchError));
     }
     
@@ -114,7 +109,9 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
     @Override
     protected void onResume() {
         super.onResume();
-        setHomeData();
+        HomeData data = mCineHomeViewModel.getHomeData();
+        if (data != null) setHomeData();
+        else requestHomeData();
     }
     
     @Override

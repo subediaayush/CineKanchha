@@ -1,32 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context="com.cinekancha.activities.HomeActivity">
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	tools:context="com.cinekancha.activities.HomeActivity"
+	>
 
-    <android.support.design.widget.AppBarLayout
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:theme="@style/AppTheme.AppBarOverlay">
+	<android.support.design.widget.AppBarLayout
+		android:layout_height="wrap_content"
+		android:layout_width="match_parent"
+		android:theme="@style/AppTheme.AppBarOverlay"
+		>
 
-        <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?android:attr/actionBarSize"
-                android:background="@color/colorPrimary"
-                app:popupTheme="@style/AppTheme.PopupOverlay"/>
+		<android.support.v7.widget.Toolbar
+			android:id="@+id/toolbar"
+			android:layout_width="match_parent"
+			android:layout_height="?android:attr/actionBarSize"
+			android:background="@color/colorPrimary"
+			app:popupTheme="@style/AppTheme.PopupOverlay"
+			/>
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/featured_pager"
-            android:layout_width="match_parent"
-            android:layout_height="180dp"
-            />
+	</android.support.design.widget.AppBarLayout>
 
-    </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_home"/>
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:orientation="vertical"
+			app:layout_behavior="@string/appbar_scrolling_view_behavior"
+			>
+
+			<android.support.v4.view.ViewPager
+				android:id="@+id/featured_pager"
+				android:layout_width="match_parent"
+				android:layout_height="180dp"
+				/>
+
+			<android.support.v7.widget.RecyclerView
+				tools:context="com.cinekancha.activities.HomeActivity"
+				tools:showIn="@layout/app_bar_home"
+				xmlns:android="http://schemas.android.com/apk/res/android"
+				xmlns:tools="http://schemas.android.com/tools"
+				android:id="@+id/home_list_view"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				/>
+		</LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>

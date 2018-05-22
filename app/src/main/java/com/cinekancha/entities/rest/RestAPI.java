@@ -71,7 +71,7 @@ public class RestAPI {
     }
     
     public Observable<HomeData> getHomeData() {
-        return getApiService().getHomeData()
+        return getApiService().getHomeTestData()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .retry(1);

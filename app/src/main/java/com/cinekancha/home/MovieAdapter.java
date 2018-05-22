@@ -1,11 +1,15 @@
 package com.cinekancha.home;
 
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
+import com.cinekancha.R;
 import com.cinekancha.entities.model.Movie;
 import com.cinekancha.utils.ListUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,11 +18,13 @@ import java.util.List;
 
 public class MovieAdapter extends RecyclerView.Adapter<MoviesHolder> {
 	
-	private List<Movie> mMovies;
+	private List<Movie> mMovies = new ArrayList<>();
 	
 	@Override
 	public MoviesHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-		return null;
+		View view = LayoutInflater.from(parent.getContext())
+				.inflate(R.layout.layout_featued_movie, parent, false);
+		return new MoviesHolder(view);
 	}
 	
 	@Override
