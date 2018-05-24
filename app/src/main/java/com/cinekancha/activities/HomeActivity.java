@@ -1,7 +1,10 @@
 package com.cinekancha.activities;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,6 +33,10 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
     protected RecyclerView mHomeListView;
     @BindView(R.id.featured_pager)
     protected ViewPager mFeaturedPager;
+    @BindView(R.id.appbar_layout)
+    protected AppBarLayout mAppbarLayout;
+    @BindView(R.id.collapsing_toolbar)
+    protected CollapsingToolbarLayout mCollapsingToolbarLayout;
     
     private HomeDataAdapter mHomeDataAdapter;
     
@@ -67,8 +74,8 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
             }
         });
         mSlideAdapter.setOnSlideClickListener(this);
-        
-//        mSwipeRefreshLayout.setOnRefreshListener(this::requestHomeData);
+    
+        mCollapsingToolbarLayout.setExpandedTitleColor(Color.TRANSPARENT);
         
         mHomeListView.setLayoutManager(new LinearLayoutManager(this));
         mHomeListView.setAdapter(mHomeDataAdapter);
