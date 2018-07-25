@@ -15,7 +15,7 @@ import io.reactivex.annotations.Nullable;
  * Created by aayushsubedi on 3/15/18.
  */
 
-public class MoviesHolder extends BaseViewHolder {
+public class ThumbnailHolder extends BaseViewHolder {
 	
 	@Nullable
 	@BindView(R.id.thumbnail)
@@ -27,7 +27,7 @@ public class MoviesHolder extends BaseViewHolder {
 	@BindView(R.id.subtitle)
 	public TextView subTitle;
 	
-	public MoviesHolder(RecyclerViewClickListener listener, View itemView) {
+	public ThumbnailHolder(RecyclerViewClickListener listener, View itemView) {
 		super(listener, itemView);
 	}
 	

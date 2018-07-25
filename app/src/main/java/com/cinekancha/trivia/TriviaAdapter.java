@@ -37,7 +37,7 @@ public class TriviaAdapter extends BaseRecyclerAdapter<TriviaHolder> {
 		TriviaHolder holder = (TriviaHolder) baseHolder;
 		Trivia trivia = mData.get(position);
 		
-		holder.title.setText("Did you know?");
+//		holder.title.setText("Did you know?");
 		holder.trivia.setText(trivia.getTrivia());
 	}
 	

@@ -9,7 +9,7 @@ import android.view.View;
 
 import com.cinekancha.R;
 import com.cinekancha.activities.base.BaseNavigationActivity;
-import com.cinekancha.adapters.base.BaseRecyclerAdapter;
+import com.cinekancha.adapters.base.RecyclerViewClickListener;
 import com.cinekancha.entities.model.Troll;
 import com.cinekancha.view.CineTrollViewModel;
 import com.stfalcon.frescoimageviewer.ImageViewer;
@@ -20,7 +20,7 @@ import butterknife.BindView;
  * Created by aayushsubedi on 3/19/18.
  */
 
-public class TrollListActivity extends BaseNavigationActivity implements BaseRecyclerAdapter.RecyclerViewClickListener {
+public class TrollListActivity extends BaseNavigationActivity implements RecyclerViewClickListener {
 	@BindView(R.id.list_view)
 	public RecyclerView mArticleList;
 	

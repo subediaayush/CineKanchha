@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="match_parent"
-	android:layout_height="wrap_content"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="200dp"
 	android:clickable="true"
 	android:focusable="true"
 	android:foreground="?android:attr/selectableItemBackground"
@@ -12,20 +13,43 @@
 	<ImageView
 		android:id="@+id/image"
 		android:layout_width="match_parent"
-		android:layout_height="180dp"
+		android:layout_height="match_parent"
 		android:foreground="@drawable/readable_shadow"
+		android:scaleType="centerCrop"
+		tools:src="@tools:sample/backgrounds/scenic"
 		/>
 
 	<TextView
-		android:id="@+id/description"
+		android:id="@+id/title"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_gravity="bottom"
+		android:layout_above="@+id/subtitle"
+		android:layout_alignParentBottom="true"
 		android:ellipsize="end"
 		android:maxLines="2"
-		android:padding="16dp"
+		android:paddingLeft="16dp"
+		android:paddingRight="16dp"
 		android:textAppearance="@style/TextAppearance.AppCompat.Title"
 		android:textColor="#fff"
+		app:layout_constraintBottom_toTopOf="@+id/subtitle"
 		tools:text="@tools:sample/lorem/random"
 		/>
-</FrameLayout>
+
+	<TextView
+		android:id="@+id/subtitle"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_alignParentBottom="true"
+		android:layout_marginBottom="8dp"
+		android:maxWidth="400dp"
+		android:ellipsize="end"
+		android:maxLines="2"
+		android:paddingLeft="16dp"
+		android:paddingRight="16dp"
+		android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+		android:textColor="#fff"
+		app:layout_constraintBottom_toBottomOf="@+id/image"
+		tools:text="@tools:sample/lorem/random"
+		/>
+
+</android.support.constraint.ConstraintLayout>

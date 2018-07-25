@@ -1,6 +1,5 @@
 package com.cinekancha.article;
 
-import android.text.TextUtils;
 import android.view.View;
 
 import com.cinekancha.R;
@@ -8,7 +7,6 @@ import com.cinekancha.adapters.base.BaseRecyclerAdapter;
 import com.cinekancha.adapters.base.BaseViewHolder;
 import com.cinekancha.entities.model.Article;
 import com.cinekancha.home.FeaturedNewsHolder;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,16 +36,7 @@ public class ArticleAdapter extends BaseRecyclerAdapter<FeaturedNewsHolder> {
 	protected void setViewOfTypeZero(BaseViewHolder baseHolder, int position) {
 		FeaturedNewsHolder holder = (FeaturedNewsHolder) baseHolder;
 		Article news = mData.get(position);
-		if (TextUtils.isEmpty(news.getImage())) {
-			holder.image.setImageResource(R.drawable.placeholder_movie);
-		} else {
-			Picasso.with(holder.itemView.getContext())
-					.load(news.getImage())
-					.into(holder.image);
-		}
-		
 		holder.title.setText(news.getTitle());
-		holder.summary.setText(news.getSummary());
 	}
 	
 	@Override

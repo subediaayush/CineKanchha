@@ -8,9 +8,11 @@ import android.widget.RadioButton;
 import com.cinekancha.R;
 import com.cinekancha.adapters.base.BaseRecyclerAdapter;
 import com.cinekancha.adapters.base.BaseViewHolder;
+import com.cinekancha.entities.ThumbWrapper;
+import com.cinekancha.entities.ThumbnailConverter;
+import com.cinekancha.entities.model.Article;
 import com.cinekancha.entities.model.HomeData;
 import com.cinekancha.entities.model.Movie;
-import com.cinekancha.entities.model.Article;
 import com.cinekancha.entities.model.Poll;
 import com.cinekancha.entities.model.Trivia;
 import com.cinekancha.entities.model.Troll;
@@ -22,13 +24,20 @@ import java.util.List;
 
 import static com.cinekancha.home.HomeDataWrapper.FEATURED_ARTICLE;
 import static com.cinekancha.home.HomeDataWrapper.FEATURED_ARTICLE_HIGHLIGHTED;
+import static com.cinekancha.home.HomeDataWrapper.FEATURED_BOX_OFFICE;
+import static com.cinekancha.home.HomeDataWrapper.FEATURED_FULL_VIDEOS;
 import static com.cinekancha.home.HomeDataWrapper.FEATURED_MOVIE;
+import static com.cinekancha.home.HomeDataWrapper.FEATURED_PHOTO_GALLERY;
 import static com.cinekancha.home.HomeDataWrapper.FEATURED_POLL;
+import static com.cinekancha.home.HomeDataWrapper.FEATURED_REVIEWS;
+import static com.cinekancha.home.HomeDataWrapper.FEATURED_SHOWTIMES;
+import static com.cinekancha.home.HomeDataWrapper.FEATURED_TRENDING_VIDEOS;
 import static com.cinekancha.home.HomeDataWrapper.FEATURED_TRIVIA;
 import static com.cinekancha.home.HomeDataWrapper.FEATURED_TROLL;
 import static com.cinekancha.home.HomeDataWrapper.HEADERS;
 import static com.cinekancha.home.HomeDataWrapper.NEW_MOVIES;
 import static com.cinekancha.home.HomeDataWrapper.UPCOMING_MOVIES;
+
 /**
  * Created by aayushsubedi on 3/8/18.
  */
@@ -40,11 +49,21 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
 	@Override
 	public HomeItemHolder onCreateView(int viewType, View view) {
 		switch (viewType) {
+			case HEADERS:
+			default: {
+				return new HeaderHolder(this, view);
+			}
 			case NEW_MOVIES: {
-				return new NewReleaseHolder(this, view);
+				return new NewReleaseHolder(
+						this,
+						view
+				);
 			}
 			case UPCOMING_MOVIES: {
-				return new UpcomingReleaseHolder(this, view);
+				return new UpcomingReleaseHolder(
+						this,
+						view
+				);
 			}
 			case FEATURED_ARTICLE_HIGHLIGHTED: {
 				return new FeaturedNewsHolder(this, view);
@@ -61,84 +80,121 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
 			case FEATURED_TROLL: {
 				return new TrollHolder(this, view);
 			}
-			case FEATURED_MOVIE:
-			default: {
-				return new FeaturedMoviesHolder(this, view);
+			case FEATURED_MOVIE: {
+				return new ThumbnailViewHolder<>(
+						this,
+						view,
+						"WATCH FULL MOVIES",
+						R.layout.layout_featued_movie_new_release,
+						new ThumbnailConverter<Movie>() {
+							@Override
+							public ThumbWrapper convert(Movie data) {
+								return new ThumbWrapper(
+										data.getFeaturedImage(),
+										data.getName()
+								);
+							}
+						}
+				);
 			}
-			case HEADERS: {
-				return new HeaderHolder(this, view);
+			case FEATURED_REVIEWS: {
+				return new FeaturedReviewsHolder(this, view);
+			}
+			case FEATURED_BOX_OFFICE: {
+				return new FeaturedBoxOfficeHolder(this, view);
+			}
+			case FEATURED_PHOTO_GALLERY: {
+				return new FeaturedPhotosHolder(this, view);
+			}
+			case FEATURED_TRENDING_VIDEOS: {
+				return new TrendingVideosHolder(this, view);
+			}
+			case FEATURED_FULL_VIDEOS: {
+				return new FullVideosHolder(this, view);
+			}
+			case FEATURED_SHOWTIMES: {
+				return new FeaturedShowtimesHolder(this, view);
 			}
 		}
-	}
-	
-	@Override
-	public int getItemViewType(int position) {
-		return mData.getType(position);
 	}
 	
 	@Override
 	public int[] getLayoutsForViewType() {
 		return new int[]{
 				R.layout.layout_home_header,
-				R.layout.layout_featured_movies,
-				R.layout.layout_featured_movies,
-				R.layout.layout_article_top,
+				R.layout.layout_featured_thumbnails,
+				R.layout.layout_featured_thumbnails,
+				R.layout.layout_featured_articles,
 				R.layout.layout_featured_articles,
 				R.layout.layout_featured_poll,
 				R.layout.layout_featured_trivia,
 				R.layout.layout_featured_trolls,
-				R.layout.layout_featued_movie,
+				R.layout.layout_featured_movie,
+				R.layout.layout_featured_box_office,
+				R.layout.layout_featured_thumbnails,
+				R.layout.layout_featured_thumbnails,
+				R.layout.layout_featured_thumbnails,
+				R.layout.layout_featured_thumbnails,
+			
 		};
 	}
 	
 	@Override
-	protected void setViewOfTypeZero(BaseViewHolder baseHolder, int position) {
-		String header = mData.getItem(position);
-		HeaderHolder holder = (HeaderHolder) baseHolder;
-		holder.header.setText(header);
-	}
-	
-	@Override
-	protected void setViewOfTypeOne(BaseViewHolder baseHolder, int position) {
-		NewReleaseHolder holder = (NewReleaseHolder) baseHolder;
-		holder.setMovies(mData.getItem(position));
-	}
-	
-	@Override
-	protected void setViewOfTypeTwo(BaseViewHolder baseHolder, int position) {
-		UpcomingReleaseHolder holder = (UpcomingReleaseHolder) baseHolder;
-		holder.setMovies(mData.getItem(position));
-	}
-	
-	@Override
-	protected void setViewOfTypeThree(BaseViewHolder baseHolder, int position) {
-		FeaturedNewsHolder holder = (FeaturedNewsHolder) baseHolder;
-		Article news = mData.getItem(position);
-		if (TextUtils.isEmpty(news.getImage())) {
-			holder.image.setImageResource(R.drawable.placeholder_movie);
-		} else {
-			Picasso.with(holder.itemView.getContext())
-					.load(news.getImage())
-					.into(holder.image);
+	protected void setViewOfType(BaseViewHolder baseHolder, int position, int viewType) {
+		if (viewType == FEATURED_REVIEWS) {
+			FeaturedReviewsHolder holder = (FeaturedReviewsHolder) baseHolder;
+			holder.setMovies(mData.getItem(position));
+		} else if (viewType == FEATURED_FULL_VIDEOS) {
+			FullVideosHolder holder = (FullVideosHolder) baseHolder;
+			holder.setVideos(mData.getItem(position));
+		} else if (viewType == FEATURED_TRENDING_VIDEOS) {
+			TrendingVideosHolder holder = (TrendingVideosHolder) baseHolder;
+			holder.setVideos(mData.getItem(position));
 		}
+	}
+	
+	@Override
+	protected void setViewOfTypeNine(BaseViewHolder baseHolder, int position) {
+		FeaturedBoxOfficeHolder holder = (FeaturedBoxOfficeHolder) baseHolder;
+		holder.setBoxOffice(mData.getItem(position));
+	}
+	
+	@Override
+	protected void setViewOfTypeEight(BaseViewHolder baseHolder, int position) {
+		FeaturedMoviesHolder holder = (FeaturedMoviesHolder) baseHolder;
+		Movie movie = mData.getItem(position);
+		if (!TextUtils.isEmpty(movie.getFeaturedImage())) {
+			Picasso.with(baseHolder.itemView.getContext())
+					.load(movie.getFeaturedImage())
+					.into(holder.image);
+		} else {
+			holder.image.setImageResource(R.drawable.placeholder_movie);
+		}
+	}
+	
+	@Override
+	protected void setViewOfTypeSeven(BaseViewHolder baseHolder, int position) {
+		TrollHolder holder = (TrollHolder) baseHolder;
+		Troll troll = mData.getItem(position);
 		
-		holder.title.setText(news.getTitle());
-		holder.summary.setText(news.getSummary());
+		if (!TextUtils.isEmpty(troll.getImage())) {
+			Picasso.with(baseHolder.itemView.getContext())
+					.load(troll.getImage())
+					.into(holder.troll);
+		}
 	}
 	
 	@Override
-	protected void setViewOfTypeFour(BaseViewHolder baseHolder, int position) {
-		FeaturedNewsListHolder holder = (FeaturedNewsListHolder) baseHolder;
-		Article news = mData.getItem(position);
-		if (TextUtils.isEmpty(news.getImage())) {
-			holder.image.setImageResource(R.drawable.placeholder_movie);
-		} else {
-			Picasso.with(holder.itemView.getContext())
-					.load(news.getImage())
-					.into(holder.image);
-		}
-		holder.title.setText(news.getTitle());
-		holder.summary.setText(news.getSummary());
+	protected void setViewOfTypeSix(BaseViewHolder baseHolder, int position) {
+		TriviaHolder holder = (TriviaHolder) baseHolder;
+		Trivia trivia = mData.getItem(position);
+		holder.trivia.setText(trivia.getTrivia());
+	}
+	
+	@Override
+	protected void setViewOfTypeTen(BaseViewHolder baseHolder, int position) {
+		FeaturedPhotosHolder holder = (FeaturedPhotosHolder) baseHolder;
+		holder.setMovies(mData.getItem(position));
 	}
 	
 	@Override
@@ -177,37 +233,51 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
 	}
 	
 	@Override
-	protected void setViewOfTypeSix(BaseViewHolder baseHolder, int position) {
-		TriviaHolder holder = (TriviaHolder) baseHolder;
-		Trivia trivia = mData.getItem(position);
-		
-		holder.title.setText("Did you know?");
-		holder.trivia.setText(trivia.getTrivia());
-	}
-	
-	@Override
-	protected void setViewOfTypeSeven(BaseViewHolder baseHolder, int position) {
-		TrollHolder holder = (TrollHolder) baseHolder;
-		Troll troll = mData.getItem(position);
-		
-		if (!TextUtils.isEmpty(troll.getImage())) {
-			Picasso.with(baseHolder.itemView.getContext())
-					.load(troll.getImage())
-					.into(holder.troll);
-		}
-	}
-	
-	@Override
-	protected void setViewOfTypeEight(BaseViewHolder baseHolder, int position) {
-		FeaturedMoviesHolder holder = (FeaturedMoviesHolder) baseHolder;
-		Movie movie = mData.getItem(position);
-		if (!TextUtils.isEmpty(movie.getFeaturedImage())) {
-			Picasso.with(baseHolder.itemView.getContext())
-					.load(movie.getFeaturedImage())
-					.into(holder.image);
-		} else {
+	protected void setViewOfTypeFour(BaseViewHolder baseHolder, int position) {
+		FeaturedNewsListHolder holder = (FeaturedNewsListHolder) baseHolder;
+		Article news = mData.getItem(position);
+		if (TextUtils.isEmpty(news.getImage())) {
 			holder.image.setImageResource(R.drawable.placeholder_movie);
+		} else {
+			Picasso.with(holder.itemView.getContext())
+					.load(news.getImage())
+					.into(holder.image);
 		}
+		holder.title.setText(news.getTitle());
+		holder.summary.setText(news.getSummary());
+	}
+	
+	@Override
+	protected void setViewOfTypeThree(BaseViewHolder baseHolder, int position) {
+		FeaturedNewsHolder holder = (FeaturedNewsHolder) baseHolder;
+		Article news = mData.getItem(position);
+		holder.title.setText(news.getTitle());
+	}
+	
+	@Override
+	protected void setViewOfTypeTwo(BaseViewHolder baseHolder, int position) {
+		UpcomingReleaseHolder holder = (UpcomingReleaseHolder) baseHolder;
+		holder.setMovies(mData.getItem(position));
+		holder.title.setText("Movies Movies");
+	}
+	
+	@Override
+	protected void setViewOfTypeOne(BaseViewHolder baseHolder, int position) {
+		NewReleaseHolder holder = (NewReleaseHolder) baseHolder;
+		holder.setMovies(mData.getItem(position));
+		holder.title.setText("New Releases");
+	}
+	
+	@Override
+	protected void setViewOfTypeZero(BaseViewHolder baseHolder, int position) {
+		String header = mData.getItem(position);
+		HeaderHolder holder = (HeaderHolder) baseHolder;
+		holder.header.setText(header);
+	}
+	
+	@Override
+	public int getItemViewType(int position) {
+		return mData.getType(position);
 	}
 	
 	@Override

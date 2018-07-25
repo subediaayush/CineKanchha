@@ -1,15 +1,46 @@
 package com.cinekancha.entities.model;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by aayushsubedi on 3/8/18.
  */
 
 public class Article {
-	private String image;
-	private String title;
-	private String summary;
-	private String content;
+	
+	@SerializedName("id")
 	private long id;
+	
+	@SerializedName("banner_url")
+	private String image;
+	
+	@SerializedName("title")
+	private String title;
+	
+	@SerializedName("summary")
+	private String summary;
+	
+	@SerializedName("content")
+	private String content;
+	
+	@SerializedName("featured")
+	private boolean featured;
+	
+	@SerializedName("url")
+	private String url;
+	
+	@SerializedName("author")
+	private String author;
+	
+	@SerializedName("created_at")
+	private String createdAt;
+	
+	@SerializedName("updated_at")
+	private String updatedAt;
+	
+	public long getId() {
+		return id;
+	}
 	
 	public String getImage() {
 		return image;
@@ -27,7 +58,23 @@ public class Article {
 		return content;
 	}
 	
-	public long getId() {
-		return id;
+	public boolean isFeatured() {
+		return featured;
+	}
+	
+	public String getUrl() {
+		return url;
+	}
+	
+	public String getAuthor() {
+		return author;
+	}
+	
+	public String getCreatedAt() {
+		return createdAt;
+	}
+	
+	public String getUpdatedAt() {
+		return updatedAt;
 	}
 }

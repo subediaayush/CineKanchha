@@ -10,11 +10,11 @@ import butterknife.ButterKnife;
  */
 public abstract class BaseViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 	
-	private BaseRecyclerAdapter baseRecyclerAdapter;
+	private RecyclerViewClickListener clickListener;
 	
-	public BaseViewHolder(BaseRecyclerAdapter baseRecyclerAdapter, View view) {
+	public BaseViewHolder(RecyclerViewClickListener baseRecyclerAdapter, View view) {
         super(view);
-        this.baseRecyclerAdapter = baseRecyclerAdapter;
+        this.clickListener = baseRecyclerAdapter;
         ButterKnife.bind(this, view);
         for (int clickViewId : getClickViewIdList()) {
             view.findViewById(clickViewId).setOnClickListener(this);
@@ -23,7 +23,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder implements 
 	
 	@Override
     public void onClick(View view) {
-        baseRecyclerAdapter.onClick(view, getLayoutPosition());
+        if (clickListener != null) clickListener.onClick(view, getLayoutPosition());
     }
 	
 	public abstract int[] getClickViewIdList();

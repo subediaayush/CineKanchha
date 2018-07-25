@@ -1,6 +1,5 @@
 package com.cinekancha.home;
 
-import android.support.v7.widget.AppCompatImageView;
 import android.view.View;
 import android.widget.TextView;
 
@@ -15,14 +14,8 @@ import butterknife.BindView;
 
 public class FeaturedNewsHolder extends HomeItemHolder {
 	
-	@BindView(R.id.image)
-	public AppCompatImageView image;
-	
-	@BindView(R.id.title)
+	@BindView(R.id.news)
 	public TextView title;
-	
-	@BindView(R.id.summary)
-	public TextView summary;
 	
 	public FeaturedNewsHolder(BaseRecyclerAdapter baseRecyclerAdapter, View view) {
 		super(baseRecyclerAdapter, view);

@@ -2,10 +2,12 @@ package com.cinekancha.home;
 
 import android.util.SparseIntArray;
 
+import com.cinekancha.entities.GalleryItem;
+import com.cinekancha.entities.Video;
+import com.cinekancha.entities.model.Article;
+import com.cinekancha.entities.model.BoxOfficeItem;
 import com.cinekancha.entities.model.HomeData;
 import com.cinekancha.entities.model.Movie;
-import com.cinekancha.entities.model.Article;
-import com.cinekancha.entities.model.Troll;
 import com.cinekancha.utils.ListUtils;
 
 import java.util.ArrayList;
@@ -25,7 +27,12 @@ public class HomeDataWrapper {
 	public static final int FEATURED_TRIVIA = 6;
 	public static final int FEATURED_TROLL = 7;
 	public static final int FEATURED_MOVIE = 8;
-	public static final int FEATURED_ITEMS = 9;
+	public static final int FEATURED_BOX_OFFICE = 9;
+	public static final int FEATURED_PHOTO_GALLERY = 10;
+	public static final int FEATURED_REVIEWS = 11;
+	public static final int FEATURED_SHOWTIMES = 12;
+	public static final int FEATURED_TRENDING_VIDEOS = 13;
+	public static final int FEATURED_FULL_VIDEOS = 14;
 	public static final int HEADERS = 0;
 	
 	List<Object> items = new ArrayList<>();
@@ -34,37 +41,61 @@ public class HomeDataWrapper {
 	public static HomeDataWrapper wrap(HomeData data) {
 		HomeDataWrapper wrapper = new HomeDataWrapper();
 		
-		wrapper.add("New Releases", HEADERS);
 		wrapper.add(data.getNewReleases(), NEW_MOVIES);
-		wrapper.add("Upcoming Releases", HEADERS);
-		wrapper.add(data.getUpcomingMovies(), UPCOMING_MOVIES);
 		
 		List<Article> topArticles = data.getTopArticles();
 		if (!ListUtils.isEmpty(topArticles)) {
-			wrapper.add("Top stories", HEADERS);
-			wrapper.add(topArticles.get(0), FEATURED_ARTICLE_HIGHLIGHTED);
-			for (int i = 1; i < topArticles.size(); i++) {
-				wrapper.add(topArticles.get(i), FEATURED_ARTICLE);
-			}
+			wrapper.add(topArticles.remove(0), FEATURED_ARTICLE_HIGHLIGHTED);
+		}
+		wrapper.add(data.getUpcomingMovies(), UPCOMING_MOVIES);
+		
+		List<BoxOfficeItem> boxOfficeItems = data.getBoxOfficeItems();
+		if (!ListUtils.isEmpty(boxOfficeItems)) {
+			wrapper.add(boxOfficeItems, FEATURED_BOX_OFFICE);
+		}
+		
+		List<GalleryItem> photoGallery = data.getPhotoGallery();
+		if (!ListUtils.isEmpty(photoGallery)) {
+			wrapper.add(photoGallery, FEATURED_PHOTO_GALLERY);
 		}
 		
 		wrapper.add(data.getFeaturedPoll(), FEATURED_POLL);
+		
+		List<Movie> reviews = data.getFeaturedReviews();
+		if (!ListUtils.isEmpty(reviews)) {
+			wrapper.add(reviews, FEATURED_REVIEWS);
+		}
+		
+		List<Movie> showtimes = data.getShowTimes();
+		if (!ListUtils.isEmpty(showtimes)) {
+			wrapper.add(showtimes, FEATURED_SHOWTIMES);
+		}
+		
 		wrapper.add(data.getFeaturedTrivia(), FEATURED_TRIVIA);
 		
-		List<Troll> trolls = data.getFeaturedTrolls();
-		if (!ListUtils.isEmpty(trolls)) {
-			for (Troll troll : trolls) {
-				wrapper.add(troll, FEATURED_TROLL);
-			}
+		if (!ListUtils.isEmpty(topArticles)) {
+			wrapper.add(new ArrayList<>(topArticles), FEATURED_ARTICLE);
 		}
 		
-		List<Movie> movies = data.getFeaturedMovies();
-		wrapper.add("Watch movies", HEADERS);
-		if (!ListUtils.isEmpty(movies)) {
-			for (Movie movie : movies) {
-				wrapper.add(movie, FEATURED_MOVIE);
-			}
+		List<Video> trendingVideos = data.getFeaturedTrending();
+		if (!ListUtils.isEmpty(trendingVideos)) {
+			wrapper.add(trendingVideos, FEATURED_TRENDING_VIDEOS);
 		}
+		
+		List<Video> fullMovies = data.getFullVideos();
+		if (!ListUtils.isEmpty(fullMovies)) {
+			wrapper.add(fullMovies, FEATURED_FULL_VIDEOS);
+		}
+		
+		wrapper.add(data.getFeaturedTrolls(), FEATURED_TROLL);
+		
+//		List<Movie> movies = data.getFeaturedMovies();
+//		wrapper.add("Watch movies", HEADERS);
+//		if (!ListUtils.isEmpty(movies)) {
+//			for (Movie movie : movies) {
+//				wrapper.add(movie, FEATURED_MOVIE);
+//			}
+//		}
 		
 		return wrapper;
 	}

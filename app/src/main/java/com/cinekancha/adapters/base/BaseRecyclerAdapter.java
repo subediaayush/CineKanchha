@@ -11,7 +11,7 @@ import android.view.animation.AnimationUtils;
 /**
  * Abstract class for easy layout inflate and data binding for list operation adapters
  */
-public abstract class BaseRecyclerAdapter<VH extends BaseViewHolder> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public abstract class  BaseRecyclerAdapter<VH extends BaseViewHolder> extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements RecyclerViewClickListener {
 
     private Context mContext;
     private RecyclerViewClickListener onClickListener;
@@ -38,7 +38,7 @@ public abstract class BaseRecyclerAdapter<VH extends BaseViewHolder> extends Rec
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         BaseViewHolder baseHolder = (BaseViewHolder) holder;
-        switch (getItemViewType(position)) {
+        switch (holder.getItemViewType()) {
             case 0:
                 setViewOfTypeZero(baseHolder, position);
                 break;
@@ -73,14 +73,20 @@ public abstract class BaseRecyclerAdapter<VH extends BaseViewHolder> extends Rec
             case 10:
                 setViewOfTypeTen(baseHolder, position);
                 break;
+            default:
+                setViewOfType(baseHolder, position, holder.getItemViewType());
         }
     }
     
-    private void setViewOfTypeNine(BaseViewHolder baseHolder, int position) {
+    protected void setViewOfType(BaseViewHolder baseHolder, int position, int viewType) {
+    
+    }
+    
+    protected void setViewOfTypeNine(BaseViewHolder baseHolder, int position) {
         setViewOfTypeZero(baseHolder, position);
     }
     
-    private void setViewOfTypeTen(BaseViewHolder baseHolder, int position) {
+    protected void setViewOfTypeTen(BaseViewHolder baseHolder, int position) {
         setViewOfTypeZero(baseHolder, position);
     }
     
@@ -134,22 +140,6 @@ public abstract class BaseRecyclerAdapter<VH extends BaseViewHolder> extends Rec
         if (onClickListener != null) {
             onClickListener.onClick(view, position);
         }
-    }
-    
-    /**
-     * Interface definition for a callback to be invoked when an item in a
-     * RecyclerView has been clicked.
-     */
-    public interface RecyclerViewClickListener {
-
-        /**
-         * Callback method to be invoked when a item in a
-         * RecyclerView is clicked
-         *
-         * @param v        The view within the RecyclerView.Adapter
-         * @param position The position of the view in the adapter
-         */
-        void onClick(View v, int position);
     }
     
 }

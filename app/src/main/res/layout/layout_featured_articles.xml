@@ -1,35 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="match_parent"
-	android:layout_height="wrap_content"
+	android:layout_height="64dp"
+	xmlns:tools="http://schemas.android.com/tools"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:orientation="horizontal"
+	android:background="#F37F2B"
 	>
 
-	<ImageView
-		android:id="@+id/image"
-		android:layout_width="56dp"
-		android:layout_height="56dp"
-		/>
-
 	<LinearLayout
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_marginLeft="72dp"
-		android:layout_marginStart="72dp"
+		android:layout_width="wrap_content"
+		android:layout_height="match_parent"
 		android:orientation="vertical"
+		android:paddingLeft="8dp"
+		android:paddingRight="8dp"
+		android:gravity="center"
+		android:background="#F1453D"
 		>
-
 		<TextView
-			android:id="@+id/title"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:textAppearance="@style/TextAppearance.AppCompat.Title"
+			android:textSize="28dp"
+			android:text="TOP"
+			android:gravity="center_horizontal"
+			android:textStyle="bold"
+			android:includeFontPadding="false"
+			android:textAllCaps="true"
+			android:textColor="@android:color/white"
 			/>
-
 		<TextView
-			android:id="@+id/summary"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+			android:gravity="center_horizontal"
+			android:textSize="14dp"
+			android:text="Stories"
+			android:textAllCaps="true"
+			android:includeFontPadding="false"
+			android:textColor="@android:color/white"
 			/>
 	</LinearLayout>
-</FrameLayout>
+
+	<TextView
+		android:id="@+id/news"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_weight="1"
+		android:textSize="18sp"
+		android:textStyle="bold"
+		android:paddingLeft="16dp"
+		android:paddingRight="16dp"
+		android:layout_gravity="center_vertical"
+		tools:text="Priyanka Chopra to ma comebac with bharat"
+		android:textColor="#fff"
+		/>
+
+	<ImageView
+		android:layout_width="24dp"
+		android:layout_height="match_parent"
+		android:background="#F1453D"
+		app:srcCompat="@drawable/ic_chevron_right"
+		/>
+
+</LinearLayout>

@@ -23,6 +23,7 @@ import com.cinekancha.view.CineHomeViewModel;
 import com.google.gson.Gson;
 
 import butterknife.BindView;
+import me.relex.circleindicator.CircleIndicator;
 
 public class HomeActivity extends BaseNavigationActivity implements OnSlideClickListener {
     private static final String TAG = "HomeActivity";
@@ -37,6 +38,8 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
     protected AppBarLayout mAppbarLayout;
     @BindView(R.id.collapsing_toolbar)
     protected CollapsingToolbarLayout mCollapsingToolbarLayout;
+    @BindView(R.id.indicator)
+    protected CircleIndicator mIndicator;
     
     private HomeDataAdapter mHomeDataAdapter;
     
@@ -57,20 +60,14 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
         mHomeDataAdapter = new HomeDataAdapter();
         mSlideAdapter = new SlideShowAdapter(getSupportFragmentManager(), mFeaturedPager);
         
-        mFeaturedPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                mSlideAdapter.stopSlideshow();
-            }
-    
-            @Override
-            public void onPageSelected(int position) {
-                mSlideAdapter.startSlideshow();
-            }
-    
+        mFeaturedPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageScrollStateChanged(int state) {
-        
+                if (state == ViewPager.SCROLL_STATE_IDLE) {
+                    mSlideAdapter.startSlideshow();
+                } else {
+                    mSlideAdapter.stopSlideshow();
+                }
             }
         });
         mSlideAdapter.setOnSlideClickListener(this);
@@ -79,9 +76,16 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
         
         mHomeListView.setLayoutManager(new LinearLayoutManager(this));
         mHomeListView.setAdapter(mHomeDataAdapter);
+        
+        mHomeListView.setNestedScrollingEnabled(false);
+        
+        mFeaturedPager.setAdapter(mSlideAdapter);
+        
+        mIndicator.setViewPager(mFeaturedPager);
+        mSlideAdapter.registerDataSetObserver(mIndicator.getDataSetObserver());
     }
     
-    private void setHomeData() {
+    private void renderHomeData() {
         HomeData data = mCineHomeViewModel.getHomeData();
         mHomeDataAdapter.setHomeData(data);
         mSlideAdapter.setFeaturedItems(data.getFeaturedItems());
@@ -104,7 +108,7 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
 
     private void handleHomeData(HomeData data) {
         mCineHomeViewModel.setHomeData(data);
-        setHomeData();
+        renderHomeData();
     }
     
     @Override
@@ -117,7 +121,7 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
     protected void onResume() {
         super.onResume();
         HomeData data = mCineHomeViewModel.getHomeData();
-        if (data != null) setHomeData();
+        if (data != null) renderHomeData();
         else requestHomeData();
     }
     

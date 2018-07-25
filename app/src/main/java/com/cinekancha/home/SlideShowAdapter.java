@@ -1,15 +1,17 @@
 package com.cinekancha.home;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,7 @@ import android.widget.TextView;
 
 import com.cinekancha.R;
 import com.cinekancha.entities.model.FeaturedItem;
+import com.cinekancha.fragments.base.BaseFragment;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -29,9 +32,10 @@ import butterknife.BindView;
  * Created by aayushsubedi on 3/13/18.
  */
 
-public class SlideShowAdapter extends FragmentStatePagerAdapter {
+public class SlideShowAdapter extends FragmentPagerAdapter {
 	
 	private static final int MESSAGE_SLIDE_CHANGE = 123654;
+	private static final String TAG = "SlideShowAdapter";
 	
 	private final ViewPager mPager;
 	private List<FeaturedItem> mFeaturedItems;
@@ -51,8 +55,9 @@ public class SlideShowAdapter extends FragmentStatePagerAdapter {
 			public void handleMessage(Message msg) {
 				switch (msg.what) {
 					case MESSAGE_SLIDE_CHANGE: {
-						mPager.setCurrentItem(mPager.getCurrentItem() % getCount());
-						startSlideshow();
+						int nextPage = (mPager.getCurrentItem() + 1) % getCount();
+						Log.d(TAG, "Switching page " + nextPage);
+						mPager.setCurrentItem(nextPage);
 						break;
 					}
 				}
@@ -72,21 +77,23 @@ public class SlideShowAdapter extends FragmentStatePagerAdapter {
 	}
 	
 	public void startSlideshow() {
-		mSlideChangeHandler.sendEmptyMessageDelayed(MESSAGE_SLIDE_CHANGE, 5000);
+		Log.d(TAG, "Resuming slide show");
+		if (mSlideChangeHandler.hasMessages(MESSAGE_SLIDE_CHANGE)) {
+			Log.d(TAG, "Remove old dispatch");
+			mSlideChangeHandler.removeMessages(MESSAGE_SLIDE_CHANGE);
+		}
+		boolean sent = mSlideChangeHandler.sendEmptyMessageDelayed(MESSAGE_SLIDE_CHANGE, 1000);
+		Log.d(TAG, "Slide " + (sent ? "" : " not ") + " resumed");
 	}
 	
 	public void stopSlideshow() {
+		Log.d(TAG, "Pausing slide show");
 		mSlideChangeHandler.removeMessages(MESSAGE_SLIDE_CHANGE);
 	}
 	
 	@Override
 	public Fragment getItem(int position) {
 		return getFragment(position);
-	}
-	
-	@Override
-	public int getItemPosition(Object object) {
-		return POSITION_NONE;
 	}
 	
 	private Fragment getFragment(int position) {
@@ -102,14 +109,19 @@ public class SlideShowAdapter extends FragmentStatePagerAdapter {
 		this.mListener = onSlideClickListener;
 	}
 	
-	public static class SlideFragment extends Fragment {
-		private FeaturedItem mFeaturedItem;
-		
+	public static class SlideFragment extends BaseFragment {
 		@BindView(R.id.image)
 		protected ImageView mImage;
-		@BindView(R.id.description)
-		protected TextView mDesc;
+		@BindView(R.id.title)
+		protected TextView mTitle;
+		@BindView(R.id.subtitle)
+		protected TextView mSubtitle;
+		
+		private FeaturedItem mFeaturedItem;
 		private OnSlideClickListener mListener;
+		private int[] colors = new int[] {
+				Color.BLUE, Color.RED, Color.YELLOW, Color.GRAY, Color.GREEN
+		};
 		
 		public static SlideFragment newInstance(FeaturedItem item, OnSlideClickListener listener) {
 			SlideFragment fragment = new SlideFragment();
@@ -126,21 +138,41 @@ public class SlideShowAdapter extends FragmentStatePagerAdapter {
 		@Nullable
 		@Override
 		public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-			View view = inflater.inflate(R.layout.fragment_featured_slide, container, false);
+			View view = super.onCreateView(inflater, container, savedInstanceState);
+			
 			
 			if (!TextUtils.isEmpty(mFeaturedItem.getImageUrl())) {
 				Picasso.with(getContext()).load(mFeaturedItem.getImageUrl()).into(mImage);
 			}
 			
-			mDesc.setText(mFeaturedItem.getDescription());
+			mImage.setBackgroundColor(getRandomColor());
 			
-			view.setOnClickListener(v -> {
-				if (mListener != null) {
-					mListener.onSlideClicked(mFeaturedItem);
-				}
-			});
+			mTitle.setText(mFeaturedItem.getTitle());
+			if (TextUtils.isEmpty(mFeaturedItem.getSubTitle())) {
+				mSubtitle.setVisibility(View.GONE);
+			} else {
+				mSubtitle.setVisibility(View.VISIBLE);
+				mSubtitle.setText(mFeaturedItem.getSubTitle());
+			}
+			
+			if (view != null) {
+				view.setOnClickListener(v -> {
+					if (mListener != null) {
+						mListener.onSlideClicked(mFeaturedItem);
+					}
+				});
+			}
 			
 			return view;
+		}
+		
+		@Override
+		protected int getLayoutId() {
+			return R.layout.fragment_featured_slide;
+		}
+		
+		private int getRandomColor() {
+			return colors[(int) (Math.random() * colors.length) % colors.length];
 		}
 		
 		public void setListener(OnSlideClickListener listener) {

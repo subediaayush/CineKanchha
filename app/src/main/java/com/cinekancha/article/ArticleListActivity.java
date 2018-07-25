@@ -10,7 +10,7 @@ import android.view.View;
 
 import com.cinekancha.R;
 import com.cinekancha.activities.base.BaseNavigationActivity;
-import com.cinekancha.adapters.base.BaseRecyclerAdapter;
+import com.cinekancha.adapters.base.RecyclerViewClickListener;
 import com.cinekancha.view.CineArticleViewModel;
 
 import butterknife.BindView;
@@ -19,7 +19,7 @@ import butterknife.BindView;
  * Created by aayushsubedi on 3/19/18.
  */
 
-public class ArticleListActivity extends BaseNavigationActivity implements BaseRecyclerAdapter.RecyclerViewClickListener {
+public class ArticleListActivity extends BaseNavigationActivity implements RecyclerViewClickListener {
 	@BindView(R.id.list_view)
 	public RecyclerView mArticleList;
 	

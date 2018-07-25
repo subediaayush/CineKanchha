@@ -1,7 +1,6 @@
 package com.cinekancha.home;
 
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cinekancha.R;
@@ -15,8 +14,8 @@ import butterknife.BindView;
 
 public class TriviaHolder extends HomeItemHolder {
 	
-	@BindView(R.id.title)
-	public TextView title;
+//	@BindView(R.id.title)
+//	public TextView title;
 	
 	@BindView(R.id.trivia)
 	public TextView trivia;
