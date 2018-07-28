@@ -25,7 +25,7 @@ import butterknife.BindView;
 public class TrendingVideosHolder extends HomeItemHolder {
 	
 	private final ThumbnailAdapter<Video> adapter;
-	@BindView(R.id.movies)
+	@BindView(R.id.list)
 	public RecyclerView upcomingMoviesList;
 	@BindView(R.id.label)
 	public TextView title;

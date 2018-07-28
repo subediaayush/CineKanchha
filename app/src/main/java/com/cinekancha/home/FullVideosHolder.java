@@ -25,7 +25,7 @@ import butterknife.BindView;
 public class FullVideosHolder extends HomeItemHolder {
 	
 	private final ThumbnailAdapter<Video> adapter;
-	@BindView(R.id.movies)
+	@BindView(R.id.list)
 	public RecyclerView upcomingMoviesList;
 	@BindView(R.id.label)
 	public TextView title;
@@ -58,7 +58,7 @@ public class FullVideosHolder extends HomeItemHolder {
 		decoration.setDrawable(ContextCompat.getDrawable(context, R.drawable.divider_transparent));
 		upcomingMoviesList.addItemDecoration(decoration);
 
-		title.setText("Trending Videos");
+		title.setText("Watch Movies");
 	}
 	
 	public void setVideos(List<Video> movies) {

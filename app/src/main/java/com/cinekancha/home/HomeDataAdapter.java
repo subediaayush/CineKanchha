@@ -54,16 +54,10 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
 				return new HeaderHolder(this, view);
 			}
 			case NEW_MOVIES: {
-				return new NewReleaseHolder(
-						this,
-						view
-				);
+				return new NewReleaseHolder(this, view);
 			}
 			case UPCOMING_MOVIES: {
-				return new UpcomingReleaseHolder(
-						this,
-						view
-				);
+				return new UpcomingReleaseHolder(this, view);
 			}
 			case FEATURED_ARTICLE_HIGHLIGHTED: {
 				return new FeaturedNewsHolder(this, view);
@@ -121,20 +115,21 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
 	@Override
 	public int[] getLayoutsForViewType() {
 		return new int[]{
-				R.layout.layout_home_header,
-				R.layout.layout_featured_thumbnails,
-				R.layout.layout_featured_thumbnails,
-				R.layout.layout_featured_articles,
-				R.layout.layout_featured_articles,
-				R.layout.layout_featured_poll,
-				R.layout.layout_featured_trivia,
-				R.layout.layout_featured_trolls,
-				R.layout.layout_featured_movie,
-				R.layout.layout_featured_box_office,
-				R.layout.layout_featured_thumbnails,
-				R.layout.layout_featured_thumbnails,
-				R.layout.layout_featured_thumbnails,
-				R.layout.layout_featured_thumbnails,
+				R.layout.layout_home_header,            // 0
+				R.layout.layout_featured_thumbnails,    // 1
+				R.layout.layout_featured_thumbnails,    // 2
+				R.layout.layout_featured_articles,      // 3
+				R.layout.layout_featured_articles,      // 4
+				R.layout.layout_featured_poll,          // 5
+				R.layout.layout_featured_trivia,        // 6
+				R.layout.layout_featured_trolls,        // 7
+				R.layout.layout_featured_movie,         // 8
+				R.layout.layout_featured_box_office,    // 9
+				R.layout.layout_featured_thumbnails,    // 10
+				R.layout.layout_featured_thumbnails,    // 11
+				R.layout.layout_featured_thumbnails,    // 12
+				R.layout.layout_featured_thumbnails,    // 13
+				R.layout.layout_featured_thumbnails,    // 14
 			
 		};
 	}
