@@ -16,7 +16,7 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
 
-        buildConfigField("String", "BASE_URL", "\"https://api.myjson.com/\"")
+        buildConfigField("String", "BASE_URL", "\"http://filmyfuche.com/admin/\"")
     }
     buildTypes {
         release {

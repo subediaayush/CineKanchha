@@ -20,39 +20,38 @@ import butterknife.BindView;
  */
 
 public class NewReleaseHolder extends HomeItemHolder {
-	
-	@BindView(R.id.list)
-	public RecyclerView newMoviesList;
-	@BindView(R.id.label)
-	public TextView title;
-	
-	private ThumbnailAdapter<Movie> adapter;
-	
-	public NewReleaseHolder(BaseRecyclerAdapter baseRecyclerAdapter, View view) {
-		super(baseRecyclerAdapter, view);
-		setIsRecyclable(false);
-		adapter = new ThumbnailAdapter<>(R.layout.layout_featued_movie_new_release, new ThumbnailConverter<Movie>() {
-			@Override
-			public ThumbWrapper convert(Movie data) {
-				return new ThumbWrapper(
-						data.getFeaturedImage(),
-						data.getName()
-				);
-			}
-		});
-		newMoviesList.setAdapter(adapter);
-		
-		LinearLayoutManager manager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false) {
-			@Override
-			public boolean canScrollVertically() {
-				return false;
-			}
-		};
-		newMoviesList.setNestedScrollingEnabled(false);
-		newMoviesList.setLayoutManager(manager);
-	}
-	
-	public void setMovies(List<Movie> movies) {
-		adapter.setThumbnails(movies);
-	}
+
+    @BindView(R.id.list)
+    public RecyclerView newMoviesList;
+    @BindView(R.id.label)
+    public TextView title;
+    private ThumbnailAdapter<Movie> adapter;
+
+    public NewReleaseHolder(BaseRecyclerAdapter baseRecyclerAdapter, View view) {
+        super(baseRecyclerAdapter, view);
+        setIsRecyclable(false);
+        adapter = new ThumbnailAdapter<>(R.layout.layout_featued_movie_new_release, new ThumbnailConverter<Movie>() {
+            @Override
+            public ThumbWrapper convert(Movie data) {
+                return new ThumbWrapper(
+                        data.getFeaturedImage(),
+                        data.getName()
+                );
+            }
+        });
+        newMoviesList.setAdapter(adapter);
+
+        LinearLayoutManager manager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false) {
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        };
+        newMoviesList.setNestedScrollingEnabled(false);
+        newMoviesList.setLayoutManager(manager);
+    }
+
+    public void setMovies(List<Movie> movies) {
+        adapter.setThumbnails(movies);
+    }
 }

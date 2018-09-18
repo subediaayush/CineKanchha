@@ -23,44 +23,46 @@ import butterknife.BindView;
  */
 
 public class UpcomingReleaseHolder extends HomeItemHolder {
-	
-	private final ThumbnailAdapter<Movie> adapter;
-	@BindView(R.id.list)
-	public RecyclerView upcomingMoviesList;
-	@BindView(R.id.label)
-	public TextView title;
-	
-	public UpcomingReleaseHolder(BaseRecyclerAdapter baseRecyclerAdapter, View view) {
-		super(baseRecyclerAdapter, view);
-		setIsRecyclable(false);
-		adapter = new ThumbnailAdapter<>(R.layout.layout_featured_movie, new ThumbnailConverter<Movie>() {
-			@Override
-			public ThumbWrapper convert(Movie data) {
-				return new ThumbWrapper(
-						data.getFeaturedImage(),
-						data.getName(),
-						data.getRelease_date()
-				);
-			}
-		});
-		upcomingMoviesList.setAdapter(adapter);
-		LinearLayoutManager manager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false) {
-			@Override
-			public boolean canScrollVertically() {
-				return false;
-			}
-		};
-		
-		Context context = view.getContext();
-		upcomingMoviesList.setNestedScrollingEnabled(false);
-		upcomingMoviesList.setLayoutManager(manager);
-		DividerItemDecoration decoration = new DividerItemDecoration(upcomingMoviesList.getContext(), DividerItemDecoration.HORIZONTAL);
-		decoration.setDrawable(ContextCompat.getDrawable(context, R.drawable.divider_transparent));
-		upcomingMoviesList.addItemDecoration(decoration);
-	}
-	
-	public void setMovies(List<Movie> movies) {
-		adapter.setThumbnails(movies);
-	}
-	
+
+    private final ThumbnailAdapter<Movie> adapter;
+    @BindView(R.id.list)
+    public RecyclerView upcomingMoviesList;
+    @BindView(R.id.label)
+    public TextView title;
+    @BindView(R.id.txtViewAll)
+    public TextView txtViewAll;
+
+    public UpcomingReleaseHolder(BaseRecyclerAdapter baseRecyclerAdapter, View view) {
+        super(baseRecyclerAdapter, view);
+        setIsRecyclable(false);
+        adapter = new ThumbnailAdapter<>(R.layout.layout_featured_movie, new ThumbnailConverter<Movie>() {
+            @Override
+            public ThumbWrapper convert(Movie data) {
+                return new ThumbWrapper(
+                        data.getFeaturedImage(),
+                        data.getName(),
+                        data.getRelease_date()
+                );
+            }
+        });
+        upcomingMoviesList.setAdapter(adapter);
+        LinearLayoutManager manager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false) {
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        };
+
+        Context context = view.getContext();
+        upcomingMoviesList.setNestedScrollingEnabled(false);
+        upcomingMoviesList.setLayoutManager(manager);
+        DividerItemDecoration decoration = new DividerItemDecoration(upcomingMoviesList.getContext(), DividerItemDecoration.HORIZONTAL);
+        decoration.setDrawable(ContextCompat.getDrawable(context, R.drawable.divider_transparent));
+        upcomingMoviesList.addItemDecoration(decoration);
+    }
+
+    public void setMovies(List<Movie> movies) {
+        adapter.setThumbnails(movies);
+    }
+
 }
