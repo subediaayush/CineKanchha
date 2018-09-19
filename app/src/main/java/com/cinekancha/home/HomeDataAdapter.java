@@ -85,7 +85,7 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
                             public ThumbWrapper convert(Movie data) {
                                 return new ThumbWrapper(
                                         data.getFeaturedImage(),
-                                        data.getName()
+                                        data.getName(), data.getId()
                                 );
                             }
                         }

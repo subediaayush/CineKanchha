@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/relativelayout"
+        android:layout_width="match_parent"
+        android:layout_height="205dp">
+
+        <ImageView
+            android:id="@+id/imgBanner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/ic_play" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/txtBannerHead"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Test"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:gravity="center_vertical">
+
+            <FrameLayout
+                android:id="@+id/lytShare"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/circle_background"
+                android:padding="5dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_share" />
+
+            </FrameLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:text="Share"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true">
+
+            <Button
+                android:id="@+id/btnReview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_background"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+                android:text="Reviews"
+                android:textColor="@color/white" />
+
+            <LinearLayout
+                android:id="@+id/lytDays"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/circle_background"
+                    android:paddingBottom="7dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="7dp">
+
+                    <TextView
+                        android:id="@+id/txtDays"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="12"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="16sp" />
+
+                </FrameLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:paddingLeft="10dp"
+                    android:text="Days to go"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycleViewRating"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp">
+
+        <ImageView
+            android:id="@+id/imgFeature"
+            android:layout_width="91dp"
+            android:layout_height="128dp" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingLeft="10dp">
+
+            <TextView
+                android:id="@+id/txtTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtSubTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp">
+
+                <TextView
+                    android:id="@+id/txtCasts"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/txtDirector"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/txtProducer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/txtMusic"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/txtDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/rlytTeaser"
+        android:layout_width="match_parent"
+        android:layout_height="205dp">
+
+        <ImageView
+            android:id="@+id/imgTeaser"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/ic_play" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/txtTeaser"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Test"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</LinearLayout>

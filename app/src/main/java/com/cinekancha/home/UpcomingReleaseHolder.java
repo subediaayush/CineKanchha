@@ -13,6 +13,7 @@ import com.cinekancha.adapters.base.BaseRecyclerAdapter;
 import com.cinekancha.entities.ThumbWrapper;
 import com.cinekancha.entities.ThumbnailConverter;
 import com.cinekancha.entities.model.Movie;
+import com.cinekancha.listener.OnClickListener;
 
 import java.util.List;
 
@@ -41,8 +42,13 @@ public class UpcomingReleaseHolder extends HomeItemHolder {
                 return new ThumbWrapper(
                         data.getFeaturedImage(),
                         data.getName(),
-                        data.getRelease_date()
+                        data.getRelease_date(), data.getId()
                 );
+            }
+        }, new OnClickListener() {
+            @Override
+            public void onClick(int id) {
+
             }
         });
         upcomingMoviesList.setAdapter(adapter);

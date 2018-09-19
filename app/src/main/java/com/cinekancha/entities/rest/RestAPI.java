@@ -3,6 +3,7 @@ package com.cinekancha.entities.rest;
 import com.cinekancha.BuildConfig;
 import com.cinekancha.entities.model.HomeData;
 import com.cinekancha.entities.model.Movie;
+import com.cinekancha.entities.model.MovieDetail;
 
 import java.util.concurrent.TimeUnit;
 
@@ -63,8 +64,8 @@ public class RestAPI {
             call.cancel();
     }
 
-    public Observable<Movie> getMovie() {
-        return getApiService().getMovie()
+    public Observable<MovieDetail> getMovie(int id) {
+        return getApiService().getMovie(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .retry(1);
