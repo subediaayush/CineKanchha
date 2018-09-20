@@ -1,47 +1,55 @@
 package com.cinekancha.movieDetail;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.graphics.Color;
-import android.support.annotation.Nullable;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.webkit.WebView;
+import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.cinekancha.BuildConfig;
 import com.cinekancha.R;
 import com.cinekancha.activities.base.BaseNavigationActivity;
-import com.cinekancha.entities.model.Movie;
+import com.cinekancha.entities.model.FeaturedItem;
+import com.cinekancha.entities.model.Links;
 import com.cinekancha.entities.model.MovieDetail;
 import com.cinekancha.entities.rest.RestAPI;
+import com.cinekancha.home.OnSlideClickListener;
 import com.cinekancha.utils.Constants;
+import com.cinekancha.utils.GlobalUtils;
 import com.cinekancha.view.CinePostMovieViewModel;
 import com.squareup.picasso.Picasso;
 
-import org.w3c.dom.Text;
-
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import butterknife.BindView;
+import me.relex.circleindicator.CircleIndicator;
 
-public class MoviePostDetailActivity extends BaseNavigationActivity {
-    @BindView(R.id.imgBanner)
-    public ImageView imgBanner;
-
+public class MoviePostDetailActivity extends BaseNavigationActivity implements OnSlideClickListener, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.imgFeature)
     public ImageView imgFeature;
 
-    @BindView(R.id.txtBannerHead)
-    public TextView txtBannerHead;
+    @BindView(R.id.viewPagerYoutube)
+    protected ViewPager viewPagerYoutube;
+
+    @BindView(R.id.indicator)
+    protected CircleIndicator mIndicator;
+
+    @BindView(R.id.toolbar)
+    protected Toolbar toolbar;
 
     @BindView(R.id.txtTitle)
     public TextView txtTitle;
@@ -70,34 +78,81 @@ public class MoviePostDetailActivity extends BaseNavigationActivity {
     @BindView(R.id.txtDescription)
     public TextView txtDescription;
 
+    @BindView(R.id.swipeRefreshLayout)
+    public SwipeRefreshLayout swipeRefreshLayout;
+
     @BindView(R.id.lytDays)
     public LinearLayout lytDays;
 
     @BindView(R.id.recycleViewRating)
-    public RecyclerView recycleView;
+    public RecyclerView recyclerViewRating;
 
     private CinePostMovieViewModel mCinePostMovieModel;
 
     private RatingAdapter adapter;
 
+    private String videoId = "";
     private int movieId;
+    private SlideaYoutubeAdapter mSlideAdapter;
+    String days = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mCinePostMovieModel = ViewModelProviders.of(this).get(CinePostMovieViewModel.class);
-        Log.d("MovieID", getIntent().getStringExtra("movie"));
         mCinePostMovieModel.setMovieID(Integer.parseInt(getIntent().getStringExtra("movie")));
+        toolbar.setTitle(getString(R.string.app_name));
         init();
-
     }
 
     private void init() {
-        recycleView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        recycleView.setNestedScrollingEnabled(false);
-        recycleView.setHasFixedSize(true);
+        recyclerViewRating.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        recyclerViewRating.setNestedScrollingEnabled(false);
+        recyclerViewRating.setHasFixedSize(true);
         adapter = new RatingAdapter();
-        recycleView.setAdapter(adapter);
+        recyclerViewRating.setAdapter(adapter);
+        swipeRefreshLayout.setOnRefreshListener(this);
+
+        mSlideAdapter = new SlideaYoutubeAdapter(getSupportFragmentManager(), viewPagerYoutube);
+
+        viewPagerYoutube.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                if (state == ViewPager.SCROLL_STATE_IDLE) {
+                    mSlideAdapter.startSlideshow();
+                } else {
+                    mSlideAdapter.stopSlideshow();
+                }
+            }
+        });
+        mSlideAdapter.setOnSlideClickListener(this);
+        viewPagerYoutube.setAdapter(mSlideAdapter);
+
+        mIndicator.setViewPager(viewPagerYoutube);
+        mSlideAdapter.registerDataSetObserver(mIndicator.getDataSetObserver());
+    }
+
+    private String compareDate(String releaseDateApi) {
+        Date currentDate = Calendar.getInstance().getTime();
+        String type = "";
+        SimpleDateFormat curFormater = new SimpleDateFormat("yyyy-MM-dd");
+        Date releaseDate = null;
+        try {
+            releaseDate = curFormater.parse(releaseDateApi);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (releaseDate.after(currentDate)) {
+            Calendar releaseDay = Calendar.getInstance();
+            releaseDay.setTime(releaseDate);
+            long diff = releaseDay.getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
+            days = String.valueOf(diff / (24 * 60 * 60 * 1000));
+            type = "pre";
+        } else if (releaseDate.before(currentDate))
+            type = "post";
+        else if (releaseDate.equals(currentDate))
+            type = "post";
+        return type;
     }
 
     @Override
@@ -110,7 +165,7 @@ public class MoviePostDetailActivity extends BaseNavigationActivity {
         super.onResume();
 
         if (mCinePostMovieModel.getMovie() == null) {
-            requestArticle(mCinePostMovieModel.getMovieId());
+            requestMovie(mCinePostMovieModel.getMovieId());
         } else {
             try {
                 renderMovieData();
@@ -121,14 +176,24 @@ public class MoviePostDetailActivity extends BaseNavigationActivity {
     }
 
     private void renderMovieData() throws MalformedURLException {
+        swipeRefreshLayout.setRefreshing(false);
         MovieDetail data = mCinePostMovieModel.getMovie();
         if (data != null) {
-            String videoId = extractYoutubeId(data.getLinks().get(0).getUrl());
-            String img_url = "http://img.youtube.com/vi/" + videoId + "/0.jpg"; // this is link which will give u thumnail image of that video
-            Picasso.with(this)
-                    .load(img_url)
-                    .placeholder(R.drawable.placeholder_movie)
-                    .into(imgBanner);
+            String releaseType = "";
+            if (data.getReleaseDate() != null)
+                releaseType = compareDate(data.getReleaseDate());
+            if (!TextUtils.isEmpty(releaseType) && releaseType.equals("pre")) {
+                btnReview.setVisibility(View.GONE);
+                lytDays.setVisibility(View.VISIBLE);
+                txtDays.setText(days);
+                recyclerViewRating.setVisibility(View.GONE);
+            } else if (!TextUtils.isEmpty(releaseType) && releaseType.equals("post")) {
+                btnReview.setVisibility(View.VISIBLE);
+                lytDays.setVisibility(View.GONE);
+                recyclerViewRating.setVisibility(View.VISIBLE);
+            }
+            mSlideAdapter.setFeaturedItems(data.getLinks());
+            mSlideAdapter.startSlideshow();
             Picasso.with(this)
                     .load(Constants.imageUrl + data.getFeaturedImage())
                     .placeholder(R.drawable.placeholder_movie)
@@ -139,7 +204,6 @@ public class MoviePostDetailActivity extends BaseNavigationActivity {
             String director = (data.getCrew().getDirectedBy() == null) ? "" : data.getCrew().getDirectedBy();
             String producer = (data.getCrew().getProducedBy() == null) ? "" : data.getCrew().getProducedBy();
             String music = (data.getCrew().getMusic() == null) ? "" : data.getCrew().getMusic();
-            txtBannerHead.setText(type);
             txtTitle.setText(title);
             txtCasts.setText("Cast: " + casts);
             txtDirector.setText("Director: " + director);
@@ -148,13 +212,19 @@ public class MoviePostDetailActivity extends BaseNavigationActivity {
         }
     }
 
-    private void requestArticle(int id) {
+    private void requestMovie(int id) {
         compositeDisposable.add(RestAPI.getInstance().getMovie(id)
                 .doOnSubscribe(disposable -> {
 //                    mSwipeRefreshLayout.setRefreshing(true);
                 })
 //                .doFinally(() -> mSwipeRefreshLayout.setRefreshing(false))
                 .subscribe(this::handleMovieData, this::handleMovieFetchError));
+    }
+
+    private void startYoutube(String url) throws MalformedURLException {
+        videoId = GlobalUtils.extractYoutubeId(url);
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube://" + videoId));
+        startActivity(intent);
     }
 
 
@@ -168,17 +238,23 @@ public class MoviePostDetailActivity extends BaseNavigationActivity {
         renderMovieData();
     }
 
-    public String extractYoutubeId(String url) throws MalformedURLException {
-        String query = new URL(url).getQuery();
-        String[] param = query.split("&");
-        String id = null;
-        for (String row : param) {
-            String[] param1 = row.split("=");
-            if (param1[0].equals("v")) {
-                id = param1[1];
-            }
-        }
-        return id;
+
+    @Override
+    public void onSlideClicked(FeaturedItem item) {
+
     }
 
+    @Override
+    public void onSlideClicked(Links item) {
+        try {
+            startYoutube(item.getUrl());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onRefresh() {
+        requestMovie(movieId);
+    }
 }

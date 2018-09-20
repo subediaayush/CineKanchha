@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -15,6 +17,7 @@ import com.cinekancha.R;
 import com.cinekancha.activities.base.BaseNavigationActivity;
 import com.cinekancha.entities.model.FeaturedItem;
 import com.cinekancha.entities.model.HomeData;
+import com.cinekancha.entities.model.Links;
 import com.cinekancha.entities.rest.RestAPI;
 import com.cinekancha.home.HomeDataAdapter;
 import com.cinekancha.home.OnSlideClickListener;
@@ -27,25 +30,28 @@ import me.relex.circleindicator.CircleIndicator;
 
 public class HomeActivity extends BaseNavigationActivity implements OnSlideClickListener {
     private static final String TAG = "HomeActivity";
-    
-//    @BindView(R.id.swipeRefreshLayout)
+
+    //    @BindView(R.id.homeSwipeRefreshLayout)
 //    protected SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.home_list_view)
     protected RecyclerView mHomeListView;
+
     @BindView(R.id.featured_pager)
     protected ViewPager mFeaturedPager;
+
     @BindView(R.id.appbar_layout)
     protected AppBarLayout mAppbarLayout;
-    @BindView(R.id.collapsing_toolbar)
-    protected CollapsingToolbarLayout mCollapsingToolbarLayout;
+
     @BindView(R.id.indicator)
     protected CircleIndicator mIndicator;
-    
+
+    @BindView(R.id.toolbar)
+    protected Toolbar toolbar;
+
     private HomeDataAdapter mHomeDataAdapter;
-    
     private CineHomeViewModel mCineHomeViewModel;
     private SlideShowAdapter mSlideAdapter;
-    
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_home;
@@ -54,12 +60,12 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         mCineHomeViewModel = ViewModelProviders.of(this).get(CineHomeViewModel.class);
-        
+
         mHomeDataAdapter = new HomeDataAdapter();
         mSlideAdapter = new SlideShowAdapter(getSupportFragmentManager(), mFeaturedPager);
-        
+        toolbar.setTitle(getString(R.string.app_name));
         mFeaturedPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageScrollStateChanged(int state) {
@@ -71,36 +77,35 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
             }
         });
         mSlideAdapter.setOnSlideClickListener(this);
-    
-        mCollapsingToolbarLayout.setExpandedTitleColor(Color.TRANSPARENT);
-        
+//        mSwipeRefreshLayout.setOnRefreshListener(this);
+
         mHomeListView.setLayoutManager(new LinearLayoutManager(this));
         mHomeListView.setAdapter(mHomeDataAdapter);
-        
+
         mHomeListView.setNestedScrollingEnabled(false);
-        
+
         mFeaturedPager.setAdapter(mSlideAdapter);
-        
+
         mIndicator.setViewPager(mFeaturedPager);
         mSlideAdapter.registerDataSetObserver(mIndicator.getDataSetObserver());
     }
-    
+
     private void renderHomeData() {
+//        mSwipeRefreshLayout.setRefreshing(false);
         HomeData data = mCineHomeViewModel.getHomeData();
         mHomeDataAdapter.setHomeData(data);
         mSlideAdapter.setFeaturedItems(data.getFeaturedItems());
         mSlideAdapter.startSlideshow();
     }
-    
+
     private void requestHomeData() {
         compositeDisposable.add(RestAPI.getInstance().getHomeData()
                 .doOnSubscribe(disposable -> {
-//                    mSwipeRefreshLayout.setRefreshing(true);
                 })
 //                .doFinally(() -> mSwipeRefreshLayout.setRefreshing(false))
                 .subscribe(this::handleHomeData, this::handleHomeFetchError));
     }
-    
+
     private void handleHomeFetchError(Throwable throwable) {
         throwable.printStackTrace();
         Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
@@ -110,13 +115,13 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
         mCineHomeViewModel.setHomeData(data);
         renderHomeData();
     }
-    
+
     @Override
     protected void onPause() {
         super.onPause();
         mSlideAdapter.stopSlideshow();
     }
-    
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -124,9 +129,15 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
         if (data != null) renderHomeData();
         else requestHomeData();
     }
-    
+
     @Override
     public void onSlideClicked(FeaturedItem item) {
         Log.d(TAG, "clicked on item " + new Gson().toJson(item));
     }
+
+    @Override
+    public void onSlideClicked(Links item) {
+
+    }
+
 }

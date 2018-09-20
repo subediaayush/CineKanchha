@@ -9,7 +9,7 @@
 	tools:showIn="@layout/app_bar_home">
 
 	<android.support.v4.widget.SwipeRefreshLayout
-		android:id="@+id/swipeRefreshLayout"
+		android:id="@+id/homeSwipeRefreshLayout"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content">
 

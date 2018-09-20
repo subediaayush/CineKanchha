@@ -3,34 +3,47 @@
 
     <group android:checkableBehavior="single">
         <item
-                android:id="@+id/nav_camera"
-                android:icon="@drawable/ic_menu_camera"
-                android:title="Import"/>
+            android:id="@+id/menuHome"
+            android:title="@string/home" />
         <item
-                android:id="@+id/nav_gallery"
-                android:icon="@drawable/ic_menu_gallery"
-                android:title="Gallery"/>
+            android:id="@+id/menuNewsGossips"
+            android:title="@string/newsGossips" />
         <item
-                android:id="@+id/nav_slideshow"
-                android:icon="@drawable/ic_menu_slideshow"
-                android:title="Slideshow"/>
+            android:id="@+id/menuNewRelease"
+            android:title="@string/newReleases" />
         <item
-                android:id="@+id/nav_manage"
-                android:icon="@drawable/ic_menu_manage"
-                android:title="Tools"/>
+            android:id="@+id/menuUpComing"
+            android:title="@string/upcomingMovies" />
+        <item
+            android:id="@+id/menuBoxOffice"
+            android:title="@string/boxOffice" />
+        <item
+            android:id="@+id/menuTrending"
+            android:title="@string/trendingVideos" />
+        <item
+            android:id="@+id/menuWatchFull"
+            android:title="@string/watchFullMovies" />
+        <item
+            android:id="@+id/menMovieReviews"
+            android:title="@string/moviesReviews" />
+        <item
+            android:id="@+id/menuPhotoGallery"
+            android:title="@string/photoGallery" />
+        <item
+            android:id="@+id/menuFilmyTrivias"
+            android:title="@string/filmyTrivias" />
+        <item
+            android:id="@+id/menuFuchePoll"
+            android:title="@string/filmyFuchePoll" />
+        <item
+            android:id="@+id/menuFilmyTroll"
+            android:title="@string/FilmyTrolls" />
+        <item
+            android:id="@+id/menuSettings"
+            android:title="@string/settings" />
+        <item
+            android:id="@+id/menuContact"
+            android:title="@string/contactUs" />
+
     </group>
-
-    <item android:title="Communicate">
-        <menu>
-            <item
-                    android:id="@+id/nav_share"
-                    android:icon="@drawable/ic_menu_share"
-                    android:title="Share"/>
-            <item
-                    android:id="@+id/nav_send"
-                    android:icon="@drawable/ic_menu_send"
-                    android:title="Send"/>
-        </menu>
-    </item>
-
 </menu>

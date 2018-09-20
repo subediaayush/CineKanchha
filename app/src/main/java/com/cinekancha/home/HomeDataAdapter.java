@@ -253,7 +253,7 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
     protected void setViewOfTypeTwo(BaseViewHolder baseHolder, int position) {
         UpcomingReleaseHolder holder = (UpcomingReleaseHolder) baseHolder;
         holder.setMovies(mData.getItem(position));
-        holder.title.setText("Movies 123");
+        holder.title.setText("Movies");
         holder.txtViewAll.setVisibility(View.VISIBLE);
     }
 

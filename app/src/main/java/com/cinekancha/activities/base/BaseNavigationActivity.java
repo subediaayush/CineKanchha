@@ -2,6 +2,7 @@ package com.cinekancha.activities.base;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.internal.NavigationMenuView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -12,9 +13,6 @@ import com.cinekancha.R;
 import com.cinekancha.utils.Logger;
 
 import butterknife.BindView;
-
-
-
 
 
 public abstract class BaseNavigationActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -31,6 +29,16 @@ public abstract class BaseNavigationActivity extends BaseActivity implements Nav
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        disableNavigationViewScrollbars(navigationView);
+    }
+
+    private void disableNavigationViewScrollbars(NavigationView navigationView) {
+        if (navigationView != null) {
+            NavigationMenuView navigationMenuView = (NavigationMenuView) navigationView.getChildAt(0);
+            if (navigationMenuView != null) {
+                navigationMenuView.setVerticalScrollBarEnabled(false);
+            }
+        }
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -39,20 +47,20 @@ public abstract class BaseNavigationActivity extends BaseActivity implements Nav
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            Logger.d("nav_camera clicked");
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }
+//        if (id == R.id.nav_camera) {
+//            Logger.d("nav_camera clicked");
+//            // Handle the camera action
+//        } else if (id == R.id.nav_gallery) {
+//
+//        } else if (id == R.id.nav_slideshow) {
+//
+//        } else if (id == R.id.nav_manage) {
+//
+//        } else if (id == R.id.nav_share) {
+//
+//        } else if (id == R.id.nav_send) {
+//
+//        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

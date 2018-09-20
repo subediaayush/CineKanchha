@@ -1,6 +1,7 @@
 package com.cinekancha.home;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +15,7 @@ import com.cinekancha.entities.ThumbWrapper;
 import com.cinekancha.entities.ThumbnailConverter;
 import com.cinekancha.entities.model.Movie;
 import com.cinekancha.listener.OnClickListener;
+import com.cinekancha.movieDetail.MoviePostDetailActivity;
 
 import java.util.List;
 
@@ -48,7 +50,9 @@ public class UpcomingReleaseHolder extends HomeItemHolder {
         }, new OnClickListener() {
             @Override
             public void onClick(int id) {
-
+                Intent detail = new Intent(view.getContext(), MoviePostDetailActivity.class);
+                detail.putExtra("movie", String.valueOf(id));
+                view.getContext().startActivity(detail);
             }
         });
         upcomingMoviesList.setAdapter(adapter);
