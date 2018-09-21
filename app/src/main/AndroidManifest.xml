@@ -27,6 +27,7 @@
         <activity
             android:name=".movieDetail.MoviePostDetailActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".newsGossips.NewsGossipsActivity"></activity>
     </application>
 
 </manifest>

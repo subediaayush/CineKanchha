@@ -84,6 +84,9 @@ public class MoviePostDetailActivity extends BaseNavigationActivity implements O
     @BindView(R.id.lytDays)
     public LinearLayout lytDays;
 
+    @BindView(R.id.lytYoutube)
+    public LinearLayout lytYoutube;
+
     @BindView(R.id.recycleViewRating)
     public RecyclerView recyclerViewRating;
 
@@ -192,19 +195,25 @@ public class MoviePostDetailActivity extends BaseNavigationActivity implements O
                 lytDays.setVisibility(View.GONE);
                 recyclerViewRating.setVisibility(View.VISIBLE);
             }
+            if (data.getLinks().size() > 0 && data.getLinks() != null) {
+                lytYoutube.setVisibility(View.VISIBLE);
+            } else {
+                lytYoutube.setVisibility(View.GONE);
+            }
             mSlideAdapter.setFeaturedItems(data.getLinks());
             mSlideAdapter.startSlideshow();
             Picasso.with(this)
                     .load(Constants.imageUrl + data.getFeaturedImage())
                     .placeholder(R.drawable.placeholder_movie)
                     .into(imgFeature);
-            String type = (data.getLinks().get(0).getType() != null) ? "" : data.getLinks().get(0).getType();
             String title = (data.getName() == null) ? "" : data.getName();
+            String description = (data.getSynopsis() == null) ? "" : data.getSynopsis();
             String casts = (data.getCasts() == null) ? "" : data.getCasts();
             String director = (data.getCrew().getDirectedBy() == null) ? "" : data.getCrew().getDirectedBy();
             String producer = (data.getCrew().getProducedBy() == null) ? "" : data.getCrew().getProducedBy();
             String music = (data.getCrew().getMusic() == null) ? "" : data.getCrew().getMusic();
             txtTitle.setText(title);
+            txtDescription.setText(description);
             txtCasts.setText("Cast: " + casts);
             txtDirector.setText("Director: " + director);
             txtProducer.setText("Producer: " + producer);
