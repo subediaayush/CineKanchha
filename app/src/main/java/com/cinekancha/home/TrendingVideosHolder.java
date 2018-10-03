@@ -65,4 +65,7 @@ public class TrendingVideosHolder extends HomeItemHolder {
 		adapter.setThumbnails(movies);
 	}
 	
+	public void setThumbnailClickListener(OnThumbnailClickListener<Video> thumbnailClickListener) {
+		adapter.setThumbnailClickListener(thumbnailClickListener);
+	}
 }

@@ -64,4 +64,7 @@ public class FeaturedPhotosHolder extends HomeItemHolder {
 		adapter.setThumbnails(movies);
 	}
 	
+	public void setThumbnailClickListener(OnThumbnailClickListener<GalleryItem> thumbnailClickListener) {
+		adapter.setThumbnailClickListener(thumbnailClickListener);
+	}
 }

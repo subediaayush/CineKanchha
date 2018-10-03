@@ -8,8 +8,10 @@ import android.widget.RadioButton;
 import com.cinekancha.R;
 import com.cinekancha.adapters.base.BaseRecyclerAdapter;
 import com.cinekancha.adapters.base.BaseViewHolder;
+import com.cinekancha.entities.GalleryItem;
 import com.cinekancha.entities.ThumbWrapper;
 import com.cinekancha.entities.ThumbnailConverter;
+import com.cinekancha.entities.Video;
 import com.cinekancha.entities.model.Article;
 import com.cinekancha.entities.model.HomeData;
 import com.cinekancha.entities.model.Movie;
@@ -98,13 +100,34 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
 				return new FeaturedBoxOfficeHolder(this, view);
 			}
 			case FEATURED_PHOTO_GALLERY: {
-				return new FeaturedPhotosHolder(this, view);
+				FeaturedPhotosHolder holder = new FeaturedPhotosHolder(this, view);
+				holder.setThumbnailClickListener(new OnThumbnailClickListener<GalleryItem>() {
+					@Override
+					public void onThumbnailClicked(GalleryItem thumbnailData, ThumbWrapper wrapper) {
+						// Open gallery item here
+					}
+				});
+				return holder;
 			}
 			case FEATURED_TRENDING_VIDEOS: {
-				return new TrendingVideosHolder(this, view);
+				TrendingVideosHolder holder = new TrendingVideosHolder(this, view);
+				holder.setThumbnailClickListener(new OnThumbnailClickListener<Video>() {
+					@Override
+					public void onThumbnailClicked(Video thumbnailData, ThumbWrapper wrapper) {
+						// Open youtube video here
+					}
+				});
+				return holder;
 			}
 			case FEATURED_FULL_VIDEOS: {
-				return new FullVideosHolder(this, view);
+				FullVideosHolder holder = new FullVideosHolder(this, view);
+				holder.setThumbnailClickListener(new OnThumbnailClickListener<Video>() {
+					@Override
+					public void onThumbnailClicked(Video thumbnailData, ThumbWrapper wrapper) {
+						// Open youtube video here
+					}
+				});
+				return holder;
 			}
 			case FEATURED_SHOWTIMES: {
 				return new FeaturedShowtimesHolder(this, view);

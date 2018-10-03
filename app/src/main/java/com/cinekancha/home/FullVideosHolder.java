@@ -65,4 +65,8 @@ public class FullVideosHolder extends HomeItemHolder {
 		adapter.setThumbnails(movies);
 	}
 	
+	public void setThumbnailClickListener(OnThumbnailClickListener<Video> listener) {
+		adapter.setThumbnailClickListener(listener);
+	}
+	
 }

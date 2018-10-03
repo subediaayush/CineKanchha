@@ -25,10 +25,13 @@ public class ThumbnailAdapter<T> extends RecyclerView.Adapter<ThumbnailHolder> i
 	private final int mItemLayout;
 	private final List<ThumbWrapper> mThumnails = new ArrayList<>();
 	private final ThumbnailConverter<T> mConverter;
+	private final List<T> mOrigThumbs;
+	private OnThumbnailClickListener<T> thumbnailClickListener;
 	
 	public ThumbnailAdapter(int layout, ThumbnailConverter<T> converter) {
 		this.mItemLayout = layout;
 		this.mConverter = converter;
+		this.mOrigThumbs = new ArrayList<>();
 	}
 	
 	
@@ -36,7 +39,20 @@ public class ThumbnailAdapter<T> extends RecyclerView.Adapter<ThumbnailHolder> i
 	public ThumbnailHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 		View view = LayoutInflater.from(parent.getContext())
 				.inflate(mItemLayout, parent, false);
-		return new ThumbnailHolder(this, view);
+		final ThumbnailHolder holder = new ThumbnailHolder(this, view);
+		holder.itemView.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (thumbnailClickListener != null) {
+					int position = holder.getAdapterPosition();
+					thumbnailClickListener.onThumbnailClicked(
+							mOrigThumbs.get(position),
+							mThumnails.get(position)
+					);
+				}
+			}
+		});
+		return holder;
 	}
 	
 	@Override
@@ -66,6 +82,8 @@ public class ThumbnailAdapter<T> extends RecyclerView.Adapter<ThumbnailHolder> i
 	
 	public void setThumbnails(List<T> data) {
 		mThumnails.clear();
+		mOrigThumbs.clear();
+		mOrigThumbs.addAll(data);
 		for (T datum : data) {
 			mThumnails.add(mConverter.convert(datum));
 		}
@@ -75,5 +93,9 @@ public class ThumbnailAdapter<T> extends RecyclerView.Adapter<ThumbnailHolder> i
 	@Override
 	public void onClick(View v, int position) {
 	
+	}
+	
+	public void setThumbnailClickListener(OnThumbnailClickListener<T> thumbnailClickListener) {
+		this.thumbnailClickListener = thumbnailClickListener;
 	}
 }
