@@ -3,44 +3,28 @@ package com.cinekancha.newsGossips;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cinekancha.R;
 import com.cinekancha.activities.base.BaseNavigationActivity;
-import com.cinekancha.entities.model.FeaturedItem;
+import com.cinekancha.entities.model.FeaturedContent;
 import com.cinekancha.entities.model.Links;
 import com.cinekancha.entities.model.MovieDetail;
 import com.cinekancha.entities.rest.RestAPI;
 import com.cinekancha.home.OnSlideClickListener;
-import com.cinekancha.movieDetail.RatingAdapter;
-import com.cinekancha.movieDetail.SlideaYoutubeAdapter;
-import com.cinekancha.utils.Constants;
 import com.cinekancha.utils.GlobalUtils;
 import com.cinekancha.view.CineNewsGossipsViewModel;
-import com.cinekancha.view.CinePostMovieViewModel;
-import com.squareup.picasso.Picasso;
 
 import java.net.MalformedURLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 
 import butterknife.BindView;
-import me.relex.circleindicator.CircleIndicator;
 
 public class NewsGossipsActivity extends BaseNavigationActivity implements OnSlideClickListener, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.imgNews)
@@ -60,7 +44,7 @@ public class NewsGossipsActivity extends BaseNavigationActivity implements OnSli
 
     private CineNewsGossipsViewModel mCineNewsGossipsModel;
 
-    private RatingAdapter adapter;
+    private NewsGossipAdapter adapter;
 
     private String videoId = "";
     private int movieId;
@@ -79,7 +63,7 @@ public class NewsGossipsActivity extends BaseNavigationActivity implements OnSli
         recyclerViewNews.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerViewNews.setNestedScrollingEnabled(false);
         recyclerViewNews.setHasFixedSize(true);
-//        adapter = new RatingAdapter();
+        adapter = new NewsGossipAdapter();
         recyclerViewNews.setAdapter(adapter);
         newsSwipeToRefresh.setOnRefreshListener(this);
     }
@@ -136,7 +120,7 @@ public class NewsGossipsActivity extends BaseNavigationActivity implements OnSli
 
 
     @Override
-    public void onSlideClicked(FeaturedItem item) {
+    public void onSlideClicked(FeaturedContent item) {
 
     }
 

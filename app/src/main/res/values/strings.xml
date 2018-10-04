@@ -17,6 +17,8 @@
     <string name="moviesReviews">Movie Reviews</string>
     <string name="showtimes">Show Times</string>
     <string name="photoGallery">Photo Gallery</string>
+    <string name="movies">Movies</string>
+    <string name="poll">Polls</string>
     <string name="filmyTrivias">Filmy Trivias</string>
     <string name="filmyFuchePoll">Filmy Fuche Polls</string>
     <string name="FilmyTrolls">Filmy Trolls</string>

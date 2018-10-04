@@ -1,6 +1,6 @@
 package com.cinekancha.home;
 
-import com.cinekancha.entities.model.FeaturedItem;
+import com.cinekancha.entities.model.FeaturedContent;
 import com.cinekancha.entities.model.Links;
 
 /**
@@ -8,7 +8,7 @@ import com.cinekancha.entities.model.Links;
  */
 
 public interface OnSlideClickListener {
-    void onSlideClicked(FeaturedItem item);
+    void onSlideClicked(FeaturedContent item);
 
     void onSlideClicked(Links item);
 }

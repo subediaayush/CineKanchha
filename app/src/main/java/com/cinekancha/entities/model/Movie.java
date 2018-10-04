@@ -1,5 +1,6 @@
 package com.cinekancha.entities.model;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -9,110 +10,31 @@ import java.util.List;
  */
 
 public class Movie {
-
-    @SerializedName("featuredImage")
-    private String featuredImage;
-    @SerializedName("review")
-    private String review;
-    @SerializedName("photo")
-    private List<String> photo;
-    @SerializedName("links")
-    private List<Links> links;
-    @SerializedName("casts")
-    private List<String> casts;
-    @SerializedName("crew")
-    private Crew crew;
-    @SerializedName("updated_at")
-    private String updated_at;
-    @SerializedName("created_at")
-    private String created_at;
-    @SerializedName("release_date")
-    private String release_date;
-    @SerializedName("synopsis")
-    private String synopsis;
-    @SerializedName("name")
-    private String name;
     @SerializedName("id")
-    private int id;
+    @Expose
+    private Integer id;
+    @SerializedName("name")
+    @Expose
+    private String name;
+    @SerializedName("featuredImage")
+    @Expose
+    private String featuredImage;
+    @SerializedName("release_date")
+    @Expose
+    private String releaseDate;
+    @SerializedName("created_at")
+    @Expose
+    private String createdAt;
+    @SerializedName("updated_at")
+    @Expose
+    private String updatedAt;
 
-    public String getFeaturedImage() {
-        return featuredImage;
+    public Integer getId() {
+        return id;
     }
 
-    public void setFeaturedImage(String featuredImage) {
-        this.featuredImage = featuredImage;
-    }
-
-    public String getReview() {
-        return review;
-    }
-
-    public void setReview(String review) {
-        this.review = review;
-    }
-
-    public List<String> getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(List<String> photo) {
-        this.photo = photo;
-    }
-
-    public List<Links> getLinks() {
-        return links;
-    }
-
-    public void setLinks(List<Links> links) {
-        this.links = links;
-    }
-
-    public List<String> getCasts() {
-        return casts;
-    }
-
-    public void setCasts(List<String> casts) {
-        this.casts = casts;
-    }
-
-    public Crew getCrew() {
-        return crew;
-    }
-
-    public void setCrew(Crew crew) {
-        this.crew = crew;
-    }
-
-    public String getUpdated_at() {
-        return updated_at;
-    }
-
-    public void setUpdated_at(String updated_at) {
-        this.updated_at = updated_at;
-    }
-
-    public String getCreated_at() {
-        return created_at;
-    }
-
-    public void setCreated_at(String created_at) {
-        this.created_at = created_at;
-    }
-
-    public String getRelease_date() {
-        return release_date;
-    }
-
-    public void setRelease_date(String release_date) {
-        this.release_date = release_date;
-    }
-
-    public String getSynopsis() {
-        return synopsis;
-    }
-
-    public void setSynopsis(String synopsis) {
-        this.synopsis = synopsis;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -123,11 +45,35 @@ public class Movie {
         this.name = name;
     }
 
-    public int getId() {
-        return id;
+    public String getFeaturedImage() {
+        return featuredImage;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setFeaturedImage(String featuredImage) {
+        this.featuredImage = featuredImage;
+    }
+
+    public String getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

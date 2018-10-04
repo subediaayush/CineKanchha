@@ -16,30 +16,33 @@ import butterknife.BindView;
  */
 
 public class PollHolder extends HomeItemHolder {
-	
-	@BindView(R.id.question)
-	public TextView question;
-	
-	@BindView(R.id.options_container)
-	public RadioGroup answerContainer;
-	
-	@BindView(R.id.submit)
-	public Button submitButton;
-	
-	public PollHolder(BaseRecyclerAdapter baseRecyclerAdapter, View view) {
-		super(baseRecyclerAdapter, view);
-		
-		answerContainer.setOnCheckedChangeListener(
-				(group, checkedId) -> PollUtil.setAnswered(
-						(long) group.getTag(),
-						(int) group.findViewById(checkedId).getTag())
-		);
-	}
-	
-	@Override
-	public int[] getClickViewIdList() {
-		return new int[]{
-				R.id.submit
-		};
-	}
+
+    @BindView(R.id.question)
+    public TextView question;
+
+    @BindView(R.id.txtViewAll)
+    public TextView txtViewAll;
+
+    @BindView(R.id.options_container)
+    public RadioGroup answerContainer;
+
+    @BindView(R.id.submit)
+    public Button submitButton;
+
+    public PollHolder(BaseRecyclerAdapter baseRecyclerAdapter, View view) {
+        super(baseRecyclerAdapter, view);
+
+        answerContainer.setOnCheckedChangeListener(
+                (group, checkedId) -> PollUtil.setAnswered(
+                        (int) group.getTag(),
+                        (int) group.findViewById(checkedId).getTag())
+        );
+    }
+
+    @Override
+    public int[] getClickViewIdList() {
+        return new int[]{
+                R.id.submit
+        };
+    }
 }

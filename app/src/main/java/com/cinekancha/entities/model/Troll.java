@@ -1,24 +1,31 @@
 package com.cinekancha.entities.model;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-/**
- * Created by aayushsubedi on 3/8/18.
- */
-
 public class Troll {
-	
+
 	@SerializedName("id")
-	private long id;
-	
+	@Expose
+	private String id;
 	@SerializedName("image_url")
-	private String image;
-	
-	public String getImage() {
-		return image;
-	}
-	
-	public long getId() {
+	@Expose
+	private String imageUrl;
+
+	public String getId() {
 		return id;
 	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
+
 }

@@ -7,9 +7,14 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.cinekancha.R;
+import com.cinekancha.activities.HomeActivity;
+import com.cinekancha.movies.MovieActivity;
+import com.cinekancha.newRelease.NewReleaseActivity;
+import com.cinekancha.utils.GlobalUtils;
 import com.cinekancha.utils.Logger;
 
 import butterknife.BindView;
@@ -18,6 +23,9 @@ import butterknife.BindView;
 public abstract class BaseNavigationActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
+
+    @BindView(R.id.toolbar)
+    protected Toolbar toolbar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,24 +55,45 @@ public abstract class BaseNavigationActivity extends BaseActivity implements Nav
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-//        if (id == R.id.nav_camera) {
-//            Logger.d("nav_camera clicked");
-//            // Handle the camera action
-//        } else if (id == R.id.nav_gallery) {
-//
-//        } else if (id == R.id.nav_slideshow) {
-//
-//        } else if (id == R.id.nav_manage) {
-//
-//        } else if (id == R.id.nav_share) {
-//
-//        } else if (id == R.id.nav_send) {
-//
-//        }
+        if (id == R.id.menuHome) {
+            GlobalUtils.navigateActivity(this, true, HomeActivity.class);
+            // Handle the camera action
+        } else if (id == R.id.menuNewsGossips) {
+
+        } else if (id == R.id.menuNewRelease) {
+            GlobalUtils.navigateActivity(this, true, NewReleaseActivity.class);
+        } else if (id == R.id.menuUpComing) {
+            GlobalUtils.navigateActivity(this, true, MovieActivity.class);
+        } else if (id == R.id.menuBoxOffice) {
+
+        } else if (id == R.id.menuTrending) {
+
+        } else if (id == R.id.menuWatchFull) {
+
+        } else if (id == R.id.menMovieReviews) {
+
+        } else if (id == R.id.menuPhotoGallery) {
+
+        } else if (id == R.id.menuFuchePoll) {
+
+        } else if (id == R.id.menuFilmyTrivias) {
+
+        } else if (id == R.id.menuFilmyTroll) {
+
+        } else if (id == R.id.menuSettings) {
+
+        } else if (id == R.id.menuContact) {
+
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void initToolbar(String title) {
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(R.string.movies);
     }
 
     @Override

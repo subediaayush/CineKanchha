@@ -19,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cinekancha.R;
-import com.cinekancha.entities.model.FeaturedItem;
 import com.cinekancha.entities.model.Links;
 import com.cinekancha.fragments.base.BaseFragment;
 import com.cinekancha.home.OnSlideClickListener;
@@ -143,16 +142,10 @@ public class SlideaYoutubeAdapter extends FragmentPagerAdapter {
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             View view = super.onCreateView(inflater, container, savedInstanceState);
-
-
-            if (!TextUtils.isEmpty(mFeaturedItem.getUrl())) {
-                try {
-                    Picasso.with(getContext()).load(GlobalUtils.extractYoutubeUrl(mFeaturedItem.getUrl())).into(mImage);
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                }
+             if (!TextUtils.isEmpty(mFeaturedItem.getYoutubeImageUrl())) {
+                 Log.d("ImageUrl", mFeaturedItem.getYoutubeImageUrl());
+                Picasso.with(getContext()).load(mFeaturedItem.getYoutubeImageUrl()).into(mImage);
             }
-
             mImage.setBackgroundColor(getRandomColor());
             String type = (mFeaturedItem.getType() == null) ? "" : mFeaturedItem.getType();
 

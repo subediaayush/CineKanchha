@@ -24,6 +24,16 @@ public class Links {
     @Expose
     private String movieId;
 
+    private String youtubeImageUrl;
+
+    public String getYoutubeImageUrl() {
+        return youtubeImageUrl;
+    }
+
+    public void setYoutubeImageUrl(String youtubeImageUrl) {
+        this.youtubeImageUrl = youtubeImageUrl;
+    }
+
     public Integer getId() {
         return id;
     }

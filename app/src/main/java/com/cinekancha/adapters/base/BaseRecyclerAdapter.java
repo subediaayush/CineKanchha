@@ -11,7 +11,7 @@ import android.view.animation.AnimationUtils;
 /**
  * Abstract class for easy layout inflate and data binding for list operation adapters
  */
-public abstract class  BaseRecyclerAdapter<VH extends BaseViewHolder> extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements RecyclerViewClickListener {
+public abstract class BaseRecyclerAdapter<VH extends BaseViewHolder> extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements RecyclerViewClickListener {
 
     private Context mContext;
     private RecyclerViewClickListener onClickListener;
@@ -69,39 +69,47 @@ public abstract class  BaseRecyclerAdapter<VH extends BaseViewHolder> extends Re
             case 9:
                 setViewOfTypeNine(baseHolder, position);
                 break;
-    
+
             case 10:
                 setViewOfTypeTen(baseHolder, position);
+                break;
+
+            case 15:
+                setViewOfEleven(baseHolder, position);
                 break;
             default:
                 setViewOfType(baseHolder, position, holder.getItemViewType());
         }
     }
-    
+
     protected void setViewOfType(BaseViewHolder baseHolder, int position, int viewType) {
-    
+
     }
-    
+
+    protected void setViewOfEleven(BaseViewHolder baseHolder, int position) {
+        setViewOfEleven(baseHolder, position);
+    }
+
     protected void setViewOfTypeNine(BaseViewHolder baseHolder, int position) {
         setViewOfTypeZero(baseHolder, position);
     }
-    
+
     protected void setViewOfTypeTen(BaseViewHolder baseHolder, int position) {
         setViewOfTypeZero(baseHolder, position);
     }
-    
+
     protected void setViewOfTypeEight(BaseViewHolder baseHolder, int position) {
         setViewOfTypeZero(baseHolder, position);
     }
-    
+
     protected void setViewOfTypeSeven(BaseViewHolder baseHolder, int position) {
         setViewOfTypeZero(baseHolder, position);
     }
-    
+
     protected void setViewOfTypeSix(BaseViewHolder baseHolder, int position) {
         setViewOfTypeZero(baseHolder, position);
     }
-    
+
     protected void setViewOfTypeFive(BaseViewHolder baseHolder, int position) {
         setViewOfTypeZero(baseHolder, position);
     }
@@ -135,11 +143,11 @@ public abstract class  BaseRecyclerAdapter<VH extends BaseViewHolder> extends Re
             lastPosition = position;
         }
     }
-    
+
     public void onClick(View view, int position) {
         if (onClickListener != null) {
             onClickListener.onClick(view, position);
         }
     }
-    
+
 }

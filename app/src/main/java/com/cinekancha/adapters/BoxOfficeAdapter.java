@@ -8,6 +8,7 @@ import com.cinekancha.adapters.base.BaseRecyclerAdapter;
 import com.cinekancha.adapters.base.BaseViewHolder;
 import com.cinekancha.adapters.base.RecyclerViewClickListener;
 import com.cinekancha.entities.model.BoxOfficeItem;
+import com.cinekancha.entities.model.BoxOfficeList;
 import com.cinekancha.utils.ListUtils;
 
 import java.util.List;
@@ -16,7 +17,7 @@ import butterknife.BindView;
 
 public class BoxOfficeAdapter extends BaseRecyclerAdapter<BoxOfficeAdapter.BoxOfficeItemHolder> {
 	
-	private List<BoxOfficeItem> items;
+	private List<BoxOfficeList> items;
 	
 	@Override
 	public BoxOfficeItemHolder onCreateView(int viewType, View view) {
@@ -33,9 +34,9 @@ public class BoxOfficeAdapter extends BaseRecyclerAdapter<BoxOfficeAdapter.BoxOf
 	@Override
 	protected void setViewOfTypeZero(BaseViewHolder baseHolder, int position) {
 		BoxOfficeItemHolder holder = (BoxOfficeItemHolder) baseHolder;
-		BoxOfficeItem item = items.get(position);
-		holder.movie.setText(item.getMovie());
-		holder.sum.setText(item.getCollected());
+		BoxOfficeList item = items.get(position);
+		holder.movie.setText(item.getName());
+		holder.sum.setText(item.getTotalCollected());
 	}
 	
 	@Override
@@ -43,7 +44,7 @@ public class BoxOfficeAdapter extends BaseRecyclerAdapter<BoxOfficeAdapter.BoxOf
 		return ListUtils.getSize(items);
 	}
 	
-	public void setBoxOfficeItems(List<BoxOfficeItem> items) {
+	public void setBoxOfficeItems(List<BoxOfficeList> items) {
 		this.items = items;
 		notifyDataSetChanged();
 	}

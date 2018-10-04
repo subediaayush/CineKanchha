@@ -1,12 +1,31 @@
 package com.cinekancha.entities.model;
 
-/**
- * Created by aayushsubedi on 3/8/18.
- */
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 public class Trivia {
-	String trivia;
-	public String getTrivia() {
-		return trivia;
-	}
+
+    @SerializedName("id")
+    @Expose
+    private String id;
+    @SerializedName("trivia")
+    @Expose
+    private String trivia;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getTrivia() {
+        return trivia;
+    }
+
+    public void setTrivia(String trivia) {
+        this.trivia = trivia;
+    }
+
 }

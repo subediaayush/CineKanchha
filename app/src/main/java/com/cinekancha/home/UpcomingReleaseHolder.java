@@ -44,7 +44,7 @@ public class UpcomingReleaseHolder extends HomeItemHolder {
                 return new ThumbWrapper(
                         data.getFeaturedImage(),
                         data.getName(),
-                        data.getRelease_date(), data.getId()
+                        data.getReleaseDate(), data.getId()
                 );
             }
         }, new OnClickListener() {

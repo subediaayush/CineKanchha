@@ -27,7 +27,22 @@
         <activity
             android:name=".movieDetail.MoviePostDetailActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".newsGossips.NewsGossipsActivity"></activity>
+        <activity
+            android:name=".newsGossips.NewsGossipsActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".boxOffice.BoxOfficeActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".movies.MovieActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".poll.PollsActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".newRelease.NewReleaseActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".trending.TrendingActivity"></activity>
     </application>
 
 </manifest>

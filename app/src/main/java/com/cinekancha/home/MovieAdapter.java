@@ -40,7 +40,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MoviesHolder> implements 
 	public void onBindViewHolder(MoviesHolder holder, int position) {
 		Movie movie = mMovies.get(position);
 		holder.title.setText(movie.getName());
-		if (holder.subTitle != null) holder.subTitle.setText(movie.getRelease_date());
+		if (holder.subTitle != null) holder.subTitle.setText(movie.getReleaseDate());
 		if (!TextUtils.isEmpty(movie.getFeaturedImage())) Picasso.with(holder.itemView.getContext())
 				.load(movie.getFeaturedImage()).into(holder.thumbnail);
 	}

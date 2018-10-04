@@ -1,32 +1,43 @@
 package com.cinekancha.entities.model;
 
-import java.util.ArrayList;
 import java.util.List;
-
-/**
- * Created by aayushsubedi on 3/8/18.
- */
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 public class Poll {
-	long id;
-	private String question;
-	private int answer;
-	
-	private List<String> options = new ArrayList<>();
-	
-	public String getQuestion() {
-		return question;
+
+	@SerializedName("data")
+	@Expose
+	private List<PollData> data = null;
+	@SerializedName("links")
+	@Expose
+	private PageLink links;
+	@SerializedName("meta")
+	@Expose
+	private Meta meta;
+
+	public List<PollData> getData() {
+		return data;
 	}
-	
-	public int getAnswer() {
-		return answer;
+
+	public void setData(List<PollData> data) {
+		this.data = data;
 	}
-	
-	public List<String> getOptions() {
-		return options;
+
+	public PageLink getLinks() {
+		return links;
 	}
-	
-	public long getId() {
-		return id;
+
+	public void setLinks(PageLink links) {
+		this.links = links;
 	}
+
+	public Meta getMeta() {
+		return meta;
+	}
+
+	public void setMeta(Meta meta) {
+		this.meta = meta;
+	}
+
 }

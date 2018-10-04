@@ -13,9 +13,16 @@ import com.cinekancha.entities.ThumbnailConverter;
 import com.cinekancha.entities.model.Article;
 import com.cinekancha.entities.model.HomeData;
 import com.cinekancha.entities.model.Movie;
+import com.cinekancha.entities.model.Option;
 import com.cinekancha.entities.model.Poll;
+import com.cinekancha.entities.model.PollData;
+import com.cinekancha.entities.model.TopStory;
 import com.cinekancha.entities.model.Trivia;
 import com.cinekancha.entities.model.Troll;
+import com.cinekancha.movies.MovieActivity;
+import com.cinekancha.poll.PollsActivity;
+import com.cinekancha.utils.Constants;
+import com.cinekancha.utils.GlobalUtils;
 import com.cinekancha.utils.PollUtil;
 import com.cinekancha.utils.ViewIdGenerator;
 import com.squareup.picasso.Picasso;
@@ -31,6 +38,7 @@ import static com.cinekancha.home.HomeDataWrapper.FEATURED_PHOTO_GALLERY;
 import static com.cinekancha.home.HomeDataWrapper.FEATURED_POLL;
 import static com.cinekancha.home.HomeDataWrapper.FEATURED_REVIEWS;
 import static com.cinekancha.home.HomeDataWrapper.FEATURED_SHOWTIMES;
+import static com.cinekancha.home.HomeDataWrapper.FEATURED_TOP_STORIES;
 import static com.cinekancha.home.HomeDataWrapper.FEATURED_TRENDING_VIDEOS;
 import static com.cinekancha.home.HomeDataWrapper.FEATURED_TRIVIA;
 import static com.cinekancha.home.HomeDataWrapper.FEATURED_TROLL;
@@ -73,6 +81,9 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
             }
             case FEATURED_TROLL: {
                 return new TrollHolder(this, view);
+            }
+            case FEATURED_TOP_STORIES: {
+                return new TopStoryHolder(this, view);
             }
             case FEATURED_MOVIE: {
                 return new ThumbnailViewHolder<>(
@@ -130,6 +141,7 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
                 R.layout.layout_featured_thumbnails,    // 12
                 R.layout.layout_featured_thumbnails,    // 13
                 R.layout.layout_featured_thumbnails,    // 14
+                R.layout.layout_featured_top_story,    // 14
 
         };
     }
@@ -172,9 +184,10 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
         TrollHolder holder = (TrollHolder) baseHolder;
         Troll troll = mData.getItem(position);
 
-        if (!TextUtils.isEmpty(troll.getImage())) {
+        if (!TextUtils.isEmpty(troll.getImageUrl())) {
+            String newString = troll.getImageUrl().replace("\\", "");
             Picasso.with(baseHolder.itemView.getContext())
-                    .load(troll.getImage())
+                    .load(Constants.imageUrl + newString)
                     .into(holder.troll);
         }
     }
@@ -186,6 +199,15 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
         holder.trivia.setText(trivia.getTrivia());
     }
 
+
+    @Override
+    protected void setViewOfEleven(BaseViewHolder baseHolder, int position) {
+        Log.d("Position", String.valueOf(position));
+        TopStoryHolder holder = (TopStoryHolder) baseHolder;
+        TopStory topStory = mData.getItem(position);
+        holder.txtTopStories.setText(topStory.getSummary());
+    }
+
     @Override
     protected void setViewOfTypeTen(BaseViewHolder baseHolder, int position) {
         FeaturedPhotosHolder holder = (FeaturedPhotosHolder) baseHolder;
@@ -195,24 +217,25 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
     @Override
     protected void setViewOfTypeFive(BaseViewHolder baseHolder, int position) {
         PollHolder holder = (PollHolder) baseHolder;
-        Poll poll = mData.getItem(position);
+        PollData poll = mData.getItem(position);
 
         holder.question.setText(poll.getQuestion());
         holder.answerContainer.removeAllViews();
 
         holder.answerContainer.setTag(poll.getId());
-
+        holder.txtViewAll.setVisibility(View.VISIBLE);
+        holder.txtViewAll.setOnClickListener(view -> GlobalUtils.navigateActivity(holder.itemView.getContext(), true, PollsActivity.class));
         boolean isAnswered = PollUtil.isAnswered(poll.getId());
         int answerIndex = PollUtil.getAnswered(poll.getId());
 
-        List<String> options = poll.getOptions();
+        List<Option> options = poll.getOptions();
 
         for (int i = 0; i < options.size(); i++) {
-            String option = options.get(i);
+            Option option = options.get(i);
             RadioButton optionButton = new RadioButton((baseHolder.itemView.getContext()));
             optionButton.setId(ViewIdGenerator.generateViewId());
             optionButton.setTag(i);
-            optionButton.setText(option);
+            optionButton.setText(option.getText());
             holder.answerContainer.addView(optionButton);
 
             if (isAnswered && answerIndex == i) holder.answerContainer.check(optionButton.getId());
@@ -255,6 +278,12 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
         holder.setMovies(mData.getItem(position));
         holder.title.setText("Movies");
         holder.txtViewAll.setVisibility(View.VISIBLE);
+        holder.txtViewAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GlobalUtils.navigateActivity(holder.itemView.getContext(), true, MovieActivity.class);
+            }
+        });
     }
 
     @Override

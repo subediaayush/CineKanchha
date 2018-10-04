@@ -1,10 +1,14 @@
 package com.cinekancha.entities.rest;
 
 import com.cinekancha.BuildConfig;
+import com.cinekancha.entities.model.BoxOffice;
 import com.cinekancha.entities.model.HomeData;
 import com.cinekancha.entities.model.Movie;
+import com.cinekancha.entities.model.MovieData;
 import com.cinekancha.entities.model.MovieDetail;
+import com.cinekancha.entities.model.NewRelease;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -70,6 +74,28 @@ public class RestAPI {
                 .observeOn(AndroidSchedulers.mainThread())
                 .retry(1);
     }
+
+    public Observable<MovieData> getMovie() {
+        return getApiService().getMovieList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .retry(1);
+    }
+
+    public Observable<NewRelease> getNewRelease() {
+        return getApiService().getNewRelease()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .retry(1);
+    }
+
+    public Observable<BoxOffice> getBOxOffice() {
+        return getApiService().getBoxOffice()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .retry(1);
+    }
+
 
     public Observable<HomeData> getHomeData() {
         return getApiService().getHomeData()

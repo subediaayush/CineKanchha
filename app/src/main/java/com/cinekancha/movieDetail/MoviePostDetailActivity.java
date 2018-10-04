@@ -19,7 +19,7 @@ import android.widget.Toast;
 
 import com.cinekancha.R;
 import com.cinekancha.activities.base.BaseNavigationActivity;
-import com.cinekancha.entities.model.FeaturedItem;
+import com.cinekancha.entities.model.FeaturedContent;
 import com.cinekancha.entities.model.Links;
 import com.cinekancha.entities.model.MovieDetail;
 import com.cinekancha.entities.rest.RestAPI;
@@ -32,8 +32,10 @@ import com.squareup.picasso.Picasso;
 import java.net.MalformedURLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import butterknife.BindView;
 import me.relex.circleindicator.CircleIndicator;
@@ -200,7 +202,15 @@ public class MoviePostDetailActivity extends BaseNavigationActivity implements O
             } else {
                 lytYoutube.setVisibility(View.GONE);
             }
-            mSlideAdapter.setFeaturedItems(data.getLinks());
+            List<Links> links = new ArrayList<>();
+            links.clear();
+            for (Links item : data.getLinks()) {
+                String imageUrl = GlobalUtils.extractYoutubeUrl(item.getUrl());
+                item.setYoutubeImageUrl(imageUrl);
+                links.add(item);
+            }
+
+            mSlideAdapter.setFeaturedItems(links);
             mSlideAdapter.startSlideshow();
             Picasso.with(this)
                     .load(Constants.imageUrl + data.getFeaturedImage())
@@ -249,7 +259,7 @@ public class MoviePostDetailActivity extends BaseNavigationActivity implements O
 
 
     @Override
-    public void onSlideClicked(FeaturedItem item) {
+    public void onSlideClicked(FeaturedContent item) {
 
     }
 

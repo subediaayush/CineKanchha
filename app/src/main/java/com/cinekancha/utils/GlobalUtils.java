@@ -19,6 +19,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -176,21 +178,24 @@ public class GlobalUtils {
                 id = param1[1];
             }
         }
-         return id;
+        return id;
     }
 
-    public static String extractYoutubeUrl(String url) throws MalformedURLException {
-        String query = new URL(url).getQuery();
-        String[] param = query.split("&");
-        String id = null;
-        for (String row : param) {
-            String[] param1 = row.split("=");
-            if (param1[0].equals("v")) {
-                id = param1[1];
-            }
+    public static String extractYoutubeUrl(String videoUrl) {
+        String imgUrl = "https://img.youtube.com/vi/" + getYoutubeVideoIdFromUrl(videoUrl) + "/0.jpg";
+        return imgUrl;
+    }
+
+    public static String getYoutubeVideoIdFromUrl(String inUrl) {
+        if (inUrl.toLowerCase().contains("youtu.be")) {
+            return inUrl.substring(inUrl.lastIndexOf("/") + 1);
         }
-        String img_url = "http://img.youtube.com/vi/" + id + "/0.jpg";
-        return img_url;
+        String pattern = "(?<=watch\\?v=|/videos/|embed\\/)[^#\\&\\?]*";
+        Pattern compiledPattern = Pattern.compile(pattern);
+        Matcher matcher = compiledPattern.matcher(inUrl);
+        if (matcher.find()) {
+            return matcher.group();
+        }
+        return null;
     }
-
 }

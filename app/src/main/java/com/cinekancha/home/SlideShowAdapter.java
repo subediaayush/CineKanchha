@@ -19,8 +19,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cinekancha.R;
-import com.cinekancha.entities.model.FeaturedItem;
+import com.cinekancha.entities.model.FeaturedContent;
 import com.cinekancha.fragments.base.BaseFragment;
+import com.cinekancha.utils.Constants;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ public class SlideShowAdapter extends FragmentPagerAdapter {
     private static final String TAG = "SlideShowAdapter";
 
     private final ViewPager mPager;
-    private List<FeaturedItem> mFeaturedItems;
+    private List<FeaturedContent> mFeaturedItems;
     private Handler mSlideChangeHandler;
 
     private OnSlideClickListener mListener;
@@ -67,13 +68,13 @@ public class SlideShowAdapter extends FragmentPagerAdapter {
         };
     }
 
-    public void setFeaturedItems(List<FeaturedItem> featuredItems) {
+    public void setFeaturedItems(List<FeaturedContent> featuredItems) {
         mFeaturedItems.clear();
         mFeaturedItems.addAll(featuredItems);
         notifyDataSetChanged();
     }
 
-    public void addData(FeaturedItem item) {
+    public void addData(FeaturedContent item) {
         mFeaturedItems.add(item);
         notifyDataSetChanged();
     }
@@ -119,13 +120,13 @@ public class SlideShowAdapter extends FragmentPagerAdapter {
         @BindView(R.id.subtitle)
         protected TextView mSubtitle;
 
-        private FeaturedItem mFeaturedItem;
+        private FeaturedContent mFeaturedItem;
         private OnSlideClickListener mListener;
         private int[] colors = new int[]{
                 Color.BLUE, Color.RED, Color.YELLOW, Color.GRAY, Color.GREEN
         };
 
-        public static SlideFragment newInstance(FeaturedItem item, OnSlideClickListener listener) {
+        public static SlideFragment newInstance(FeaturedContent item, OnSlideClickListener listener) {
             SlideFragment fragment = new SlideFragment();
             fragment.setFeaturedItem(item);
             fragment.setListener(listener);
@@ -133,7 +134,7 @@ public class SlideShowAdapter extends FragmentPagerAdapter {
             return fragment;
         }
 
-        public void setFeaturedItem(FeaturedItem item) {
+        public void setFeaturedItem(FeaturedContent item) {
             this.mFeaturedItem = item;
         }
 
@@ -144,17 +145,18 @@ public class SlideShowAdapter extends FragmentPagerAdapter {
 
 
             if (!TextUtils.isEmpty(mFeaturedItem.getImageUrl())) {
-                Picasso.with(getContext()).load(mFeaturedItem.getImageUrl()).into(mImage);
+                String newString = mFeaturedItem.getImageUrl().replace("\\", "");
+                Picasso.with(getContext()).load(Constants.imageUrl + newString).into(mImage);
             }
 
             mImage.setBackgroundColor(getRandomColor());
 
             mTitle.setText(mFeaturedItem.getTitle());
-            if (TextUtils.isEmpty(mFeaturedItem.getSubTitle())) {
+            if (TextUtils.isEmpty(mFeaturedItem.getSubtitle())) {
                 mSubtitle.setVisibility(View.GONE);
             } else {
                 mSubtitle.setVisibility(View.VISIBLE);
-                mSubtitle.setText(mFeaturedItem.getSubTitle());
+                mSubtitle.setText(mFeaturedItem.getSubtitle());
             }
 
             if (view != null) {

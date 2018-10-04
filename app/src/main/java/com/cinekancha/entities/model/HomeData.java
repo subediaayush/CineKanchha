@@ -1,132 +1,129 @@
+
 package com.cinekancha.entities.model;
 
-import com.cinekancha.entities.GalleryItem;
-import com.cinekancha.entities.Video;
-import com.cinekancha.utils.ListUtils;
+import java.util.List;
+
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by aayushsubedi on 3/8/18.
  */
 
+
 public class HomeData {
-	@SerializedName("featuredContents")
-	private List<FeaturedItem> featuredItems = new ArrayList<>();
-	
-	@SerializedName("new_releases")
-	private List<Movie> newReleases = new ArrayList<>();
-	
-	@SerializedName("movies")
-	private List<Movie> upcomingMovies = new ArrayList<>();
-	
-	private Article featuredArticle;
-	
-	@SerializedName("hot_news")
-	private List<Article> topArticles = new ArrayList<>();
-	
-	@SerializedName("box_office_list")
-	private List<BoxOfficeItem> boxOfficeItems = new ArrayList<>();
-	
-	@SerializedName("photo_gallery")
-	private List<GalleryItem> photoGallery = new ArrayList<>();
-	
-	@SerializedName("movie_reviews")
-	private List<Movie> featuredReviews = new ArrayList<>();
-	
-	@SerializedName("poll")
-	private Poll featuredPoll;
-	
-	@SerializedName("trivia")
-	private Trivia featuredTrivia;
 
-	@SerializedName("troll")
-	private Troll featuredTrolls;
-	
-	private List<Movie> featuredMovies = new ArrayList<>();
-	
-	private List<Movie> showTimes;
-	
-	@SerializedName("trending_videos")
-	private List<Video> featuredTrending = new ArrayList<>();
+    @SerializedName("featuredContents")
+    @Expose
+    private List<FeaturedContent> featuredContents = null;
+    @SerializedName("new_releases")
+    @Expose
+    private List<Movie> newReleases = null;
+    @SerializedName("movies")
+    @Expose
+    private List<Movie> movies = null;
+    @SerializedName("box_office_list")
+    @Expose
+    private List<BoxOfficeList> boxOfficeList = null;
+    @SerializedName("hot_news")
+    @Expose
+    private List<Object> hotNews = null;
+    @SerializedName("full_movies")
+    @Expose
+    private List<Movie> fullMovies = null;
+    @SerializedName("poll")
+    @Expose
+    private PollData poll;
+    @SerializedName("trivia")
+    @Expose
+    private Trivia trivia;
+    @SerializedName("troll")
+    @Expose
+    private Troll troll;
+    @SerializedName("top_story")
+    @Expose
+    private TopStory topStory;
 
-	@SerializedName("full_movies")
-	private List<Video> fullVideos = new ArrayList<>();
-	
-	public int getItemCount(){
-		int count = 0;
-		if (!ListUtils.isEmpty(featuredItems)) count += 1;
-		if (!ListUtils.isEmpty(newReleases)) count += 1;
-		if (!ListUtils.isEmpty(upcomingMovies)) count += 1;
-		if (featuredArticle != null) count += 1;
-		if (!ListUtils.isEmpty(topArticles)) count += 1;
-		if (featuredPoll != null) count += 1;
-		if (featuredTrivia != null) count += 1;
-		if (featuredTrolls != null) count += 1;
-		if (!ListUtils.isEmpty(featuredMovies)) count += featuredMovies.size();
-		
-		return count;
-	}
-	
-	public List<FeaturedItem> getFeaturedItems() {
-		return featuredItems;
-	}
-	
-	public List<Movie> getNewReleases() {
-		return newReleases;
-	}
-	
-	public List<Movie> getUpcomingMovies() {
-		return upcomingMovies;
-	}
-	
-	public Article getFeaturedArticle() {
-		return featuredArticle;
-	}
-	
-	public List<Article> getTopArticles() {
-		return topArticles;
-	}
-	
-	public List<BoxOfficeItem> getBoxOfficeItems() {
-		return boxOfficeItems;
-	}
-	
-	public Poll getFeaturedPoll() {
-		return featuredPoll;
-	}
-	
-	public Trivia getFeaturedTrivia() {
-		return featuredTrivia;
-	}
-	
-	public Troll getFeaturedTrolls() {
-		return featuredTrolls;
-	}
-	
-	public List<Movie> getFeaturedMovies() {
-		return featuredMovies;
-	}
-	
-	public List<GalleryItem> getPhotoGallery() {
-		return photoGallery;
-	}
-	
-	public List<Movie> getFeaturedReviews() {
-		return featuredReviews;
-	}
-	
-	public List<Movie> getShowTimes() {
-		return showTimes;
-	}
-	
-	public List<Video> getFeaturedTrending() {
-		return featuredTrending;
-	}
-	
-	public List<Video> getFullVideos() {
-		return fullVideos;
-	}
+    public List<FeaturedContent> getFeaturedContents() {
+        return featuredContents;
+    }
+
+    public void setFeaturedContents(List<FeaturedContent> featuredContents) {
+        this.featuredContents = featuredContents;
+    }
+
+    public List<Movie> getNewReleases() {
+        return newReleases;
+    }
+
+    public void setNewReleases(List<Movie> newReleases) {
+        this.newReleases = newReleases;
+    }
+
+    public List<Movie> getMovies() {
+        return movies;
+    }
+
+    public void setMovies(List<Movie> movies) {
+        this.movies = movies;
+    }
+
+    public List<BoxOfficeList> getBoxOfficeList() {
+        return boxOfficeList;
+    }
+
+    public void setBoxOfficeList(List<BoxOfficeList> boxOfficeList) {
+        this.boxOfficeList = boxOfficeList;
+    }
+
+    public List<Object> getHotNews() {
+        return hotNews;
+    }
+
+    public void setHotNews(List<Object> hotNews) {
+        this.hotNews = hotNews;
+    }
+
+    public List<Movie> getFullMovies() {
+        return fullMovies;
+    }
+
+    public void setFullMovies(List<Movie> fullMovies) {
+        this.fullMovies = fullMovies;
+    }
+
+    public PollData getPoll() {
+        return poll;
+    }
+
+    public void setPoll(PollData poll) {
+        this.poll = poll;
+    }
+
+    public Trivia getTrivia() {
+        return trivia;
+    }
+
+    public void setTrivia(Trivia trivia) {
+        this.trivia = trivia;
+    }
+
+    public Troll getTroll() {
+        return troll;
+    }
+
+    public void setTroll(Troll troll) {
+        this.troll = troll;
+    }
+
+    public TopStory getTopStory() {
+        return topStory;
+    }
+
+    public void setTopStory(TopStory topStory) {
+        this.topStory = topStory;
+    }
+
 }

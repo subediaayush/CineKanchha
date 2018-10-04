@@ -1,8 +1,13 @@
 package com.cinekancha.entities.rest;
 
+import com.cinekancha.entities.model.BoxOffice;
 import com.cinekancha.entities.model.HomeData;
 import com.cinekancha.entities.model.Movie;
+import com.cinekancha.entities.model.MovieData;
 import com.cinekancha.entities.model.MovieDetail;
+import com.cinekancha.entities.model.NewRelease;
+
+import java.util.List;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
@@ -17,8 +22,17 @@ public interface ApiService {
     Observable<MovieDetail> getMovie(
             @Path("movieId") int movieId);
 
+    @GET("api/movie")
+    Observable<MovieData> getMovieList();
+
+    @GET("api/new_releases")
+    Observable<NewRelease> getNewRelease();
+
     @GET("api/home")
     Observable<HomeData> getHomeData();
+
+    @GET("api/boxOffice")
+    Observable<BoxOffice> getBoxOffice();
 
     @GET("bins/19gt0m")
     Observable<HomeData> getHomeTestData();

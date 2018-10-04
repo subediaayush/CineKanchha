@@ -1,12 +1,9 @@
 package com.cinekancha.activities;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -15,7 +12,7 @@ import android.widget.Toast;
 
 import com.cinekancha.R;
 import com.cinekancha.activities.base.BaseNavigationActivity;
-import com.cinekancha.entities.model.FeaturedItem;
+import com.cinekancha.entities.model.FeaturedContent;
 import com.cinekancha.entities.model.HomeData;
 import com.cinekancha.entities.model.Links;
 import com.cinekancha.entities.rest.RestAPI;
@@ -65,7 +62,6 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
 
         mHomeDataAdapter = new HomeDataAdapter();
         mSlideAdapter = new SlideShowAdapter(getSupportFragmentManager(), mFeaturedPager);
-        toolbar.setTitle(getString(R.string.app_name));
         mFeaturedPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageScrollStateChanged(int state) {
@@ -90,11 +86,16 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
         mSlideAdapter.registerDataSetObserver(mIndicator.getDataSetObserver());
     }
 
+    private void initToolbar() {
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(R.string.home);
+    }
+
     private void renderHomeData() {
 //        mSwipeRefreshLayout.setRefreshing(false);
         HomeData data = mCineHomeViewModel.getHomeData();
         mHomeDataAdapter.setHomeData(data);
-        mSlideAdapter.setFeaturedItems(data.getFeaturedItems());
+        mSlideAdapter.setFeaturedItems(data.getFeaturedContents());
         mSlideAdapter.startSlideshow();
     }
 
@@ -131,7 +132,7 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
     }
 
     @Override
-    public void onSlideClicked(FeaturedItem item) {
+    public void onSlideClicked(FeaturedContent item) {
         Log.d(TAG, "clicked on item " + new Gson().toJson(item));
     }
 

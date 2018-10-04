@@ -63,7 +63,7 @@ public class TrollListActivity extends BaseNavigationActivity implements Recycle
 	@Override
 	public void onClick(View v, int position) {
 		new ImageViewer.Builder<>(this, mCineTrollViewModel.getTrolls())
-				.setFormatter(Troll::getImage)
+				.setFormatter(Troll::getImageUrl)
 				.setStartPosition(position).show();
 	}
 }
