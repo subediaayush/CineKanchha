@@ -14,8 +14,8 @@ import com.cinekancha.R;
 import com.cinekancha.activities.HomeActivity;
 import com.cinekancha.movies.MovieActivity;
 import com.cinekancha.newRelease.NewReleaseActivity;
+import com.cinekancha.newsGossips.NewsGossipsActivity;
 import com.cinekancha.utils.GlobalUtils;
-import com.cinekancha.utils.Logger;
 
 import butterknife.BindView;
 
@@ -59,7 +59,7 @@ public abstract class BaseNavigationActivity extends BaseActivity implements Nav
             GlobalUtils.navigateActivity(this, true, HomeActivity.class);
             // Handle the camera action
         } else if (id == R.id.menuNewsGossips) {
-
+            GlobalUtils.navigateActivity(this, true, NewsGossipsActivity.class);
         } else if (id == R.id.menuNewRelease) {
             GlobalUtils.navigateActivity(this, true, NewReleaseActivity.class);
         } else if (id == R.id.menuUpComing) {
