@@ -29,4 +29,9 @@ public class NewsGossipHolder extends HomeItemHolder {
         super(baseRecyclerAdapter, view);
         view.setOnClickListener(this);
     }
+
+    @Override
+    public int[] getClickViewIdList() {
+        return new int[]{R.id.holder};
+    }
 }

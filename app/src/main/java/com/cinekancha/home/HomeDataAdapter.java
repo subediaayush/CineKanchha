@@ -8,17 +8,15 @@ import android.widget.RadioButton;
 import com.cinekancha.R;
 import com.cinekancha.adapters.base.BaseRecyclerAdapter;
 import com.cinekancha.adapters.base.BaseViewHolder;
+import com.cinekancha.article.ArticleDetailActivity;
 import com.cinekancha.entities.ThumbWrapper;
 import com.cinekancha.entities.ThumbnailConverter;
 import com.cinekancha.entities.model.Article;
 import com.cinekancha.entities.model.HomeData;
 import com.cinekancha.entities.model.Movie;
 import com.cinekancha.entities.model.Option;
-import com.cinekancha.entities.model.Poll;
 import com.cinekancha.entities.model.PollData;
-import com.cinekancha.entities.model.TopStory;
 import com.cinekancha.entities.model.Trivia;
-import com.cinekancha.entities.model.Troll;
 import com.cinekancha.entities.model.TrollData;
 import com.cinekancha.movies.MovieActivity;
 import com.cinekancha.newsGossips.NewsGossipsActivity;
@@ -86,7 +84,11 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
                 return new TrollHolder(this, view);
             }
             case FEATURED_TOP_STORIES: {
-                return new TopStoryHolder(this, view);
+                TopStoryHolder topStoryHolder = new TopStoryHolder(this, view);
+                topStoryHolder.itemView.setOnClickListener(view1 -> {
+                    ArticleDetailActivity.startActivity(topStoryHolder.itemView.getContext(), mData.getItem(topStoryHolder.getAdapterPosition()));
+                });
+                return topStoryHolder;
             }
             case FEATURED_MOVIE: {
                 return new ThumbnailViewHolder<>(
@@ -133,7 +135,7 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
                 R.layout.layout_featured_thumbnails,    // 1
                 R.layout.layout_featured_thumbnails,    // 2
                 R.layout.layout_featured_articles,      // 3
-                R.layout.layout_featured_articles,      // 4
+                R.layout.layout_featured_thumbnails,    // 4
                 R.layout.layout_featured_poll,          // 5
                 R.layout.layout_featured_trivia,        // 6
                 R.layout.layout_featured_trolls,        // 7
@@ -208,7 +210,7 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
     @Override
     protected void setViewOfEleven(BaseViewHolder baseHolder, int position) {
         TopStoryHolder holder = (TopStoryHolder) baseHolder;
-        TopStory topStory = mData.getItem(position);
+        Article topStory = mData.getItem(position);
         holder.txtTopStories.setText(topStory.getSummary());
         holder.itemView.setOnClickListener(view -> {
             GlobalUtils.navigateActivity(holder.itemView.getContext(), true, NewsGossipsActivity.class);
@@ -260,16 +262,10 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
     @Override
     protected void setViewOfTypeFour(BaseViewHolder baseHolder, int position) {
         FeaturedNewsListHolder holder = (FeaturedNewsListHolder) baseHolder;
-        Article news = mData.getItem(position);
-        if (TextUtils.isEmpty(news.getImage())) {
-            holder.image.setImageResource(R.drawable.placeholder_movie);
-        } else {
-            Picasso.with(holder.itemView.getContext())
-                    .load(news.getImage())
-                    .into(holder.image);
-        }
-        holder.title.setText(news.getTitle());
-        holder.summary.setText(news.getSummary());
+        holder.setNews(mData.getItem(position));
+        holder.txtViewAll.setVisibility(View.VISIBLE);
+        holder.txtViewAll.setOnClickListener(view -> GlobalUtils.navigateActivity(holder.itemView.getContext(), true, NewsGossipsActivity.class));
+        holder.title.setText("Hot News");
     }
 
     @Override

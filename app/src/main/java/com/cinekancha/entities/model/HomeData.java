@@ -1,4 +1,3 @@
-
 package com.cinekancha.entities.model;
 
 import com.cinekancha.entities.GalleryItem;
@@ -29,7 +28,7 @@ public class HomeData {
     private List<BoxOfficeList> boxOfficeList = null;
     @SerializedName("hot_news")
     @Expose
-    private List<Object> hotNews = null;
+    private List<Article> hotNews = null;
     @SerializedName("full_movies")
     @Expose
     private List<Movie> fullMovies = null;
@@ -44,7 +43,7 @@ public class HomeData {
     private TrollData troll;
     @SerializedName("top_story")
     @Expose
-    private TopStory topStory;
+    private Article topStory;
     @SerializedName("photo_gallery")
     @Expose
     private List<GalleryItem> photoGallery = new ArrayList<>();
@@ -84,11 +83,11 @@ public class HomeData {
         this.boxOfficeList = boxOfficeList;
     }
 
-    public List<Object> getHotNews() {
+    public List<Article> getHotNews() {
         return hotNews;
     }
 
-    public void setHotNews(List<Object> hotNews) {
+    public void setHotNews(List<Article> hotNews) {
         this.hotNews = hotNews;
     }
 
@@ -124,11 +123,11 @@ public class HomeData {
         this.troll = troll;
     }
 
-    public TopStory getTopStory() {
+    public Article getTopStory() {
         return topStory;
     }
 
-    public void setTopStory(TopStory topStory) {
+    public void setTopStory(Article topStory) {
         this.topStory = topStory;
     }
 

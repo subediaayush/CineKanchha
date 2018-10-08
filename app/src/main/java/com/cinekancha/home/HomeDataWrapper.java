@@ -41,6 +41,9 @@ public class HomeDataWrapper {
         HomeDataWrapper wrapper = new HomeDataWrapper();
 
         wrapper.add(data.getNewReleases(), NEW_MOVIES);
+
+        wrapper.add(data.getHotNews(), FEATURED_ARTICLE);
+
         if (data.getTopStory().getSummary() != null) {
             wrapper.add(data.getTopStory(), FEATURED_TOP_STORIES);
         }
@@ -52,10 +55,10 @@ public class HomeDataWrapper {
             wrapper.add(boxOfficeItems, FEATURED_BOX_OFFICE);
         }
 
-		List<GalleryItem> photoGallery = data.getPhotoGallery();
-		if (!ListUtils.isEmpty(photoGallery)) {
-			wrapper.add(photoGallery, FEATURED_PHOTO_GALLERY);
-		}
+        List<GalleryItem> photoGallery = data.getPhotoGallery();
+        if (!ListUtils.isEmpty(photoGallery)) {
+            wrapper.add(photoGallery, FEATURED_PHOTO_GALLERY);
+        }
 
         wrapper.add(data.getPoll(), FEATURED_POLL);
 

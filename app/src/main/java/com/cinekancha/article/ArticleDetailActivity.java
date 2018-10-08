@@ -1,6 +1,8 @@
 package com.cinekancha.article;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 import com.cinekancha.R;
 import com.cinekancha.activities.base.BaseNavigationActivity;
 import com.cinekancha.entities.model.Article;
+import com.cinekancha.utils.Constants;
 import com.cinekancha.view.CineArticleViewModel;
 import com.squareup.picasso.Picasso;
 
@@ -31,14 +34,27 @@ public class ArticleDetailActivity extends BaseNavigationActivity {
 	public WebView mArticle;
 	
 	private CineArticleViewModel mCineArticleViewModel;
-	
+
+	public static void startActivity(Context context, Article article){
+		Intent intent = new Intent(context, ArticleDetailActivity.class );
+		intent.putExtra("article", article);
+		context.startActivity(intent);
+	}
+
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
 		mCineArticleViewModel = ViewModelProviders.of(this).get(CineArticleViewModel.class);
-		
-		mCineArticleViewModel.setArticleId(getIntent().getIntExtra("article", -1));
+		getSupportActionBar().setTitle("News Gossip");
+
+		if (getIntent() != null){
+			mCineArticleViewModel.setArticle((Article) getIntent().getExtras().getSerializable("article"));
+		}
+
+		if (mCineArticleViewModel.getArticle() != null){
+			renderArticle(mCineArticleViewModel.getArticle());
+		}
 	}
 	
 	@Override
@@ -49,23 +65,13 @@ public class ArticleDetailActivity extends BaseNavigationActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		
-		if (mCineArticleViewModel.getArticle() == null) {
-			requestArticle(mCineArticleViewModel.getArticleId());
-		} else {
-			renderArticle(mCineArticleViewModel.getArticle());
-		}
 	}
 	
 	private void renderArticle(Article article) {
 		if (!TextUtils.isEmpty(article.getImage())) Picasso.with(this)
-				.load(article.getImage())
+				.load(Constants.imageUrl + article.getImage())
 				.into(mArticleImage);
 		mTitle.setText(article.getTitle());
 		mArticle.loadData(article.getContent(), "text/html", "utf-8");
-	}
-	
-	private void requestArticle(int id) {
-		// Request article here
 	}
 }
