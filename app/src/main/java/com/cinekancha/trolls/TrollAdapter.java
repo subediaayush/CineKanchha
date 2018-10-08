@@ -43,7 +43,7 @@ public class TrollAdapter extends BaseRecyclerAdapter<TrollHolder> {
 
         if (!TextUtils.isEmpty(troll.getImageUrl())) {
             Picasso.with(baseHolder.itemView.getContext())
-                    .load(Constants.imageUrl + troll.getImageUrl())
+                    .load(troll.getImageUrl())
                     .into(holder.troll);
         }
     }
