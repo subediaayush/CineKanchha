@@ -26,7 +26,7 @@ public class BoxOfficeActivity extends BaseNavigationActivity {
 
     private CineBoxOfficeViewModel cineBoxOfficeViewModel;
 
-    private MoviesAdapter adapter;
+    private BoxOfficeAdapter adapter;
 
     private BoxOffice boxOffice;
 
@@ -45,23 +45,17 @@ public class BoxOfficeActivity extends BaseNavigationActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (boxOffice.getData() == null) {
+        if (cineBoxOfficeViewModel.getBoxOffice() == null) {
             requestBoxOffice();
         } else {
-            try {
-                renderBoxOfficeData();
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
+            renderBoxOfficeData();
         }
     }
 
-    private void renderBoxOfficeData() throws MalformedURLException {
+    private void renderBoxOfficeData() {
         this.boxOffice = cineBoxOfficeViewModel.getBoxOffice();
         if (boxOffice.getData() != null && boxOffice.getData().size() > 0) {
-            for (BoxOfficeItem boxOfficeItem : boxOffice.getData()) {
-                requestMovieData(boxOfficeItem);
-            }
+
         } else requestBoxOffice();
     }
 
@@ -79,13 +73,9 @@ public class BoxOfficeActivity extends BaseNavigationActivity {
         Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }
 
-    private void handleBoxOfficeData(BoxOffice boxOffice) throws MalformedURLException {
+    private void handleBoxOfficeData(BoxOffice boxOffice) {
         cineBoxOfficeViewModel.setBoxOffice(boxOffice);
         renderBoxOfficeData();
-    }
-
-    private void requestMovieData(BoxOfficeItem boxOffice) {
-
     }
 
 }
