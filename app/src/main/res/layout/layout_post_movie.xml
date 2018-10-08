@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
@@ -38,12 +39,13 @@
                 android:id="@+id/lytShare"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/circle_background"
-                android:padding="10dp">
+                android:background="@drawable/circle_background">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="center"
+                    android:padding="8dp"
                     android:src="@drawable/ic_share" />
 
             </FrameLayout>
@@ -78,8 +80,9 @@
             <LinearLayout
                 android:id="@+id/lytDays"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone">
+                android:layout_height="36dp"
+                android:visibility="gone"
+                tools:visibility="visible">
 
                 <FrameLayout
                     android:layout_width="wrap_content"
@@ -91,6 +94,8 @@
                         android:id="@+id/txtDays"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:includeFontPadding="false"
                         android:text="12"
                         android:textColor="@color/colorPrimary"
                         android:textSize="16sp" />
@@ -197,10 +202,11 @@
 
     </LinearLayout>
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout
         android:id="@+id/rlytTeaser"
         android:layout_width="match_parent"
-        android:layout_height="205dp">
+        android:layout_height="205dp"
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/imgTeaser"
@@ -220,6 +226,5 @@
         android:id="@+id/recylerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-
 
 </LinearLayout>

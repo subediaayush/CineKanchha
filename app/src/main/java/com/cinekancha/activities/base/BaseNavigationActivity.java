@@ -12,10 +12,12 @@ import android.view.MenuItem;
 
 import com.cinekancha.R;
 import com.cinekancha.activities.HomeActivity;
+import com.cinekancha.boxOffice.BoxOfficeActivity;
 import com.cinekancha.movies.MovieActivity;
 import com.cinekancha.newRelease.NewReleaseActivity;
+import com.cinekancha.newsGossips.NewsGossipsActivity;
+import com.cinekancha.trolls.TrollListActivity;
 import com.cinekancha.utils.GlobalUtils;
-import com.cinekancha.utils.Logger;
 
 import butterknife.BindView;
 
@@ -59,12 +61,13 @@ public abstract class BaseNavigationActivity extends BaseActivity implements Nav
             GlobalUtils.navigateActivity(this, true, HomeActivity.class);
             // Handle the camera action
         } else if (id == R.id.menuNewsGossips) {
-
+            GlobalUtils.navigateActivity(this, true, NewsGossipsActivity.class);
         } else if (id == R.id.menuNewRelease) {
             GlobalUtils.navigateActivity(this, true, NewReleaseActivity.class);
         } else if (id == R.id.menuUpComing) {
             GlobalUtils.navigateActivity(this, true, MovieActivity.class);
         } else if (id == R.id.menuBoxOffice) {
+            GlobalUtils.navigateActivity(this, true, BoxOfficeActivity.class);
 
         } else if (id == R.id.menuTrending) {
 
@@ -79,7 +82,7 @@ public abstract class BaseNavigationActivity extends BaseActivity implements Nav
         } else if (id == R.id.menuFilmyTrivias) {
 
         } else if (id == R.id.menuFilmyTroll) {
-
+            GlobalUtils.navigateActivity(this, true, TrollListActivity.class);
         } else if (id == R.id.menuSettings) {
 
         } else if (id == R.id.menuContact) {

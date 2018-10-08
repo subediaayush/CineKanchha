@@ -41,7 +41,7 @@ public class HomeData {
     private Trivia trivia;
     @SerializedName("troll")
     @Expose
-    private Troll troll;
+    private TrollData troll;
     @SerializedName("top_story")
     @Expose
     private TopStory topStory;
@@ -110,11 +110,11 @@ public class HomeData {
         this.trivia = trivia;
     }
 
-    public Troll getTroll() {
+    public TrollData getTroll() {
         return troll;
     }
 
-    public void setTroll(Troll troll) {
+    public void setTroll(TrollData troll) {
         this.troll = troll;
     }
 

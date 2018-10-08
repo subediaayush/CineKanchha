@@ -1,15 +1,14 @@
 package com.cinekancha.entities.model;
 
-import java.util.List;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Troll {
+import java.util.List;
 
+public class NewsGossip {
     @SerializedName("data")
     @Expose
-    private List<TrollData> data = null;
+    private List<Article> data = null;
     @SerializedName("links")
     @Expose
     private PageLink links;
@@ -17,11 +16,11 @@ public class Troll {
     @Expose
     private Meta meta;
 
-    public List<TrollData> getData() {
+    public List<Article> getData() {
         return data;
     }
 
-    public void setData(List<TrollData> data) {
+    public void setData(List<Article> data) {
         this.data = data;
     }
 
@@ -40,5 +39,4 @@ public class Troll {
     public void setMeta(Meta meta) {
         this.meta = meta;
     }
-
 }

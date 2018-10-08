@@ -5,6 +5,7 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.support.annotation.NonNull;
 
 import com.cinekancha.entities.model.Troll;
+import com.cinekancha.entities.model.TrollData;
 
 import java.util.List;
 
@@ -13,18 +14,18 @@ import java.util.List;
  */
 
 public class CineTrollViewModel extends AndroidViewModel {
-	
-	private List<Troll> mTrolls;
-	
-	public CineTrollViewModel(@NonNull Application application) {
-		super(application);
-	}
-	
-	public List<Troll> getTrolls() {
-		return mTrolls;
-	}
-	
-	public void setArticles(List<Troll> trolls) {
-		this.mTrolls = trolls;
-	}
+
+    private List<TrollData> mTrolls;
+
+    public CineTrollViewModel(@NonNull Application application) {
+        super(application);
+    }
+
+    public List<TrollData> getTrolls() {
+        return mTrolls;
+    }
+
+    public void setArticles(List<TrollData> trolls) {
+        this.mTrolls = trolls;
+    }
 }

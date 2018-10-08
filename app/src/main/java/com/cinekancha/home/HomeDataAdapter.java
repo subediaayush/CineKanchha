@@ -19,6 +19,7 @@ import com.cinekancha.entities.model.PollData;
 import com.cinekancha.entities.model.TopStory;
 import com.cinekancha.entities.model.Trivia;
 import com.cinekancha.entities.model.Troll;
+import com.cinekancha.entities.model.TrollData;
 import com.cinekancha.movies.MovieActivity;
 import com.cinekancha.poll.PollsActivity;
 import com.cinekancha.utils.Constants;
@@ -182,7 +183,7 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
     @Override
     protected void setViewOfTypeSeven(BaseViewHolder baseHolder, int position) {
         TrollHolder holder = (TrollHolder) baseHolder;
-        Troll troll = mData.getItem(position);
+        TrollData troll = mData.getItem(position);
 
         if (!TextUtils.isEmpty(troll.getImageUrl())) {
             String newString = troll.getImageUrl().replace("\\", "");

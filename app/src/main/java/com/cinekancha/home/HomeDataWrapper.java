@@ -80,6 +80,7 @@ public class HomeDataWrapper {
             wrapper.add(fullMovies, FEATURED_FULL_VIDEOS);
         }
 
+
         wrapper.add(data.getTroll(), FEATURED_TROLL);
 //
 ////		List<Movie> movies = data.getFeaturedMovies();

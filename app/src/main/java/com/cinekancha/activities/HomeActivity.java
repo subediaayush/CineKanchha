@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -25,11 +26,11 @@ import com.google.gson.Gson;
 import butterknife.BindView;
 import me.relex.circleindicator.CircleIndicator;
 
-public class HomeActivity extends BaseNavigationActivity implements OnSlideClickListener {
+public class HomeActivity extends BaseNavigationActivity implements OnSlideClickListener, SwipeRefreshLayout.OnRefreshListener {
     private static final String TAG = "HomeActivity";
 
-    //    @BindView(R.id.homeSwipeRefreshLayout)
-//    protected SwipeRefreshLayout mSwipeRefreshLayout;
+    @BindView(R.id.homeSwipeRefreshLayout)
+    protected SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.home_list_view)
     protected RecyclerView mHomeListView;
 
@@ -73,7 +74,7 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
             }
         });
         mSlideAdapter.setOnSlideClickListener(this);
-//        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
 
         mHomeListView.setLayoutManager(new LinearLayoutManager(this));
         mHomeListView.setAdapter(mHomeDataAdapter);
@@ -92,7 +93,6 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
     }
 
     private void renderHomeData() {
-//        mSwipeRefreshLayout.setRefreshing(false);
         HomeData data = mCineHomeViewModel.getHomeData();
         mHomeDataAdapter.setHomeData(data);
         mSlideAdapter.setFeaturedItems(data.getFeaturedContents());
@@ -102,8 +102,9 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
     private void requestHomeData() {
         compositeDisposable.add(RestAPI.getInstance().getHomeData()
                 .doOnSubscribe(disposable -> {
+                    mSwipeRefreshLayout.setRefreshing(true);
                 })
-//                .doFinally(() -> mSwipeRefreshLayout.setRefreshing(false))
+                .doFinally(() -> mSwipeRefreshLayout.setRefreshing(false))
                 .subscribe(this::handleHomeData, this::handleHomeFetchError));
     }
 
@@ -141,4 +142,8 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
 
     }
 
+    @Override
+    public void onRefresh() {
+        requestHomeData();
+    }
 }

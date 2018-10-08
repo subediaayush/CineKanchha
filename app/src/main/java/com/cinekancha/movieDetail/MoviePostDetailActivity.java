@@ -97,7 +97,6 @@ public class MoviePostDetailActivity extends BaseNavigationActivity implements O
     private RatingAdapter adapter;
 
     private String videoId = "";
-    private int movieId;
     private SlideaYoutubeAdapter mSlideAdapter;
     String days = "";
 
@@ -234,9 +233,9 @@ public class MoviePostDetailActivity extends BaseNavigationActivity implements O
     private void requestMovie(int id) {
         compositeDisposable.add(RestAPI.getInstance().getMovie(id)
                 .doOnSubscribe(disposable -> {
-//                    mSwipeRefreshLayout.setRefreshing(true);
+                    swipeRefreshLayout.setRefreshing(true);
                 })
-//                .doFinally(() -> mSwipeRefreshLayout.setRefreshing(false))
+                .doFinally(() -> swipeRefreshLayout.setRefreshing(false))
                 .subscribe(this::handleMovieData, this::handleMovieFetchError));
     }
 
@@ -274,6 +273,6 @@ public class MoviePostDetailActivity extends BaseNavigationActivity implements O
 
     @Override
     public void onRefresh() {
-        requestMovie(movieId);
+        requestMovie(mCinePostMovieModel.getMovieId());
     }
 }

@@ -1,5 +1,6 @@
 package com.cinekancha.newsGossips;
 
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,6 +21,9 @@ public class NewsGossipHolder extends HomeItemHolder {
     public ImageView imgNewsGossip;
     @BindView(R.id.txtNewsGossip)
     public TextView txtNewsGossip;
+    @Nullable
+    @BindView(R.id.divider)
+    public View divider;
 
     public NewsGossipHolder(BaseRecyclerAdapter baseRecyclerAdapter, View view) {
         super(baseRecyclerAdapter, view);

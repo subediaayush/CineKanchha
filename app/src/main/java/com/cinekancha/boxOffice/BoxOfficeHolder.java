@@ -25,6 +25,8 @@ public class BoxOfficeHolder extends HomeItemHolder {
     public TextView txtGross;
     @BindView(R.id.txtWeek)
     public TextView txtWeek;
+    @BindView(R.id.imgBoxOffice)
+    public ImageView imgBoxOffice;
 
     public BoxOfficeHolder(BaseRecyclerAdapter baseRecyclerAdapter, View view, OnClickListener listener) {
         super(baseRecyclerAdapter, view);

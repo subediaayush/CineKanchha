@@ -2,12 +2,11 @@ package com.cinekancha.entities.rest;
 
 import com.cinekancha.entities.model.BoxOffice;
 import com.cinekancha.entities.model.HomeData;
-import com.cinekancha.entities.model.Movie;
 import com.cinekancha.entities.model.MovieData;
 import com.cinekancha.entities.model.MovieDetail;
 import com.cinekancha.entities.model.NewRelease;
-
-import java.util.List;
+import com.cinekancha.entities.model.NewsGossip;
+import com.cinekancha.entities.model.Troll;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
@@ -33,6 +32,12 @@ public interface ApiService {
 
     @GET("api/boxOffice")
     Observable<BoxOffice> getBoxOffice();
+
+    @GET("api/news")
+    Observable<NewsGossip> getNewsGossip();
+
+    @GET("api/troll")
+    Observable<Troll> getTroll();
 
     @GET("bins/19gt0m")
     Observable<HomeData> getHomeTestData();

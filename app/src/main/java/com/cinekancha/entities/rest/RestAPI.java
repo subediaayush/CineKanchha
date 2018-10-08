@@ -3,12 +3,12 @@ package com.cinekancha.entities.rest;
 import com.cinekancha.BuildConfig;
 import com.cinekancha.entities.model.BoxOffice;
 import com.cinekancha.entities.model.HomeData;
-import com.cinekancha.entities.model.Movie;
 import com.cinekancha.entities.model.MovieData;
 import com.cinekancha.entities.model.MovieDetail;
 import com.cinekancha.entities.model.NewRelease;
+import com.cinekancha.entities.model.NewsGossip;
+import com.cinekancha.entities.model.Troll;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -96,9 +96,23 @@ public class RestAPI {
                 .retry(1);
     }
 
-
     public Observable<HomeData> getHomeData() {
         return getApiService().getHomeData()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .retry(1);
+    }
+
+    public Observable<NewsGossip> getNewsGossip() {
+        return getApiService().getNewsGossip()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .retry(1);
+    }
+
+
+    public Observable<Troll> getTroll() {
+        return getApiService().getTroll()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .retry(1);

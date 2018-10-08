@@ -43,9 +43,9 @@ public class BoxOfficeAdapter extends BaseRecyclerAdapter<BoxOfficeHolder> {
     protected void setViewOfTypeZero(BaseViewHolder baseHolder, int position) {
         BoxOfficeHolder holder = (BoxOfficeHolder) baseHolder;
         BoxOfficeItem boxOfficeItem = boxOfficeList.get(position);
-//        holder.txtMovie.setText(boxOfficeItem.getName());
-//        holder.txtDate.setText(boxOfficeItem.getReleaseDate());
-//        Picasso.with(holder.itemView.getContext()).load(Constants.imageUrl + movie.getFeaturedImage()).into(holder.imgMovie);
+        holder.txtGross.setText(boxOfficeItem.getCollection() + " Crore");
+        holder.txtWeekend.setText(boxOfficeItem.getCollectionDate());
+//        Picasso.with(holder.itemView.getContext()).load(Constants.imageUrl + boxOfficeItem.).into(holder.imgMovie);
     }
 
     @Override

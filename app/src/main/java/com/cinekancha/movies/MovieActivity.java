@@ -32,14 +32,13 @@ public class MovieActivity extends BaseNavigationActivity implements OnClickList
     private CineMovieViewModel cineMovieViewModel;
 
     private MoviesAdapter adapter;
-    private List<Movie> movieList;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         cineMovieViewModel = ViewModelProviders.of(this).get(CineMovieViewModel.class);
-         init();
+        init();
     }
 
     private void initToolbar() {
@@ -75,9 +74,8 @@ public class MovieActivity extends BaseNavigationActivity implements OnClickList
     }
 
     private void renderMovieData() throws MalformedURLException {
-        this.movieList = cineMovieViewModel.getMovieList();
-        if (movieList != null && movieList.size() > 0) {
-            adapter = new MoviesAdapter(movieList, this);
+        if (cineMovieViewModel.getMovieList() != null && cineMovieViewModel.getMovieList().size() > 0) {
+            adapter = new MoviesAdapter(cineMovieViewModel.getMovieList(), this);
             recyclerView.setAdapter(adapter);
         } else requestMovie();
     }
@@ -103,7 +101,7 @@ public class MovieActivity extends BaseNavigationActivity implements OnClickList
 
     @Override
     public void onClick(int id) {
-        Movie movie = movieList.get(id);
+        Movie movie = cineMovieViewModel.getMovieList().get(id);
         Intent detail = new Intent(this, MoviePostDetailActivity.class);
         detail.putExtra("movie", String.valueOf(movie.getId()));
         startActivity(detail);

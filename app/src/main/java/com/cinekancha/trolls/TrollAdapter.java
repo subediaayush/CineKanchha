@@ -7,6 +7,7 @@ import com.cinekancha.R;
 import com.cinekancha.adapters.base.BaseRecyclerAdapter;
 import com.cinekancha.adapters.base.BaseViewHolder;
 import com.cinekancha.entities.model.Troll;
+import com.cinekancha.entities.model.TrollData;
 import com.cinekancha.home.TrollHolder;
 import com.cinekancha.utils.Constants;
 import com.squareup.picasso.Picasso;
@@ -21,7 +22,7 @@ import io.reactivex.annotations.NonNull;
  */
 
 public class TrollAdapter extends BaseRecyclerAdapter<TrollHolder> {
-    private List<Troll> mData;
+    private List<TrollData> mData;
 
     @Override
     public TrollHolder onCreateView(int viewType, View view) {
@@ -38,7 +39,7 @@ public class TrollAdapter extends BaseRecyclerAdapter<TrollHolder> {
     @Override
     protected void setViewOfTypeZero(BaseViewHolder baseHolder, int position) {
         TrollHolder holder = (TrollHolder) baseHolder;
-        Troll troll = mData.get(position);
+        TrollData troll = mData.get(position);
 
         if (!TextUtils.isEmpty(troll.getImageUrl())) {
             Picasso.with(baseHolder.itemView.getContext())
@@ -52,19 +53,19 @@ public class TrollAdapter extends BaseRecyclerAdapter<TrollHolder> {
         return mData == null ? 0 : mData.size();
     }
 
-    public void setTrolls(List<Troll> trolls) {
+    public void setTrolls(List<TrollData> trolls) {
         this.mData = trolls;
         notifyDataSetChanged();
     }
 
-    public void addTrolls(@NonNull List<Troll> trolls) {
+    public void addTrolls(@NonNull List<TrollData> trolls) {
         if (this.mData == null) this.mData = new ArrayList<>();
         int initial = this.mData.size();
         this.mData.addAll(trolls);
         notifyItemRangeInserted(initial, trolls.size());
     }
 
-    public Troll getTroll(int position) {
+    public TrollData getTroll(int position) {
         return mData.get(position % mData.size());
     }
 }
