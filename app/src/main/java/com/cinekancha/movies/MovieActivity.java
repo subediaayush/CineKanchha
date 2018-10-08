@@ -3,6 +3,7 @@ package com.cinekancha.movies;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -22,9 +23,12 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class MovieActivity extends BaseNavigationActivity implements OnClickListener {
+public class MovieActivity extends BaseNavigationActivity implements OnClickListener, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.toolbar)
     protected Toolbar toolbar;
+
+    @BindView(R.id.homeSwipeRefreshLayout)
+    protected SwipeRefreshLayout homeSwipeRefreshLayout;
 
     @BindView(R.id.movieRecyclerView)
     public RecyclerView recyclerView;
@@ -50,7 +54,7 @@ public class MovieActivity extends BaseNavigationActivity implements OnClickList
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setHasFixedSize(true);
-
+        homeSwipeRefreshLayout.setOnRefreshListener(this);
     }
 
 
@@ -83,9 +87,9 @@ public class MovieActivity extends BaseNavigationActivity implements OnClickList
     private void requestMovie() {
         compositeDisposable.add(RestAPI.getInstance().getMovie()
                 .doOnSubscribe(disposable -> {
-//                    mSwipeRefreshLayout.setRefreshing(true);
+                    homeSwipeRefreshLayout.setRefreshing(true);
                 })
-//                .doFinally(() -> mSwipeRefreshLayout.setRefreshing(false))
+                .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
                 .subscribe(this::handleMovieData, this::handleMovieFetchError));
     }
 
@@ -105,5 +109,10 @@ public class MovieActivity extends BaseNavigationActivity implements OnClickList
         Intent detail = new Intent(this, MoviePostDetailActivity.class);
         detail.putExtra("movie", String.valueOf(movie.getId()));
         startActivity(detail);
+    }
+
+    @Override
+    public void onRefresh() {
+        requestMovie();
     }
 }

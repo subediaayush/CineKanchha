@@ -21,7 +21,9 @@ import com.cinekancha.entities.model.Trivia;
 import com.cinekancha.entities.model.Troll;
 import com.cinekancha.entities.model.TrollData;
 import com.cinekancha.movies.MovieActivity;
+import com.cinekancha.newsGossips.NewsGossipsActivity;
 import com.cinekancha.poll.PollsActivity;
+import com.cinekancha.trolls.TrollListActivity;
 import com.cinekancha.utils.Constants;
 import com.cinekancha.utils.GlobalUtils;
 import com.cinekancha.utils.PollUtil;
@@ -188,9 +190,11 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
         if (!TextUtils.isEmpty(troll.getImageUrl())) {
             String newString = troll.getImageUrl().replace("\\", "");
             Picasso.with(baseHolder.itemView.getContext())
-                    .load(Constants.imageUrl + newString)
+                    .load(newString)
                     .into(holder.troll);
         }
+        holder.txtViewAll.setVisibility(View.VISIBLE);
+        holder.txtViewAll.setOnClickListener(view -> GlobalUtils.navigateActivity(holder.itemView.getContext(), true, TrollListActivity.class));
     }
 
     @Override
@@ -203,10 +207,12 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
 
     @Override
     protected void setViewOfEleven(BaseViewHolder baseHolder, int position) {
-        Log.d("Position", String.valueOf(position));
         TopStoryHolder holder = (TopStoryHolder) baseHolder;
         TopStory topStory = mData.getItem(position);
         holder.txtTopStories.setText(topStory.getSummary());
+        holder.itemView.setOnClickListener(view -> {
+            GlobalUtils.navigateActivity(holder.itemView.getContext(), true, NewsGossipsActivity.class);
+        });
     }
 
     @Override

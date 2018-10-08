@@ -1,7 +1,5 @@
 package com.cinekancha.entities.model;
-
 import java.util.List;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -18,10 +16,10 @@ public class MovieDetail {
     private String synopsis;
     @SerializedName("review")
     @Expose
-    private String review;
+    private Object review;
     @SerializedName("featuredImage")
     @Expose
-    private String featuredImage;
+    private Object featuredImage;
     @SerializedName("release_date")
     @Expose
     private String releaseDate;
@@ -36,7 +34,7 @@ public class MovieDetail {
     private List<Links> links = null;
     @SerializedName("photo")
     @Expose
-    private List<Object> photo = null;
+    private List<Photo> photo = null;
     @SerializedName("created_at")
     @Expose
     private CreatedAt createdAt;
@@ -68,19 +66,19 @@ public class MovieDetail {
         this.synopsis = synopsis;
     }
 
-    public String getReview() {
+    public Object getReview() {
         return review;
     }
 
-    public void setReview(String review) {
+    public void setReview(Object review) {
         this.review = review;
     }
 
-    public String getFeaturedImage() {
+    public Object getFeaturedImage() {
         return featuredImage;
     }
 
-    public void setFeaturedImage(String featuredImage) {
+    public void setFeaturedImage(Object featuredImage) {
         this.featuredImage = featuredImage;
     }
 
@@ -116,11 +114,11 @@ public class MovieDetail {
         this.links = links;
     }
 
-    public List<Object> getPhoto() {
+    public List<Photo> getPhoto() {
         return photo;
     }
 
-    public void setPhoto(List<Object> photo) {
+    public void setPhoto(List<Photo> photo) {
         this.photo = photo;
     }
 

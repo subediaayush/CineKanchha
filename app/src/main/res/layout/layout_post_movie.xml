@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingBottom="10dp">
 
     <LinearLayout
         android:id="@+id/lytYoutube"
@@ -202,25 +203,10 @@
 
     </LinearLayout>
 
-    <RelativeLayout
-        android:id="@+id/rlytTeaser"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recylerViewPhotos"
         android:layout_width="match_parent"
-        android:layout_height="205dp"
-        android:visibility="gone">
-
-        <ImageView
-            android:id="@+id/imgTeaser"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:src="@drawable/default_image" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:src="@drawable/ic_play" />
-    </RelativeLayout>
+        android:layout_height="180dp" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recylerView"

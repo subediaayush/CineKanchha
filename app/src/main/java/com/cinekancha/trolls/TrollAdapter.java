@@ -1,6 +1,7 @@
 package com.cinekancha.trolls;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 
 import com.cinekancha.R;
@@ -42,8 +43,9 @@ public class TrollAdapter extends BaseRecyclerAdapter<TrollHolder> {
         TrollData troll = mData.get(position);
 
         if (!TextUtils.isEmpty(troll.getImageUrl())) {
+            Log.d("TrollImage", troll.getImageUrl());
             Picasso.with(baseHolder.itemView.getContext())
-                    .load(Constants.imageUrl + troll.getImageUrl())
+                    .load(troll.getImageUrl())
                     .into(holder.troll);
         }
     }

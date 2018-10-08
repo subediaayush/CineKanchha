@@ -1,5 +1,6 @@
 package com.cinekancha.entities.model;
 
+import com.cinekancha.utils.Constants;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -27,7 +28,7 @@ public class TrollData {
     }
 
     public String getImageUrl() {
-        return imageUrl;
+        return Constants.imageUrl + imageUrl;
     }
 
     public void setImageUrl(String imageUrl) {

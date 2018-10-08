@@ -19,15 +19,20 @@ import android.widget.Toast;
 
 import com.cinekancha.R;
 import com.cinekancha.activities.base.BaseNavigationActivity;
+import com.cinekancha.adapters.base.RecyclerViewClickListener;
 import com.cinekancha.entities.model.FeaturedContent;
 import com.cinekancha.entities.model.Links;
 import com.cinekancha.entities.model.MovieDetail;
+import com.cinekancha.entities.model.Photo;
+import com.cinekancha.entities.model.TrollData;
 import com.cinekancha.entities.rest.RestAPI;
 import com.cinekancha.home.OnSlideClickListener;
 import com.cinekancha.utils.Constants;
 import com.cinekancha.utils.GlobalUtils;
+import com.cinekancha.utils.ListUtils;
 import com.cinekancha.view.CinePostMovieViewModel;
 import com.squareup.picasso.Picasso;
+import com.stfalcon.frescoimageviewer.ImageViewer;
 
 import java.net.MalformedURLException;
 import java.text.ParseException;
@@ -40,7 +45,7 @@ import java.util.List;
 import butterknife.BindView;
 import me.relex.circleindicator.CircleIndicator;
 
-public class MoviePostDetailActivity extends BaseNavigationActivity implements OnSlideClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class MoviePostDetailActivity extends BaseNavigationActivity implements OnSlideClickListener, SwipeRefreshLayout.OnRefreshListener, RecyclerViewClickListener {
     @BindView(R.id.imgFeature)
     public ImageView imgFeature;
 
@@ -92,9 +97,13 @@ public class MoviePostDetailActivity extends BaseNavigationActivity implements O
     @BindView(R.id.recycleViewRating)
     public RecyclerView recyclerViewRating;
 
+    @BindView(R.id.recylerViewPhotos)
+    public RecyclerView recylerViewPhotos;
+
     private CinePostMovieViewModel mCinePostMovieModel;
 
     private RatingAdapter adapter;
+    private PhotoAdapter photoAdapter;
 
     private String videoId = "";
     private SlideaYoutubeAdapter mSlideAdapter;
@@ -113,7 +122,17 @@ public class MoviePostDetailActivity extends BaseNavigationActivity implements O
         recyclerViewRating.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         recyclerViewRating.setNestedScrollingEnabled(false);
         recyclerViewRating.setHasFixedSize(true);
+
+        recylerViewPhotos.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        recylerViewPhotos.setNestedScrollingEnabled(false);
+        recylerViewPhotos.setHasFixedSize(true);
+
         adapter = new RatingAdapter();
+        photoAdapter = new PhotoAdapter();
+
+        photoAdapter.setOnClickListener(this);
+
+        recylerViewPhotos.setAdapter(photoAdapter);
         recyclerViewRating.setAdapter(adapter);
         swipeRefreshLayout.setOnRefreshListener(this);
 
@@ -190,17 +209,19 @@ public class MoviePostDetailActivity extends BaseNavigationActivity implements O
                 btnReview.setVisibility(View.GONE);
                 lytDays.setVisibility(View.VISIBLE);
                 txtDays.setText(days);
-                recyclerViewRating.setVisibility(View.GONE);
             } else if (!TextUtils.isEmpty(releaseType) && releaseType.equals("post")) {
                 btnReview.setVisibility(View.VISIBLE);
                 lytDays.setVisibility(View.GONE);
-                recyclerViewRating.setVisibility(View.VISIBLE);
             }
-            if (data.getLinks().size() > 0 && data.getLinks() != null) {
+            if (data.getLinks().size() > 0 && data.getLinks() != null)
                 lytYoutube.setVisibility(View.VISIBLE);
-            } else {
+            else
                 lytYoutube.setVisibility(View.GONE);
-            }
+            if (data.getPhoto().size() > 0 && data.getPhoto() != null) {
+                recylerViewPhotos.setVisibility(View.VISIBLE);
+                photoAdapter.setData(data.getPhoto());
+            } else
+                recylerViewPhotos.setVisibility(View.GONE);
             List<Links> links = new ArrayList<>();
             links.clear();
             for (Links item : data.getLinks()) {
@@ -274,5 +295,12 @@ public class MoviePostDetailActivity extends BaseNavigationActivity implements O
     @Override
     public void onRefresh() {
         requestMovie(mCinePostMovieModel.getMovieId());
+    }
+
+    @Override
+    public void onClick(View v, int position) {
+        new ImageViewer.Builder<>(this, mCinePostMovieModel.getMovie().getPhoto())
+                .setFormatter(Photo::getUrl)
+                .setStartPosition(position).show();
     }
 }

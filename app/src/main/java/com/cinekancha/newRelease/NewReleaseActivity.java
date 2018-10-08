@@ -3,6 +3,7 @@ package com.cinekancha.newRelease;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -24,12 +25,15 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class NewReleaseActivity extends BaseNavigationActivity implements OnClickListener {
+public class NewReleaseActivity extends BaseNavigationActivity implements OnClickListener, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.toolbar)
     protected Toolbar toolbar;
 
     @BindView(R.id.movieRecyclerView)
     public RecyclerView recyclerView;
+
+    @BindView(R.id.homeSwipeRefreshLayout)
+    protected SwipeRefreshLayout homeSwipeRefreshLayout;
 
     private CineMovieViewModel cineMovieViewModel;
 
@@ -50,6 +54,7 @@ public class NewReleaseActivity extends BaseNavigationActivity implements OnClic
     }
 
     private void init() {
+        homeSwipeRefreshLayout.setOnRefreshListener(this);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setHasFixedSize(true);
@@ -87,9 +92,9 @@ public class NewReleaseActivity extends BaseNavigationActivity implements OnClic
     private void requestMovie() {
         compositeDisposable.add(RestAPI.getInstance().getNewRelease()
                 .doOnSubscribe(disposable -> {
-//                    mSwipeRefreshLayout.setRefreshing(true);
+                    homeSwipeRefreshLayout.setRefreshing(true);
                 })
-//                .doFinally(() -> mSwipeRefreshLayout.setRefreshing(false))
+                .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
                 .subscribe(this::handleMovieData, this::handleMovieFetchError));
     }
 
@@ -109,5 +114,15 @@ public class NewReleaseActivity extends BaseNavigationActivity implements OnClic
         Intent detail = new Intent(this, MoviePostDetailActivity.class);
         detail.putExtra("movie", String.valueOf(movie.getId()));
         startActivity(detail);
+    }
+
+    @Override
+    public void onRefresh() {
+        requestMovie();
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
     }
 }

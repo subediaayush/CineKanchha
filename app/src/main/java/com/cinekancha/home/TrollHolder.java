@@ -14,12 +14,14 @@ import butterknife.BindView;
  */
 
 public class TrollHolder extends HomeItemHolder {
-	
-	@BindView(R.id.troll)
-	public ImageView troll;
-	
-	public TrollHolder(BaseRecyclerAdapter baseRecyclerAdapter, View view) {
-		super(baseRecyclerAdapter, view);
-		view.setOnClickListener(this);
-	}
+
+    @BindView(R.id.troll)
+    public ImageView troll;
+    @BindView(R.id.txtViewAll)
+    public TextView txtViewAll;
+
+    public TrollHolder(BaseRecyclerAdapter baseRecyclerAdapter, View view) {
+        super(baseRecyclerAdapter, view);
+        view.setOnClickListener(this);
+    }
 }
