@@ -1,11 +1,11 @@
 
 package com.cinekancha.entities.model;
 
-import java.util.List;
-
+import com.cinekancha.entities.GalleryItem;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -45,6 +45,12 @@ public class HomeData {
     @SerializedName("top_story")
     @Expose
     private TopStory topStory;
+    @SerializedName("photo_gallery")
+    @Expose
+    private List<GalleryItem> photoGallery = new ArrayList<>();
+    @Expose
+    @SerializedName("movie_reviews")
+    private List<Movie> featuredReviews = new ArrayList<>();
 
     public List<FeaturedContent> getFeaturedContents() {
         return featuredContents;
@@ -126,4 +132,19 @@ public class HomeData {
         this.topStory = topStory;
     }
 
+    public List<GalleryItem> getPhotoGallery() {
+        return photoGallery;
+    }
+
+    public void setPhotoGallery(List<GalleryItem> photoGallery) {
+        this.photoGallery = photoGallery;
+    }
+
+    public List<Movie> getFeaturedReviews() {
+        return featuredReviews;
+    }
+
+    public void setFeaturedReviews(List<Movie> featuredReviews) {
+        this.featuredReviews = featuredReviews;
+    }
 }

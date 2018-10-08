@@ -3,13 +3,9 @@ package com.cinekancha.home;
 import android.util.SparseIntArray;
 
 import com.cinekancha.entities.GalleryItem;
-import com.cinekancha.entities.Video;
-import com.cinekancha.entities.model.Article;
-import com.cinekancha.entities.model.BoxOfficeItem;
 import com.cinekancha.entities.model.BoxOfficeList;
 import com.cinekancha.entities.model.HomeData;
 import com.cinekancha.entities.model.Movie;
-import com.cinekancha.entities.model.Troll;
 import com.cinekancha.utils.ListUtils;
 
 import java.util.ArrayList;
@@ -56,17 +52,17 @@ public class HomeDataWrapper {
             wrapper.add(boxOfficeItems, FEATURED_BOX_OFFICE);
         }
 
-//		List<Troll> photoGallery = (List<Troll>) data.getTroll();
-//		if (!ListUtils.isEmpty(photoGallery)) {
-//			wrapper.add(photoGallery, FEATURED_PHOTO_GALLERY);
-//		}
+		List<GalleryItem> photoGallery = data.getPhotoGallery();
+		if (!ListUtils.isEmpty(photoGallery)) {
+			wrapper.add(photoGallery, FEATURED_PHOTO_GALLERY);
+		}
 
         wrapper.add(data.getPoll(), FEATURED_POLL);
 
-//		List<Movie> reviews = data.get();
-//		if (!ListUtils.isEmpty(reviews)) {
-//			wrapper.add(reviews, FEATURED_REVIEWS);
-//		}
+        List<Movie> reviews = data.getFeaturedReviews();
+        if (!ListUtils.isEmpty(reviews)) {
+            wrapper.add(reviews, FEATURED_REVIEWS);
+        }
 
 //        List<Movie> showtimes = data.getMovies();
 //        if (!ListUtils.isEmpty(showtimes)) {
