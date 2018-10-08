@@ -1,4 +1,3 @@
-
 package com.cinekancha.entities.model;
 
 import com.cinekancha.entities.GalleryItem;
@@ -44,7 +43,7 @@ public class HomeData {
     private TrollData troll;
     @SerializedName("top_story")
     @Expose
-    private TopStory topStory;
+    private Article topStory;
     @SerializedName("photo_gallery")
     @Expose
     private List<GalleryItem> photoGallery = new ArrayList<>();
@@ -124,11 +123,11 @@ public class HomeData {
         this.troll = troll;
     }
 
-    public TopStory getTopStory() {
+    public Article getTopStory() {
         return topStory;
     }
 
-    public void setTopStory(TopStory topStory) {
+    public void setTopStory(Article topStory) {
         this.topStory = topStory;
     }
 

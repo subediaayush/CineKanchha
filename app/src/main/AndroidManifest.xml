@@ -20,7 +20,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".article.ArticleDetailActivity" />
+        <activity android:name=".article.ArticleDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".article.ArticleListActivity" />
         <activity android:name=".trivia.TriviaListActivity" />
         <activity

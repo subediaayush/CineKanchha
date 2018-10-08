@@ -8,10 +8,13 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.Toast;
 
 import com.cinekancha.R;
 import com.cinekancha.activities.base.BaseNavigationActivity;
+import com.cinekancha.adapters.base.RecyclerViewClickListener;
+import com.cinekancha.article.ArticleDetailActivity;
 import com.cinekancha.entities.model.FeaturedContent;
 import com.cinekancha.entities.model.Links;
 import com.cinekancha.entities.model.NewsGossip;
@@ -25,7 +28,7 @@ import java.net.MalformedURLException;
 
 import butterknife.BindView;
 
-public class NewsGossipsActivity extends BaseNavigationActivity implements OnSlideClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class NewsGossipsActivity extends BaseNavigationActivity implements OnSlideClickListener, SwipeRefreshLayout.OnRefreshListener, RecyclerViewClickListener {
     @BindView(R.id.toolbar)
     public Toolbar toolbar;
 
@@ -51,6 +54,7 @@ public class NewsGossipsActivity extends BaseNavigationActivity implements OnSli
         recyclerViewNews.setNestedScrollingEnabled(false);
         recyclerViewNews.setHasFixedSize(true);
         adapter = new NewsGossipAdapter();
+        adapter.setOnClickListener(this);
         recyclerViewNews.setAdapter(adapter);
         newsSwipeToRefresh.setOnRefreshListener(this);
     }
@@ -126,5 +130,12 @@ public class NewsGossipsActivity extends BaseNavigationActivity implements OnSli
     @Override
     public void onRefresh() {
         requestNewsGossipList();
+    }
+
+    @Override
+    public void onClick(View v, int position) {
+        if (v.getId() == R.id.holder) {
+            ArticleDetailActivity.startActivity(this, mCineNewsGossipsModel.getNewsGossip().getData().get(position));
+        }
     }
 }

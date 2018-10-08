@@ -8,17 +8,15 @@ import android.widget.RadioButton;
 import com.cinekancha.R;
 import com.cinekancha.adapters.base.BaseRecyclerAdapter;
 import com.cinekancha.adapters.base.BaseViewHolder;
+import com.cinekancha.article.ArticleDetailActivity;
 import com.cinekancha.entities.ThumbWrapper;
 import com.cinekancha.entities.ThumbnailConverter;
 import com.cinekancha.entities.model.Article;
 import com.cinekancha.entities.model.HomeData;
 import com.cinekancha.entities.model.Movie;
 import com.cinekancha.entities.model.Option;
-import com.cinekancha.entities.model.Poll;
 import com.cinekancha.entities.model.PollData;
-import com.cinekancha.entities.model.TopStory;
 import com.cinekancha.entities.model.Trivia;
-import com.cinekancha.entities.model.Troll;
 import com.cinekancha.entities.model.TrollData;
 import com.cinekancha.movies.MovieActivity;
 import com.cinekancha.poll.PollsActivity;
@@ -84,7 +82,11 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
                 return new TrollHolder(this, view);
             }
             case FEATURED_TOP_STORIES: {
-                return new TopStoryHolder(this, view);
+                TopStoryHolder topStoryHolder = new TopStoryHolder(this, view);
+                topStoryHolder.itemView.setOnClickListener(view1 -> {
+                    ArticleDetailActivity.startActivity(topStoryHolder.itemView.getContext(), mData.getItem(topStoryHolder.getAdapterPosition()));
+                });
+                return topStoryHolder;
             }
             case FEATURED_MOVIE: {
                 return new ThumbnailViewHolder<>(
@@ -205,7 +207,7 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
     protected void setViewOfEleven(BaseViewHolder baseHolder, int position) {
         Log.d("Position", String.valueOf(position));
         TopStoryHolder holder = (TopStoryHolder) baseHolder;
-        TopStory topStory = mData.getItem(position);
+        Article topStory = mData.getItem(position);
         holder.txtTopStories.setText(topStory.getSummary());
     }
 

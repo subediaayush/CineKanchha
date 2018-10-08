@@ -2,11 +2,13 @@ package com.cinekancha.entities.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Created by aayushsubedi on 3/8/18.
  */
 
-public class Article {
+public class Article implements Serializable{
 	
 	@SerializedName("id")
 	private long id;
