@@ -31,6 +31,7 @@ public class NewReleaseHolder extends HomeItemHolder {
     @BindView(R.id.label)
     public TextView title;
     private ThumbnailAdapter<Movie> adapter;
+    public List<Movie> movieList;
 
     public NewReleaseHolder(BaseRecyclerAdapter baseRecyclerAdapter, View view) {
         super(baseRecyclerAdapter, view);
@@ -44,10 +45,10 @@ public class NewReleaseHolder extends HomeItemHolder {
                         data.getId()
                 );
             }
-        }, id -> {
-            Log.d("MovieID", String.valueOf(id));
+        }, position -> {
+            Movie movie = movieList.get(position);
             Intent detail = new Intent(view.getContext(), MoviePostDetailActivity.class);
-            detail.putExtra("movie", String.valueOf(id));
+            detail.putExtra("movie", String.valueOf(movie.getId()));
             view.getContext().startActivity(detail);
         });
         newMoviesList.setAdapter(adapter);
@@ -63,6 +64,7 @@ public class NewReleaseHolder extends HomeItemHolder {
     }
 
     public void setMovies(List<Movie> movies) {
+        movieList = movies;
         adapter.setThumbnails(movies);
     }
 }

@@ -1,34 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:tools="http://schemas.android.com/tools"
-	android:orientation="vertical"
-	android:layout_width="wrap_content"
-	android:layout_height="wrap_content"
-	android:gravity="center_horizontal">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
 
-	<android.support.v7.widget.AppCompatImageView
-		android:id="@+id/thumbnail"
-		android:layout_width="213dp"
-		android:layout_height="160dp"
-		android:scaleType="centerCrop"
-		tools:src="@tools:sample/backgrounds/scenic"
-		android:background="#7777"
-		/>
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/thumbnail"
+        android:layout_width="213dp"
+        android:layout_height="160dp"
+        android:background="#7777"
+        android:scaleType="centerCrop"
+        tools:src="@tools:sample/backgrounds/scenic" />
 
-	<TextView
-		android:id="@+id/title"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		tools:text="@tools:sample/lorem/random"
-		android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
-		android:lines="1"
-		/>
-	<TextView
-		android:id="@+id/subtitle"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		tools:text="@tools:sample/lorem"
-		android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
-		android:lines="1"
-		/>
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+        tools:text="@tools:sample/lorem/random" />
+
+    <TextView
+        android:id="@+id/subtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:lines="1"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+        tools:text="@tools:sample/lorem" />
 </LinearLayout>

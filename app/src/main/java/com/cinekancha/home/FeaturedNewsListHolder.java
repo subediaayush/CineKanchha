@@ -20,7 +20,9 @@ import com.cinekancha.entities.model.Article;
 import com.cinekancha.entities.model.Movie;
 import com.cinekancha.listener.OnClickListener;
 import com.cinekancha.movieDetail.MoviePostDetailActivity;
+import com.cinekancha.newsGossips.NewsGossipsActivity;
 import com.cinekancha.utils.Constants;
+import com.cinekancha.utils.GlobalUtils;
 
 import java.util.List;
 
@@ -45,6 +47,13 @@ public class FeaturedNewsListHolder extends HomeItemHolder {
     public FeaturedNewsListHolder(BaseRecyclerAdapter baseRecyclerAdapter, View view) {
         super(baseRecyclerAdapter, view);
         setIsRecyclable(false);
+        txtViewAll.setVisibility(View.VISIBLE);
+        txtViewAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GlobalUtils.navigateActivity(view.getContext(), true, NewsGossipsActivity.class);
+            }
+        });
         adapter = new ThumbnailAdapter<>(R.layout.layout_featured_news, new ThumbnailConverter<Article>() {
             @Override
             public ThumbWrapper convert(Article data) {
@@ -55,13 +64,8 @@ public class FeaturedNewsListHolder extends HomeItemHolder {
                 );
             }
         }, id -> {
-            for (int i = 0; i < articles.size(); i++) {
-                if (id == articles.get(i).getId()) {
-                    Article article = articles.get(i);
-                    ArticleDetailActivity.startActivity(view.getContext(), article);
-                    break;
-                }
-            }
+            Article article = articles.get(id);
+            ArticleDetailActivity.startActivity(view.getContext(), article);
         });
         upcomingMoviesList.setAdapter(adapter);
         LinearLayoutManager manager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false) {

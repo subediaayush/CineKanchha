@@ -4,8 +4,10 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.support.annotation.NonNull;
 
-import com.cinekancha.entities.model.BoxOffice;
+import com.cinekancha.entities.model.BoxOfficeItem;
 import com.cinekancha.entities.model.MovieDetail;
+
+import java.util.List;
 
 /**
  * Created by aayushsubedi on 3/8/18.
@@ -13,7 +15,7 @@ import com.cinekancha.entities.model.MovieDetail;
 
 public class CineBoxOfficeViewModel extends AndroidViewModel {
 
-    private BoxOffice boxOffice;
+    private List<BoxOfficeItem> boxOffice;
     private String movieId;
     private MovieDetail mMovie;
 
@@ -22,27 +24,11 @@ public class CineBoxOfficeViewModel extends AndroidViewModel {
         super(application);
     }
 
-    public BoxOffice getBoxOffice() {
+    public List<BoxOfficeItem> getBoxOffice() {
         return boxOffice;
     }
 
-    public void setBoxOffice(BoxOffice boxOffice) {
+    public void setBoxOffice(List<BoxOfficeItem> boxOffice) {
         this.boxOffice = boxOffice;
-    }
-
-    public MovieDetail getMovie() {
-        return mMovie;
-    }
-
-    public void setMovie(MovieDetail movie) {
-        this.mMovie = movie;
-    }
-
-    public void setMovieId(String movieId) {
-        this.movieId = movieId;
-    }
-
-    public String getMovieId() {
-        return movieId;
     }
 }

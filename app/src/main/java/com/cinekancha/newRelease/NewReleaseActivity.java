@@ -54,6 +54,8 @@ public class NewReleaseActivity extends BaseNavigationActivity implements OnClic
     }
 
     private void init() {
+        getSupportActionBar().setTitle(R.string.newReleases);
+
         homeSwipeRefreshLayout.setOnRefreshListener(this);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         recyclerView.setNestedScrollingEnabled(false);

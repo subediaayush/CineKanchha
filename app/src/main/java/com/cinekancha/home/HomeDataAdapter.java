@@ -146,7 +146,7 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
                 R.layout.layout_featured_thumbnails,    // 12
                 R.layout.layout_featured_thumbnails,    // 13
                 R.layout.layout_featured_thumbnails,    // 14
-                R.layout.layout_featured_top_story,    // 14
+                R.layout.layout_featured_top_story,    // 15
 
         };
     }
@@ -212,9 +212,6 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
         TopStoryHolder holder = (TopStoryHolder) baseHolder;
         Article topStory = mData.getItem(position);
         holder.txtTopStories.setText(topStory.getSummary());
-        holder.itemView.setOnClickListener(view -> {
-            GlobalUtils.navigateActivity(holder.itemView.getContext(), true, NewsGossipsActivity.class);
-        });
     }
 
     @Override

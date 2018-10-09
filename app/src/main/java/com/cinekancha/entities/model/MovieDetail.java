@@ -1,5 +1,12 @@
 package com.cinekancha.entities.model;
+
 import java.util.List;
+
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -11,15 +18,18 @@ public class MovieDetail {
     @SerializedName("name")
     @Expose
     private String name;
+    @SerializedName("rating")
+    @Expose
+    private String rating;
     @SerializedName("synopsis")
     @Expose
     private String synopsis;
     @SerializedName("review")
     @Expose
-    private Object review;
+    private String review;
     @SerializedName("featuredImage")
     @Expose
-    private Object featuredImage;
+    private String featuredImage;
     @SerializedName("release_date")
     @Expose
     private String releaseDate;
@@ -35,12 +45,15 @@ public class MovieDetail {
     @SerializedName("photo")
     @Expose
     private List<Photo> photo = null;
+    @SerializedName("articles")
+    @Expose
+    private List<Article> articles = null;
     @SerializedName("created_at")
     @Expose
-    private CreatedAt createdAt;
+    private String createdAt;
     @SerializedName("updated_at")
     @Expose
-    private UpdatedAt updatedAt;
+    private String updatedAt;
 
     public Integer getId() {
         return id;
@@ -58,6 +71,14 @@ public class MovieDetail {
         this.name = name;
     }
 
+    public String getRating() {
+        return rating;
+    }
+
+    public void setRating(String rating) {
+        this.rating = rating;
+    }
+
     public String getSynopsis() {
         return synopsis;
     }
@@ -66,19 +87,19 @@ public class MovieDetail {
         this.synopsis = synopsis;
     }
 
-    public Object getReview() {
+    public String getReview() {
         return review;
     }
 
-    public void setReview(Object review) {
+    public void setReview(String review) {
         this.review = review;
     }
 
-    public Object getFeaturedImage() {
+    public String getFeaturedImage() {
         return featuredImage;
     }
 
-    public void setFeaturedImage(Object featuredImage) {
+    public void setFeaturedImage(String featuredImage) {
         this.featuredImage = featuredImage;
     }
 
@@ -122,19 +143,27 @@ public class MovieDetail {
         this.photo = photo;
     }
 
-    public CreatedAt getCreatedAt() {
+    public List<Article> getArticles() {
+        return articles;
+    }
+
+    public void setArticles(List<Article> articles) {
+        this.articles = articles;
+    }
+
+    public String getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(CreatedAt createdAt) {
+    public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
 
-    public UpdatedAt getUpdatedAt() {
+    public String getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(UpdatedAt updatedAt) {
+    public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
     }
 

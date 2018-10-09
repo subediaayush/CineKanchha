@@ -13,14 +13,11 @@ import android.widget.Toast;
 import com.cinekancha.R;
 import com.cinekancha.activities.base.BaseNavigationActivity;
 import com.cinekancha.entities.Video;
-import com.cinekancha.entities.model.Movie;
-import com.cinekancha.entities.model.MovieData;
 import com.cinekancha.entities.model.TrendingData;
 import com.cinekancha.entities.rest.RestAPI;
 import com.cinekancha.listener.OnClickListener;
-import com.cinekancha.movieDetail.MoviePostDetailActivity;
-import com.cinekancha.movies.MoviesAdapter;
 import com.cinekancha.utils.GlobalUtils;
+import com.cinekancha.view.CineFullMoviesViewModel;
 import com.cinekancha.view.CineTrendingViewModel;
 
 import java.net.MalformedURLException;
@@ -28,7 +25,7 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class TrendingActivity extends BaseNavigationActivity implements OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class FullMoviesActivity extends BaseNavigationActivity implements OnClickListener, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.toolbar)
     protected Toolbar toolbar;
 
@@ -37,7 +34,7 @@ public class TrendingActivity extends BaseNavigationActivity implements OnClickL
     @BindView(R.id.homeSwipeRefreshLayout)
     public SwipeRefreshLayout homeSwipeRefreshLayout;
 
-    private CineTrendingViewModel cineTrendingViewModel;
+    private CineFullMoviesViewModel cineFullMoviesViewModel;
 
     private TrendingAdapter adapter;
     private List<Video> trendingList;
@@ -46,7 +43,7 @@ public class TrendingActivity extends BaseNavigationActivity implements OnClickL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        cineTrendingViewModel = ViewModelProviders.of(this).get(CineTrendingViewModel.class);
+        cineFullMoviesViewModel = ViewModelProviders.of(this).get(CineFullMoviesViewModel.class);
         init();
     }
 
@@ -56,8 +53,7 @@ public class TrendingActivity extends BaseNavigationActivity implements OnClickL
     }
 
     private void init() {
-        getSupportActionBar().setTitle("Trending Videos");
-
+        getSupportActionBar().setTitle("Watch Full Movies");
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setHasFixedSize(true);
@@ -73,7 +69,7 @@ public class TrendingActivity extends BaseNavigationActivity implements OnClickL
     @Override
     protected void onResume() {
         super.onResume();
-        if (cineTrendingViewModel.getTrendingList() == null) {
+        if (cineFullMoviesViewModel.getTrendingList() == null) {
             requestMovie();
         } else {
             try {
@@ -85,15 +81,15 @@ public class TrendingActivity extends BaseNavigationActivity implements OnClickL
     }
 
     private void renderMovieData() throws MalformedURLException {
-        this.trendingList = cineTrendingViewModel.getTrendingList();
-        if (trendingList != null && trendingList.size() > 0) {
-            adapter = new TrendingAdapter(trendingList, this);
+        this.trendingList = cineFullMoviesViewModel.getTrendingList();
+        if (cineFullMoviesViewModel.getTrendingList() != null && cineFullMoviesViewModel.getTrendingList().size() > 0) {
+            adapter = new TrendingAdapter(cineFullMoviesViewModel.getTrendingList(), this);
             recyclerView.setAdapter(adapter);
         } else requestMovie();
     }
 
     private void requestMovie() {
-        compositeDisposable.add(RestAPI.getInstance().getTrending()
+        compositeDisposable.add(RestAPI.getInstance().getFullMovies()
                 .doOnSubscribe(disposable -> {
                     homeSwipeRefreshLayout.setRefreshing(true);
                 })
@@ -107,7 +103,7 @@ public class TrendingActivity extends BaseNavigationActivity implements OnClickL
     }
 
     private void handleMovieData(TrendingData data) throws MalformedURLException {
-        cineTrendingViewModel.setTrendingList(data.getTrendingList());
+        cineFullMoviesViewModel.setTrendingList(data.getTrendingList());
         renderMovieData();
     }
 

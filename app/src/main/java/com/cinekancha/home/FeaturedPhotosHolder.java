@@ -30,10 +30,16 @@ public class FeaturedPhotosHolder extends HomeItemHolder {
     public RecyclerView upcomingMoviesList;
     @BindView(R.id.label)
     public TextView title;
+    @BindView(R.id.txtViewAll)
+    public TextView txtViewAll;
 
     public FeaturedPhotosHolder(BaseRecyclerAdapter baseRecyclerAdapter, View view) {
         super(baseRecyclerAdapter, view);
         setIsRecyclable(false);
+        txtViewAll.setVisibility(View.VISIBLE);
+        txtViewAll.setOnClickListener(view1 -> {
+
+        });
         adapter = new ThumbnailAdapter<>(R.layout.layout_featured_photo, new ThumbnailConverter<GalleryItem>() {
             @Override
             public ThumbWrapper convert(GalleryItem data) {
@@ -45,7 +51,7 @@ public class FeaturedPhotosHolder extends HomeItemHolder {
             }
         }, new OnClickListener() {
             @Override
-            public void onClick(int id) {
+            public void onClick(int position) {
 
             }
         });

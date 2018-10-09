@@ -62,7 +62,7 @@ public class ThumbnailAdapter<T> extends RecyclerView.Adapter<ThumbnailHolder> i
                 holder.thumbnail.setImageDrawable(new ColorDrawable(0x77777777));
             }
         }
-        holder.itemView.setOnClickListener(view -> listener.onClick(thumb.getId()));
+        holder.itemView.setOnClickListener(view -> listener.onClick(position));
     }
 
     @Override

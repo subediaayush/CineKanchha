@@ -35,6 +35,8 @@ public class UpcomingReleaseHolder extends HomeItemHolder {
     @BindView(R.id.txtViewAll)
     public TextView txtViewAll;
 
+    public List<Movie> movieList;
+
     public UpcomingReleaseHolder(BaseRecyclerAdapter baseRecyclerAdapter, View view) {
         super(baseRecyclerAdapter, view);
         setIsRecyclable(false);
@@ -49,9 +51,10 @@ public class UpcomingReleaseHolder extends HomeItemHolder {
             }
         }, new OnClickListener() {
             @Override
-            public void onClick(int id) {
+            public void onClick(int position) {
+                Movie movie = movieList.get(position);
                 Intent detail = new Intent(view.getContext(), MoviePostDetailActivity.class);
-                detail.putExtra("movie", String.valueOf(id));
+                detail.putExtra("movie", String.valueOf(movie.getId()));
                 view.getContext().startActivity(detail);
             }
         });
@@ -72,6 +75,8 @@ public class UpcomingReleaseHolder extends HomeItemHolder {
     }
 
     public void setMovies(List<Movie> movies) {
+
+        movieList = movies;
         adapter.setThumbnails(movies);
     }
 

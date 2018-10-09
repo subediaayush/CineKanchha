@@ -3,7 +3,8 @@ package com.cinekancha.home;
 import android.util.SparseIntArray;
 
 import com.cinekancha.entities.GalleryItem;
-import com.cinekancha.entities.model.BoxOfficeList;
+import com.cinekancha.entities.Video;
+import com.cinekancha.entities.model.BoxOfficeItem;
 import com.cinekancha.entities.model.HomeData;
 import com.cinekancha.entities.model.Movie;
 import com.cinekancha.utils.ListUtils;
@@ -50,7 +51,7 @@ public class HomeDataWrapper {
 
         wrapper.add(data.getMovies(), UPCOMING_MOVIES);
 
-        List<BoxOfficeList> boxOfficeItems = data.getBoxOfficeList();
+        List<BoxOfficeItem> boxOfficeItems = data.getBoxOfficeList();
         if (!ListUtils.isEmpty(boxOfficeItems)) {
             wrapper.add(boxOfficeItems, FEATURED_BOX_OFFICE);
         }
@@ -67,14 +68,14 @@ public class HomeDataWrapper {
             wrapper.add(reviews, FEATURED_REVIEWS);
         }
 
-//        List<Movie> showtimes = data.getMovies();
-//        if (!ListUtils.isEmpty(showtimes)) {
-//            wrapper.add(showtimes, FEATURED_SHOWTIMES);
-//        }
+        List<Video> trendingVideo = data.getTrendingVideo();
+        if (!ListUtils.isEmpty(trendingVideo)) {
+            wrapper.add(trendingVideo, FEATURED_TRENDING_VIDEOS);
+        }
 
         wrapper.add(data.getTrivia(), FEATURED_TRIVIA);
 
-        List<Movie> fullMovies = data.getFullMovies();
+        List<Video> fullMovies = data.getFullMovies();
         if (!ListUtils.isEmpty(fullMovies)) {
             wrapper.add(fullMovies, FEATURED_FULL_VIDEOS);
         }

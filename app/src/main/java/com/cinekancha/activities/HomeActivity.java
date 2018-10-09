@@ -58,6 +58,7 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setTitle("Home");
 
         mCineHomeViewModel = ViewModelProviders.of(this).get(CineHomeViewModel.class);
 

@@ -1,6 +1,7 @@
 package com.cinekancha.entities.model;
 
 import com.cinekancha.entities.GalleryItem;
+import com.cinekancha.entities.Video;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -25,13 +26,16 @@ public class HomeData {
     private List<Movie> movies = null;
     @SerializedName("box_office_list")
     @Expose
-    private List<BoxOfficeList> boxOfficeList = null;
+    private List<BoxOfficeItem> boxOfficeList = null;
     @SerializedName("hot_news")
     @Expose
     private List<Article> hotNews = null;
     @SerializedName("full_movies")
     @Expose
-    private List<Movie> fullMovies = null;
+    private List<Video> fullMovies = null;
+    @SerializedName("trending_videos")
+    @Expose
+    private List<Video> trendingVideo = null;
     @SerializedName("poll")
     @Expose
     private PollData poll;
@@ -75,11 +79,11 @@ public class HomeData {
         this.movies = movies;
     }
 
-    public List<BoxOfficeList> getBoxOfficeList() {
+    public List<BoxOfficeItem> getBoxOfficeList() {
         return boxOfficeList;
     }
 
-    public void setBoxOfficeList(List<BoxOfficeList> boxOfficeList) {
+    public void setBoxOfficeList(List<BoxOfficeItem> boxOfficeList) {
         this.boxOfficeList = boxOfficeList;
     }
 
@@ -91,11 +95,11 @@ public class HomeData {
         this.hotNews = hotNews;
     }
 
-    public List<Movie> getFullMovies() {
+    public List<Video> getFullMovies() {
         return fullMovies;
     }
 
-    public void setFullMovies(List<Movie> fullMovies) {
+    public void setFullMovies(List<Video> fullMovies) {
         this.fullMovies = fullMovies;
     }
 
@@ -145,5 +149,13 @@ public class HomeData {
 
     public void setFeaturedReviews(List<Movie> featuredReviews) {
         this.featuredReviews = featuredReviews;
+    }
+
+    public List<Video> getTrendingVideo() {
+        return trendingVideo;
+    }
+
+    public void setTrendingVideo(List<Video> trendingVideo) {
+        this.trendingVideo = trendingVideo;
     }
 }

@@ -3,23 +3,18 @@ package com.cinekancha.boxOffice;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
 import com.cinekancha.R;
 import com.cinekancha.activities.base.BaseNavigationActivity;
-import com.cinekancha.entities.model.BoxOffice;
 import com.cinekancha.entities.model.BoxOfficeItem;
 import com.cinekancha.entities.rest.RestAPI;
 import com.cinekancha.listener.OnClickListener;
-import com.cinekancha.movies.MoviesAdapter;
 import com.cinekancha.view.CineBoxOfficeViewModel;
-import com.cinekancha.view.CineMovieViewModel;
 
-import java.net.MalformedURLException;
+import java.util.List;
 
 import butterknife.BindView;
 
@@ -66,8 +61,8 @@ public class BoxOfficeActivity extends BaseNavigationActivity implements OnClick
     }
 
     private void renderBoxOfficeData() {
-        if (cineBoxOfficeViewModel.getBoxOffice().getData() != null && cineBoxOfficeViewModel.getBoxOffice().getData().size() > 0) {
-            adapter = new BoxOfficeAdapter(cineBoxOfficeViewModel.getBoxOffice().getData(), this);
+        if (cineBoxOfficeViewModel.getBoxOffice() != null && cineBoxOfficeViewModel.getBoxOffice().size() > 0) {
+            adapter = new BoxOfficeAdapter(cineBoxOfficeViewModel.getBoxOffice(), this);
             recyclerView.setAdapter(adapter);
         } else requestBoxOffice();
     }
@@ -86,7 +81,7 @@ public class BoxOfficeActivity extends BaseNavigationActivity implements OnClick
         Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }
 
-    private void handleBoxOfficeData(BoxOffice boxOffice) {
+    private void handleBoxOfficeData(List<BoxOfficeItem> boxOffice) {
         cineBoxOfficeViewModel.setBoxOffice(boxOffice);
         renderBoxOfficeData();
     }

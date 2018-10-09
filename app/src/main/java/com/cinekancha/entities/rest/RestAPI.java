@@ -1,14 +1,17 @@
 package com.cinekancha.entities.rest;
 
 import com.cinekancha.BuildConfig;
-import com.cinekancha.entities.model.BoxOffice;
+import com.cinekancha.entities.Video;
+import com.cinekancha.entities.model.BoxOfficeItem;
 import com.cinekancha.entities.model.HomeData;
 import com.cinekancha.entities.model.MovieData;
 import com.cinekancha.entities.model.MovieDetail;
 import com.cinekancha.entities.model.NewRelease;
 import com.cinekancha.entities.model.NewsGossip;
+import com.cinekancha.entities.model.TrendingData;
 import com.cinekancha.entities.model.Troll;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -89,7 +92,7 @@ public class RestAPI {
                 .retry(1);
     }
 
-    public Observable<BoxOffice> getBOxOffice() {
+    public Observable<List<BoxOfficeItem>> getBOxOffice() {
         return getApiService().getBoxOffice()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -113,6 +116,18 @@ public class RestAPI {
 
     public Observable<Troll> getTroll() {
         return getApiService().getTroll()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .retry(1);
+    }
+
+    public Observable<TrendingData> getTrending() {
+        return getApiService().getTrending()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .retry(1);
+    } public Observable<TrendingData> getFullMovies() {
+        return getApiService().getFullMovies()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .retry(1);

@@ -16,6 +16,8 @@ import com.cinekancha.boxOffice.BoxOfficeActivity;
 import com.cinekancha.movies.MovieActivity;
 import com.cinekancha.newRelease.NewReleaseActivity;
 import com.cinekancha.newsGossips.NewsGossipsActivity;
+import com.cinekancha.trending.FullMoviesActivity;
+import com.cinekancha.trending.TrendingActivity;
 import com.cinekancha.trolls.TrollListActivity;
 import com.cinekancha.utils.GlobalUtils;
 
@@ -70,8 +72,10 @@ public abstract class BaseNavigationActivity extends BaseActivity implements Nav
             GlobalUtils.navigateActivity(this, true, BoxOfficeActivity.class);
 
         } else if (id == R.id.menuTrending) {
+            GlobalUtils.navigateActivity(this, true, TrendingActivity.class);
 
         } else if (id == R.id.menuWatchFull) {
+            GlobalUtils.navigateActivity(this, true, FullMoviesActivity.class);
 
         } else if (id == R.id.menMovieReviews) {
 

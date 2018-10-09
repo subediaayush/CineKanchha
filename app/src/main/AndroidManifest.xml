@@ -20,8 +20,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".article.ArticleDetailActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".article.ArticleDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".article.ArticleListActivity" />
         <activity android:name=".trivia.TriviaListActivity" />
         <activity
@@ -45,7 +46,12 @@
         <activity
             android:name=".newRelease.NewReleaseActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".trending.TrendingActivity"></activity>
+        <activity
+            android:name=".trending.TrendingActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".trending.FullMoviesActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

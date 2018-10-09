@@ -12,7 +12,6 @@ import com.cinekancha.R;
 import com.cinekancha.adapters.BoxOfficeAdapter;
 import com.cinekancha.boxOffice.BoxOfficeActivity;
 import com.cinekancha.entities.model.BoxOfficeItem;
-import com.cinekancha.entities.model.BoxOfficeList;
 import com.cinekancha.utils.GlobalUtils;
 
 import java.util.List;
@@ -58,7 +57,7 @@ class FeaturedBoxOfficeHolder extends HomeItemHolder {
         boxOffice.setAdapter(adapter);
     }
 
-    public void setBoxOffice(List<BoxOfficeList> items) {
+    public void setBoxOffice(List<BoxOfficeItem> items) {
         adapter.setBoxOfficeItems(items);
     }
 }
