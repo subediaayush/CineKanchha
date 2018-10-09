@@ -40,8 +40,7 @@ public class TrendingActivity extends BaseNavigationActivity implements OnClickL
     private CineTrendingViewModel cineTrendingViewModel;
 
     private TrendingAdapter adapter;
-    private List<Video> trendingList;
-    private String videoId = "";
+     private String videoId = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,9 +84,8 @@ public class TrendingActivity extends BaseNavigationActivity implements OnClickL
     }
 
     private void renderMovieData() throws MalformedURLException {
-        this.trendingList = cineTrendingViewModel.getTrendingList();
-        if (trendingList != null && trendingList.size() > 0) {
-            adapter = new TrendingAdapter(trendingList, this);
+         if (cineTrendingViewModel.getTrendingList() != null && cineTrendingViewModel.getTrendingList().size() > 0) {
+            adapter = new TrendingAdapter(cineTrendingViewModel.getTrendingList(), this);
             recyclerView.setAdapter(adapter);
         } else requestMovie();
     }
@@ -113,7 +111,7 @@ public class TrendingActivity extends BaseNavigationActivity implements OnClickL
 
     @Override
     public void onClick(int id) {
-        Video movie = trendingList.get(id);
+        Video movie = cineTrendingViewModel.getTrendingList().get(id);
         try {
             startYoutube(movie.getLink());
         } catch (MalformedURLException e) {

@@ -44,6 +44,7 @@ public class BoxOfficeActivity extends BaseNavigationActivity implements OnClick
     }
 
     private void init() {
+        getSupportActionBar().setTitle(R.string.boxOffice);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setHasFixedSize(true);

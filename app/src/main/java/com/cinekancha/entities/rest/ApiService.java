@@ -1,7 +1,10 @@
 package com.cinekancha.entities.rest;
 
+import com.cinekancha.entities.model.ActorGallery;
+import com.cinekancha.entities.model.ActorPhoto;
 import com.cinekancha.entities.model.BoxOfficeItem;
 import com.cinekancha.entities.model.HomeData;
+import com.cinekancha.entities.model.Movie;
 import com.cinekancha.entities.model.MovieData;
 import com.cinekancha.entities.model.MovieDetail;
 import com.cinekancha.entities.model.NewRelease;
@@ -28,7 +31,7 @@ public interface ApiService {
     Observable<MovieData> getMovieList();
 
     @GET("api/new_releases")
-    Observable<NewRelease> getNewRelease();
+    Observable<List<Movie>> getNewRelease();
 
     @GET("api/home")
     Observable<HomeData> getHomeData();
@@ -44,6 +47,14 @@ public interface ApiService {
 
     @GET("api/trending_videos")
     Observable<TrendingData> getTrending();
+
+    @GET("api/actorGallery")
+    Observable<ActorGallery> getActorList();
+
+    @GET("api/actorGallery/{actorId}")
+    Observable<ActorPhoto> getActorPhoto(
+            @Path("actorId") int actorId);
+
 
     @GET("api/full_movies")
     Observable<TrendingData> getFullMovies();

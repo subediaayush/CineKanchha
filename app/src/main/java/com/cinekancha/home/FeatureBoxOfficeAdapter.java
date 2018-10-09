@@ -1,4 +1,4 @@
-package com.cinekancha.adapters;
+package com.cinekancha.home;
 
 import android.view.View;
 import android.widget.TextView;
@@ -14,7 +14,7 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class BoxOfficeAdapter extends BaseRecyclerAdapter<BoxOfficeAdapter.BoxOfficeItemHolder> {
+public class FeatureBoxOfficeAdapter extends BaseRecyclerAdapter<FeatureBoxOfficeAdapter.BoxOfficeItemHolder> {
 
     private List<BoxOfficeItem> items;
 

@@ -105,8 +105,8 @@ public class NewReleaseActivity extends BaseNavigationActivity implements OnClic
         Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }
 
-    private void handleMovieData(NewRelease data) throws MalformedURLException {
-        cineMovieViewModel.setMovieList(data.getData());
+    private void handleMovieData(List<Movie> movieList) throws MalformedURLException {
+        cineMovieViewModel.setMovieList(movieList);
         renderMovieData();
     }
 

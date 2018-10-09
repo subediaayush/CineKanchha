@@ -2,8 +2,11 @@ package com.cinekancha.entities.rest;
 
 import com.cinekancha.BuildConfig;
 import com.cinekancha.entities.Video;
+import com.cinekancha.entities.model.ActorGallery;
+import com.cinekancha.entities.model.ActorPhoto;
 import com.cinekancha.entities.model.BoxOfficeItem;
 import com.cinekancha.entities.model.HomeData;
+import com.cinekancha.entities.model.Movie;
 import com.cinekancha.entities.model.MovieData;
 import com.cinekancha.entities.model.MovieDetail;
 import com.cinekancha.entities.model.NewRelease;
@@ -85,7 +88,7 @@ public class RestAPI {
                 .retry(1);
     }
 
-    public Observable<NewRelease> getNewRelease() {
+    public Observable<List<Movie>> getNewRelease() {
         return getApiService().getNewRelease()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -126,7 +129,24 @@ public class RestAPI {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .retry(1);
-    } public Observable<TrendingData> getFullMovies() {
+    }
+
+    public Observable<ActorGallery> getActorList() {
+        return getApiService().getActorList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .retry(1);
+    }
+
+
+    public Observable<ActorPhoto> getActorPhoto(int id) {
+        return getApiService().getActorPhoto(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .retry(1);
+    }
+
+    public Observable<TrendingData> getFullMovies() {
         return getApiService().getFullMovies()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

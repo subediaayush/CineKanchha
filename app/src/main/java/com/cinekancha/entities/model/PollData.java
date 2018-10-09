@@ -13,15 +13,15 @@ public class PollData {
     @SerializedName("question")
     @Expose
     private String question;
+    @SerializedName("status")
+    @Expose
+    private String status;
     @SerializedName("options")
     @Expose
     private List<Option> options = null;
-    @SerializedName("created_at")
+    @SerializedName("total_votes")
     @Expose
-    private String createdAt;
-    @SerializedName("updated_at")
-    @Expose
-    private String updatedAt;
+    private Integer totalVotes;
 
     public Integer getId() {
         return id;
@@ -39,20 +39,12 @@ public class PollData {
         this.question = question;
     }
 
-    public String getCreatedAt() {
-        return createdAt;
+    public String getStatus() {
+        return status;
     }
 
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public String getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(String updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public List<Option> getOptions() {
@@ -62,4 +54,13 @@ public class PollData {
     public void setOptions(List<Option> options) {
         this.options = options;
     }
+
+    public Integer getTotalVotes() {
+        return totalVotes;
+    }
+
+    public void setTotalVotes(Integer totalVotes) {
+        this.totalVotes = totalVotes;
+    }
+
 }

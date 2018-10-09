@@ -1,31 +1,30 @@
-package com.cinekancha.trending;
+package com.cinekancha.actor;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
 import com.cinekancha.R;
 import com.cinekancha.activities.base.BaseNavigationActivity;
-import com.cinekancha.entities.Video;
-import com.cinekancha.entities.model.TrendingData;
+import com.cinekancha.entities.model.Actor;
+import com.cinekancha.entities.model.ActorPhoto;
+import com.cinekancha.entities.model.Photo;
 import com.cinekancha.entities.rest.RestAPI;
 import com.cinekancha.listener.OnClickListener;
-import com.cinekancha.utils.GlobalUtils;
-import com.cinekancha.view.CineFullMoviesViewModel;
-import com.cinekancha.view.CineTrendingViewModel;
+import com.cinekancha.utils.ItemOffsetDecoration;
+import com.cinekancha.view.CineActorPhotoViewModel;
+import com.cinekancha.view.CineActorViewModel;
+import com.stfalcon.frescoimageviewer.ImageViewer;
 
-import java.net.MalformedURLException;
 import java.util.List;
 
 import butterknife.BindView;
 
-public class FullMoviesActivity extends BaseNavigationActivity implements OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class ActorDetailActivity extends BaseNavigationActivity implements OnClickListener, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.toolbar)
     protected Toolbar toolbar;
 
@@ -34,15 +33,16 @@ public class FullMoviesActivity extends BaseNavigationActivity implements OnClic
     @BindView(R.id.homeSwipeRefreshLayout)
     public SwipeRefreshLayout homeSwipeRefreshLayout;
 
-    private CineFullMoviesViewModel cineFullMoviesViewModel;
+    private CineActorPhotoViewModel cineActorPhotoViewModel;
 
-    private TrendingAdapter adapter;
-    private String videoId = "";
+    private ActorPhotoAdapter adapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        cineFullMoviesViewModel = ViewModelProviders.of(this).get(CineFullMoviesViewModel.class);
+        cineActorPhotoViewModel = ViewModelProviders.of(this).get(CineActorPhotoViewModel.class);
+        cineActorPhotoViewModel.setActorID(Integer.parseInt(getIntent().getStringExtra("actor")));
         init();
     }
 
@@ -52,8 +52,9 @@ public class FullMoviesActivity extends BaseNavigationActivity implements OnClic
     }
 
     private void init() {
-        getSupportActionBar().setTitle("Watch Full Movies");
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        getSupportActionBar().setTitle(R.string.photoGallery);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        recyclerView.addItemDecoration(new ItemOffsetDecoration(this, R.dimen.item_offset));
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setHasFixedSize(true);
         homeSwipeRefreshLayout.setOnRefreshListener(this);
@@ -68,26 +69,22 @@ public class FullMoviesActivity extends BaseNavigationActivity implements OnClic
     @Override
     protected void onResume() {
         super.onResume();
-        if (cineFullMoviesViewModel.getTrendingList() == null) {
+        if (cineActorPhotoViewModel.getActorPhoto() == null) {
             requestMovie();
         } else {
-            try {
-                renderMovieData();
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
+            renderMovieData();
         }
     }
 
-    private void renderMovieData() throws MalformedURLException {
-        if (cineFullMoviesViewModel.getTrendingList() != null && cineFullMoviesViewModel.getTrendingList().size() > 0) {
-            adapter = new TrendingAdapter(cineFullMoviesViewModel.getTrendingList(), this);
+    private void renderMovieData() {
+        if (cineActorPhotoViewModel.getActorPhoto() != null) {
+            adapter = new ActorPhotoAdapter(cineActorPhotoViewModel.getActorPhoto().getPhotos(), this);
             recyclerView.setAdapter(adapter);
         } else requestMovie();
     }
 
     private void requestMovie() {
-        compositeDisposable.add(RestAPI.getInstance().getFullMovies()
+        compositeDisposable.add(RestAPI.getInstance().getActorPhoto(cineActorPhotoViewModel.getActorID())
                 .doOnSubscribe(disposable -> {
                     homeSwipeRefreshLayout.setRefreshing(true);
                 })
@@ -100,25 +97,21 @@ public class FullMoviesActivity extends BaseNavigationActivity implements OnClic
         Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }
 
-    private void handleMovieData(TrendingData data) throws MalformedURLException {
-        cineFullMoviesViewModel.setTrendingList(data.getTrendingList());
+    private void handleMovieData(ActorPhoto data) {
+        cineActorPhotoViewModel.setActorPhoto(data);
         renderMovieData();
     }
 
     @Override
     public void onClick(int id) {
-        Video movie = cineFullMoviesViewModel.getTrendingList().get(id);
-        try {
-            startYoutube(movie.getLink());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void startYoutube(String url) throws MalformedURLException {
-        videoId = GlobalUtils.extractYoutubeId(url);
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube://" + videoId));
-        startActivity(intent);
+        new ImageViewer.Builder<>(this, cineActorPhotoViewModel.getActorPhoto().getPhotos())
+                .setFormatter(new ImageViewer.Formatter<String>() {
+                    @Override
+                    public String format(String photos) {
+                        return photos;
+                    }
+                })
+                .show();
     }
 
     @Override

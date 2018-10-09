@@ -1,4 +1,4 @@
-package com.cinekancha.trending;
+package com.cinekancha.actor;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
@@ -13,19 +13,22 @@ import android.widget.Toast;
 import com.cinekancha.R;
 import com.cinekancha.activities.base.BaseNavigationActivity;
 import com.cinekancha.entities.Video;
+import com.cinekancha.entities.model.Actor;
+import com.cinekancha.entities.model.ActorGallery;
 import com.cinekancha.entities.model.TrendingData;
 import com.cinekancha.entities.rest.RestAPI;
 import com.cinekancha.listener.OnClickListener;
+import com.cinekancha.movieDetail.MoviePostDetailActivity;
+import com.cinekancha.trending.TrendingAdapter;
 import com.cinekancha.utils.GlobalUtils;
-import com.cinekancha.view.CineFullMoviesViewModel;
-import com.cinekancha.view.CineTrendingViewModel;
+import com.cinekancha.view.CineActorViewModel;
 
 import java.net.MalformedURLException;
 import java.util.List;
 
 import butterknife.BindView;
 
-public class FullMoviesActivity extends BaseNavigationActivity implements OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class ActorListActivity extends BaseNavigationActivity implements OnClickListener, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.toolbar)
     protected Toolbar toolbar;
 
@@ -34,15 +37,14 @@ public class FullMoviesActivity extends BaseNavigationActivity implements OnClic
     @BindView(R.id.homeSwipeRefreshLayout)
     public SwipeRefreshLayout homeSwipeRefreshLayout;
 
-    private CineFullMoviesViewModel cineFullMoviesViewModel;
+    private CineActorViewModel cineActorViewModel;
 
-    private TrendingAdapter adapter;
-    private String videoId = "";
+    private ActorAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        cineFullMoviesViewModel = ViewModelProviders.of(this).get(CineFullMoviesViewModel.class);
+        cineActorViewModel = ViewModelProviders.of(this).get(CineActorViewModel.class);
         init();
     }
 
@@ -52,7 +54,7 @@ public class FullMoviesActivity extends BaseNavigationActivity implements OnClic
     }
 
     private void init() {
-        getSupportActionBar().setTitle("Watch Full Movies");
+        getSupportActionBar().setTitle(R.string.photoGallery);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setHasFixedSize(true);
@@ -68,7 +70,7 @@ public class FullMoviesActivity extends BaseNavigationActivity implements OnClic
     @Override
     protected void onResume() {
         super.onResume();
-        if (cineFullMoviesViewModel.getTrendingList() == null) {
+        if (cineActorViewModel.getActorList() == null) {
             requestMovie();
         } else {
             try {
@@ -80,14 +82,14 @@ public class FullMoviesActivity extends BaseNavigationActivity implements OnClic
     }
 
     private void renderMovieData() throws MalformedURLException {
-        if (cineFullMoviesViewModel.getTrendingList() != null && cineFullMoviesViewModel.getTrendingList().size() > 0) {
-            adapter = new TrendingAdapter(cineFullMoviesViewModel.getTrendingList(), this);
+        if (cineActorViewModel.getActorList() != null && cineActorViewModel.getActorList().size() > 0) {
+            adapter = new ActorAdapter(cineActorViewModel.getActorList(), this);
             recyclerView.setAdapter(adapter);
         } else requestMovie();
     }
 
     private void requestMovie() {
-        compositeDisposable.add(RestAPI.getInstance().getFullMovies()
+        compositeDisposable.add(RestAPI.getInstance().getActorList()
                 .doOnSubscribe(disposable -> {
                     homeSwipeRefreshLayout.setRefreshing(true);
                 })
@@ -100,25 +102,18 @@ public class FullMoviesActivity extends BaseNavigationActivity implements OnClic
         Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }
 
-    private void handleMovieData(TrendingData data) throws MalformedURLException {
-        cineFullMoviesViewModel.setTrendingList(data.getTrendingList());
+    private void handleMovieData(ActorGallery data) throws MalformedURLException {
+        cineActorViewModel.setActorList(data.getData());
         renderMovieData();
     }
 
     @Override
     public void onClick(int id) {
-        Video movie = cineFullMoviesViewModel.getTrendingList().get(id);
-        try {
-            startYoutube(movie.getLink());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-    }
+        Actor actor = cineActorViewModel.getActorList().get(id);
+        Intent detail = new Intent(this, ActorDetailActivity.class);
+        detail.putExtra("actor", String.valueOf(actor.getId()));
+        startActivity(detail);
 
-    private void startYoutube(String url) throws MalformedURLException {
-        videoId = GlobalUtils.extractYoutubeId(url);
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube://" + videoId));
-        startActivity(intent);
     }
 
     @Override

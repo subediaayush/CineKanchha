@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.cinekancha.R;
-import com.cinekancha.adapters.BoxOfficeAdapter;
 import com.cinekancha.boxOffice.BoxOfficeActivity;
 import com.cinekancha.entities.model.BoxOfficeItem;
 import com.cinekancha.utils.GlobalUtils;
@@ -26,7 +25,7 @@ class FeaturedBoxOfficeHolder extends HomeItemHolder {
     @BindView(R.id.txtViewAll)
     public TextView txtViewAll;
 
-    private BoxOfficeAdapter adapter;
+    private FeatureBoxOfficeAdapter adapter;
 
     public FeaturedBoxOfficeHolder(HomeDataAdapter homeDataAdapter, View view) {
         super(homeDataAdapter, view);
@@ -49,7 +48,7 @@ class FeaturedBoxOfficeHolder extends HomeItemHolder {
             GlobalUtils.navigateActivity(view.getContext(), true, BoxOfficeActivity.class);
         });
 
-        adapter = new BoxOfficeAdapter();
+        adapter = new FeatureBoxOfficeAdapter();
         Drawable divider = ContextCompat.getDrawable(view.getContext(), R.drawable.list_divider);
         DividerItemDecoration decor = new DividerItemDecoration(view.getContext(), DividerItemDecoration.VERTICAL);
         decor.setDrawable(divider);

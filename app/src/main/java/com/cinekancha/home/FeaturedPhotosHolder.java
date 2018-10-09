@@ -1,6 +1,7 @@
 package com.cinekancha.home;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,11 +10,15 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.cinekancha.R;
+import com.cinekancha.actor.ActorDetailActivity;
+import com.cinekancha.actor.ActorListActivity;
 import com.cinekancha.adapters.base.BaseRecyclerAdapter;
 import com.cinekancha.entities.GalleryItem;
 import com.cinekancha.entities.ThumbWrapper;
 import com.cinekancha.entities.ThumbnailConverter;
+import com.cinekancha.entities.model.Actor;
 import com.cinekancha.listener.OnClickListener;
+import com.cinekancha.utils.GlobalUtils;
 
 import java.util.List;
 
@@ -33,12 +38,14 @@ public class FeaturedPhotosHolder extends HomeItemHolder {
     @BindView(R.id.txtViewAll)
     public TextView txtViewAll;
 
+    private List<GalleryItem> photo;
+
     public FeaturedPhotosHolder(BaseRecyclerAdapter baseRecyclerAdapter, View view) {
         super(baseRecyclerAdapter, view);
         setIsRecyclable(false);
         txtViewAll.setVisibility(View.VISIBLE);
         txtViewAll.setOnClickListener(view1 -> {
-
+            GlobalUtils.navigateActivity(view.getContext(), false, ActorListActivity.class);
         });
         adapter = new ThumbnailAdapter<>(R.layout.layout_featured_photo, new ThumbnailConverter<GalleryItem>() {
             @Override
@@ -52,7 +59,10 @@ public class FeaturedPhotosHolder extends HomeItemHolder {
         }, new OnClickListener() {
             @Override
             public void onClick(int position) {
-
+                GalleryItem actor = photo.get(position);
+                Intent detail = new Intent(view.getContext(), ActorDetailActivity.class);
+                detail.putExtra("actor", String.valueOf(actor.getId()));
+                view.getContext().startActivity(detail);
             }
         });
         upcomingMoviesList.setAdapter(adapter);
@@ -74,6 +84,7 @@ public class FeaturedPhotosHolder extends HomeItemHolder {
     }
 
     public void setMovies(List<GalleryItem> movies) {
+        photo = movies;
         adapter.setThumbnails(movies);
     }
 

@@ -12,6 +12,7 @@ import android.view.MenuItem;
 
 import com.cinekancha.R;
 import com.cinekancha.activities.HomeActivity;
+import com.cinekancha.actor.ActorListActivity;
 import com.cinekancha.boxOffice.BoxOfficeActivity;
 import com.cinekancha.movies.MovieActivity;
 import com.cinekancha.newRelease.NewReleaseActivity;
@@ -80,7 +81,7 @@ public abstract class BaseNavigationActivity extends BaseActivity implements Nav
         } else if (id == R.id.menMovieReviews) {
 
         } else if (id == R.id.menuPhotoGallery) {
-
+            GlobalUtils.navigateActivity(this, true, ActorListActivity.class);
         } else if (id == R.id.menuFuchePoll) {
 
         } else if (id == R.id.menuFilmyTrivias) {
