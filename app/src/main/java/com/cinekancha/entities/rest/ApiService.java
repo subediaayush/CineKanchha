@@ -9,8 +9,10 @@ import com.cinekancha.entities.model.MovieData;
 import com.cinekancha.entities.model.MovieDetail;
 import com.cinekancha.entities.model.NewRelease;
 import com.cinekancha.entities.model.NewsGossip;
+import com.cinekancha.entities.model.Poll;
 import com.cinekancha.entities.model.TrendingData;
 import com.cinekancha.entities.model.Troll;
+import com.cinekancha.entities.model.UpcomingMovie;
 
 import java.util.List;
 
@@ -32,6 +34,9 @@ public interface ApiService {
 
     @GET("api/new_releases")
     Observable<List<Movie>> getNewRelease();
+
+    @GET("api/upcoming_movies")
+    Observable<UpcomingMovie> getUpcomingMovie();
 
     @GET("api/home")
     Observable<HomeData> getHomeData();
@@ -55,9 +60,11 @@ public interface ApiService {
     Observable<ActorPhoto> getActorPhoto(
             @Path("actorId") int actorId);
 
-
     @GET("api/full_movies")
     Observable<TrendingData> getFullMovies();
+
+    @GET("api/poll")
+    Observable<Poll> getPoll();
 
     @GET("bins/19gt0m")
     Observable<HomeData> getHomeTestData();

@@ -11,8 +11,10 @@ import com.cinekancha.entities.model.MovieData;
 import com.cinekancha.entities.model.MovieDetail;
 import com.cinekancha.entities.model.NewRelease;
 import com.cinekancha.entities.model.NewsGossip;
+import com.cinekancha.entities.model.Poll;
 import com.cinekancha.entities.model.TrendingData;
 import com.cinekancha.entities.model.Troll;
+import com.cinekancha.entities.model.UpcomingMovie;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -95,6 +97,13 @@ public class RestAPI {
                 .retry(1);
     }
 
+    public Observable<UpcomingMovie> getUpcomingMovie() {
+        return getApiService().getUpcomingMovie()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .retry(1);
+    }
+
     public Observable<List<BoxOfficeItem>> getBOxOffice() {
         return getApiService().getBoxOffice()
                 .subscribeOn(Schedulers.io())
@@ -148,6 +157,13 @@ public class RestAPI {
 
     public Observable<TrendingData> getFullMovies() {
         return getApiService().getFullMovies()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .retry(1);
+    }
+
+    public Observable<Poll> getPoll() {
+        return getApiService().getPoll()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .retry(1);

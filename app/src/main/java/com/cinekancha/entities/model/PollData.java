@@ -6,7 +6,6 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class PollData {
-
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -62,5 +61,4 @@ public class PollData {
     public void setTotalVotes(Integer totalVotes) {
         this.totalVotes = totalVotes;
     }
-
 }

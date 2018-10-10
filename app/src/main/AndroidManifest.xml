@@ -35,6 +35,9 @@
             android:name=".newsGossips.NewsGossipsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".upcomingMovies.UpcomingMovieActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".boxOffice.BoxOfficeActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

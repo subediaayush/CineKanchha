@@ -1,12 +1,10 @@
-package com.cinekancha.poll;
+package com.cinekancha.upcomingMovies;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
@@ -15,44 +13,47 @@ import com.cinekancha.R;
 import com.cinekancha.activities.base.BaseNavigationActivity;
 import com.cinekancha.entities.model.Movie;
 import com.cinekancha.entities.model.MovieData;
-import com.cinekancha.entities.model.Poll;
-import com.cinekancha.entities.rest.Repository;
+import com.cinekancha.entities.model.UpcomingMovie;
 import com.cinekancha.entities.rest.RestAPI;
 import com.cinekancha.listener.OnClickListener;
 import com.cinekancha.movieDetail.MoviePostDetailActivity;
 import com.cinekancha.movies.MoviesAdapter;
 import com.cinekancha.view.CineMovieViewModel;
-import com.cinekancha.view.CinePollViewModel;
 
 import java.net.MalformedURLException;
-import java.util.List;
 
 import butterknife.BindView;
 
-public class PollsActivity extends BaseNavigationActivity implements OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class UpcomingMovieActivity extends BaseNavigationActivity implements OnClickListener, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.toolbar)
     protected Toolbar toolbar;
 
-    @BindView(R.id.pollRecyclerView)
+    @BindView(R.id.homeSwipeRefreshLayout)
+    protected SwipeRefreshLayout homeSwipeRefreshLayout;
+
+    @BindView(R.id.movieRecyclerView)
     public RecyclerView recyclerView;
 
-    @BindView(R.id.homeSwipeRefreshLayout)
-    public SwipeRefreshLayout homeSwipeRefreshLayout;
+    private CineMovieViewModel cineMovieViewModel;
 
-    private CinePollViewModel cinePollViewModel;
+    private MoviesAdapter adapter;
 
-    private PollAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        cinePollViewModel = ViewModelProviders.of(this).get(CinePollViewModel.class);
+        cineMovieViewModel = ViewModelProviders.of(this).get(CineMovieViewModel.class);
         init();
     }
 
+    private void initToolbar() {
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(R.string.movies);
+    }
+
     private void init() {
-        getSupportActionBar().setTitle(R.string.poll);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        getSupportActionBar().setTitle(R.string.upcomingMovies);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setHasFixedSize(true);
         homeSwipeRefreshLayout.setOnRefreshListener(this);
@@ -61,29 +62,32 @@ public class PollsActivity extends BaseNavigationActivity implements OnClickList
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_polls;
+        return R.layout.activity_movie;
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (cinePollViewModel.getPollData() == null) {
+        if (cineMovieViewModel.getMovieList() == null) {
             requestMovie();
         } else {
-            renderMovieData();
+            try {
+                renderMovieData();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    private void renderMovieData() {
-
-        if (cinePollViewModel.getPollData().getData() != null && cinePollViewModel.getPollData().getData().size() > 0) {
-            adapter = new PollAdapter(cinePollViewModel.getPollData().getData(), this);
+    private void renderMovieData() throws MalformedURLException {
+        if (cineMovieViewModel.getMovieList() != null && cineMovieViewModel.getMovieList().size() > 0) {
+            adapter = new MoviesAdapter(cineMovieViewModel.getMovieList(), this);
             recyclerView.setAdapter(adapter);
         } else requestMovie();
     }
 
     private void requestMovie() {
-        compositeDisposable.add(RestAPI.getInstance().getPoll()
+        compositeDisposable.add(RestAPI.getInstance().getUpcomingMovie()
                 .doOnSubscribe(disposable -> {
                     homeSwipeRefreshLayout.setRefreshing(true);
                 })
@@ -96,15 +100,17 @@ public class PollsActivity extends BaseNavigationActivity implements OnClickList
         Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }
 
-    private void handleMovieData(Poll data) throws MalformedURLException {
-        cinePollViewModel.setPollData(data);
+    private void handleMovieData(UpcomingMovie data) throws MalformedURLException {
+        cineMovieViewModel.setMovieList(data.getData());
         renderMovieData();
     }
 
-
     @Override
     public void onClick(int id) {
-
+        Movie movie = cineMovieViewModel.getMovieList().get(id);
+        Intent detail = new Intent(this, MoviePostDetailActivity.class);
+        detail.putExtra("movie", String.valueOf(movie.getId()));
+        startActivity(detail);
     }
 
     @Override

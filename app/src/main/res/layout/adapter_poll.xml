@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <LinearLayout
@@ -9,33 +9,52 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingBottom="24dp"
         android:paddingLeft="10dp"
+        android:paddingTop="12dp"
         android:paddingRight="10dp"
-        android:paddingTop="24dp">
+        android:paddingBottom="12dp">
 
         <TextView
             android:id="@+id/txtPreviousResult"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="5dp"
             android:paddingTop="10dp"
+            android:paddingBottom="5dp"
             android:text="Previous Poll Result"
             android:textAllCaps="true"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:visibility="gone" />
 
-        <include layout="@layout/layout_border" />
+        <include
+            android:id="@+id/lytBorder"
+            layout="@layout/layout_border"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/txtQuestion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="10dp"
             android:paddingTop="10dp"
+            android:paddingBottom="10dp"
             android:text="Previous Poll Result"
             android:textColor="@android:color/black"
             android:textSize="18sp"
             android:textStyle="bold" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/answerRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/submit"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_margin="8dp"
+            android:text="submit"
+            android:visibility="gone" />
     </LinearLayout>
 
 </LinearLayout>

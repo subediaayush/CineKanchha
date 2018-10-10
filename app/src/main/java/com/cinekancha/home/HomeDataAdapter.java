@@ -281,7 +281,7 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
         holder.txtViewAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                GlobalUtils.navigateActivity(holder.itemView.getContext(), true, MovieActivity.class);
+                GlobalUtils.navigateActivity(holder.itemView.getContext(), false, MovieActivity.class);
             }
         });
     }

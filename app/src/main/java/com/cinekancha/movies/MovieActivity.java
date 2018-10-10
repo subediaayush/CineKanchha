@@ -45,13 +45,8 @@ public class MovieActivity extends BaseNavigationActivity implements OnClickList
         init();
     }
 
-    private void initToolbar() {
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.movies);
-    }
-
     private void init() {
-        getSupportActionBar().setTitle(R.string.upcomingMovies);
+        getSupportActionBar().setTitle(R.string.movies);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setHasFixedSize(true);
