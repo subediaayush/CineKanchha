@@ -42,7 +42,7 @@ public class ActorPhotoAdapter extends BaseRecyclerAdapter<ActorPhotoHolder> {
     protected void setViewOfTypeZero(BaseViewHolder baseHolder, int position) {
         ActorPhotoHolder holder = (ActorPhotoHolder) baseHolder;
         String photos = actorPhotoList.get(position);
-        Picasso.with(holder.itemView.getContext()).load(photos).into(holder.imgActorPic);
+        Picasso.with(holder.itemView.getContext()).load(Constants.imageUrl + photos).into(holder.imgActorPic);
     }
 
     @Override

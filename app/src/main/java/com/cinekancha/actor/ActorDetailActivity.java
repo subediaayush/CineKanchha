@@ -3,36 +3,30 @@ package com.cinekancha.actor;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
 import com.cinekancha.R;
 import com.cinekancha.activities.base.BaseNavigationActivity;
-import com.cinekancha.entities.model.Actor;
 import com.cinekancha.entities.model.ActorPhoto;
-import com.cinekancha.entities.model.Photo;
 import com.cinekancha.entities.rest.RestAPI;
 import com.cinekancha.listener.OnClickListener;
+import com.cinekancha.utils.Constants;
 import com.cinekancha.utils.ItemOffsetDecoration;
 import com.cinekancha.view.CineActorPhotoViewModel;
-import com.cinekancha.view.CineActorViewModel;
 import com.stfalcon.frescoimageviewer.ImageViewer;
-
-import java.util.List;
 
 import butterknife.BindView;
 
 public class ActorDetailActivity extends BaseNavigationActivity implements OnClickListener, SwipeRefreshLayout.OnRefreshListener {
-    @BindView(R.id.toolbar)
-    protected Toolbar toolbar;
-
     @BindView(R.id.movieRecyclerView)
     public RecyclerView recyclerView;
     @BindView(R.id.homeSwipeRefreshLayout)
     public SwipeRefreshLayout homeSwipeRefreshLayout;
-
+    @BindView(R.id.toolbar)
+    protected Toolbar toolbar;
     private CineActorPhotoViewModel cineActorPhotoViewModel;
 
     private ActorPhotoAdapter adapter;
@@ -53,7 +47,7 @@ public class ActorDetailActivity extends BaseNavigationActivity implements OnCli
 
     private void init() {
         getSupportActionBar().setTitle(R.string.photoGallery);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         recyclerView.addItemDecoration(new ItemOffsetDecoration(this, R.dimen.item_offset));
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setHasFixedSize(true);
@@ -105,12 +99,8 @@ public class ActorDetailActivity extends BaseNavigationActivity implements OnCli
     @Override
     public void onClick(int id) {
         new ImageViewer.Builder<>(this, cineActorPhotoViewModel.getActorPhoto().getPhotos())
-                .setFormatter(new ImageViewer.Formatter<String>() {
-                    @Override
-                    public String format(String photos) {
-                        return photos;
-                    }
-                })
+                .setFormatter(photos -> Constants.imageUrl + photos)
+                .setStartPosition(id)
                 .show();
     }
 
