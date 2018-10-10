@@ -46,10 +46,10 @@ public class ActorPhoto {
     }
 
     public List<String> getPhotos() {
-        for (int i = 0; i < photos.size(); i++) {
+       /* for (int i = 0; i < photos.size(); i++) {
             String photo = photos.get(i);
             photos.set(i, Constants.imageUrl + photo);
-        }
+        }*/
         return photos;
     }
 
