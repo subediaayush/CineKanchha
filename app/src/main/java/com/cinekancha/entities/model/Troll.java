@@ -5,11 +5,16 @@ import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Troll {
+import io.realm.RealmList;
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
+public class Troll extends RealmObject {
+    @PrimaryKey
+    private int id = 0;
     @SerializedName("data")
     @Expose
-    private List<TrollData> data = null;
+    private RealmList<TrollData> data = null;
     @SerializedName("links")
     @Expose
     private PageLink links;
@@ -17,11 +22,11 @@ public class Troll {
     @Expose
     private Meta meta;
 
-    public List<TrollData> getData() {
+    public RealmList<TrollData> getData() {
         return data;
     }
 
-    public void setData(List<TrollData> data) {
+    public void setData(RealmList<TrollData> data) {
         this.data = data;
     }
 

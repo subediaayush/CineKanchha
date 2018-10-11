@@ -3,51 +3,53 @@ package com.cinekancha.entities;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Video {
+import io.realm.RealmObject;
 
-	@SerializedName("id")
-	@Expose
-	private String id;
-	@SerializedName("name")
-	@Expose
-	private String name;
-	@SerializedName("image_url")
-	@Expose
-	private String imageUrl;
-	@SerializedName("link")
-	@Expose
-	private String link;
+public class Video extends RealmObject {
 
-	public String getId() {
-		return id;
-	}
+    @SerializedName("id")
+    @Expose
+    private String id;
+    @SerializedName("name")
+    @Expose
+    private String name;
+    @SerializedName("image_url")
+    @Expose
+    private String imageUrl;
+    @SerializedName("link")
+    @Expose
+    private String link;
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getImageUrl() {
-		return imageUrl;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
-	}
+    public String getImageUrl() {
+        return imageUrl;
+    }
 
-	public String getLink() {
-		return link;
-	}
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 
-	public void setLink(String link) {
-		this.link = link;
-	}
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
 
 }

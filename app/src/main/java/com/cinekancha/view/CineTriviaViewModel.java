@@ -4,7 +4,7 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.support.annotation.NonNull;
 
-import com.cinekancha.entities.model.Trivia;
+import com.cinekancha.entities.model.TriviaData;
 
 import java.util.List;
 
@@ -14,17 +14,17 @@ import java.util.List;
 
 public class CineTriviaViewModel extends AndroidViewModel {
 	
-	private List<Trivia> mTrivias;
+	private List<TriviaData> mTriviaData;
 	
 	public CineTriviaViewModel(@NonNull Application application) {
 		super(application);
 	}
 	
-	public List<Trivia> getTrivias() {
-		return mTrivias;
+	public List<TriviaData> getTrivias() {
+		return mTriviaData;
 	}
 	
-	public void setArticles(List<Trivia> trivias) {
-		this.mTrivias = trivias;
+	public void setArticles(List<TriviaData> triviaData) {
+		this.mTriviaData = triviaData;
 	}
 }

@@ -21,6 +21,7 @@ import com.cinekancha.newsGossips.NewsGossipsActivity;
 import com.cinekancha.poll.PollsActivity;
 import com.cinekancha.trending.FullMoviesActivity;
 import com.cinekancha.trending.TrendingActivity;
+import com.cinekancha.trivia.TriviaListActivity;
 import com.cinekancha.trolls.TrollListActivity;
 import com.cinekancha.upcomingMovies.UpcomingMovieActivity;
 import com.cinekancha.utils.GlobalUtils;
@@ -88,6 +89,7 @@ public abstract class BaseNavigationActivity extends BaseActivity implements Nav
         } else if (id == R.id.menuFuchePoll) {
             GlobalUtils.navigateActivity(this, true, PollsActivity.class);
         } else if (id == R.id.menuFilmyTrivias) {
+            GlobalUtils.navigateActivity(this, true, TriviaListActivity.class);
 
         } else if (id == R.id.menuFilmyTroll) {
             GlobalUtils.navigateActivity(this, true, TrollListActivity.class);

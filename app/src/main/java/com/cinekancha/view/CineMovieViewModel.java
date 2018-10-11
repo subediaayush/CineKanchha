@@ -5,7 +5,6 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.support.annotation.NonNull;
 
 import com.cinekancha.entities.model.Movie;
-import com.cinekancha.entities.model.Trivia;
 
 import java.util.List;
 

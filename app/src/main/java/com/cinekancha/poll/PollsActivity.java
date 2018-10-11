@@ -1,11 +1,8 @@
 package com.cinekancha.poll;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -13,19 +10,12 @@ import android.widget.Toast;
 
 import com.cinekancha.R;
 import com.cinekancha.activities.base.BaseNavigationActivity;
-import com.cinekancha.entities.model.Movie;
-import com.cinekancha.entities.model.MovieData;
 import com.cinekancha.entities.model.Poll;
-import com.cinekancha.entities.rest.Repository;
 import com.cinekancha.entities.rest.RestAPI;
 import com.cinekancha.listener.OnClickListener;
-import com.cinekancha.movieDetail.MoviePostDetailActivity;
-import com.cinekancha.movies.MoviesAdapter;
-import com.cinekancha.view.CineMovieViewModel;
 import com.cinekancha.view.CinePollViewModel;
 
 import java.net.MalformedURLException;
-import java.util.List;
 
 import butterknife.BindView;
 

@@ -1,7 +1,6 @@
 package com.cinekancha.entities.rest;
 
 import com.cinekancha.BuildConfig;
-import com.cinekancha.entities.Video;
 import com.cinekancha.entities.model.ActorGallery;
 import com.cinekancha.entities.model.ActorPhoto;
 import com.cinekancha.entities.model.BoxOfficeItem;
@@ -9,10 +8,10 @@ import com.cinekancha.entities.model.HomeData;
 import com.cinekancha.entities.model.Movie;
 import com.cinekancha.entities.model.MovieData;
 import com.cinekancha.entities.model.MovieDetail;
-import com.cinekancha.entities.model.NewRelease;
 import com.cinekancha.entities.model.NewsGossip;
 import com.cinekancha.entities.model.Poll;
 import com.cinekancha.entities.model.TrendingData;
+import com.cinekancha.entities.model.Trivia;
 import com.cinekancha.entities.model.Troll;
 import com.cinekancha.entities.model.UpcomingMovie;
 
@@ -141,6 +140,7 @@ public class RestAPI {
     }
 
     public Observable<ActorGallery> getActorList() {
+
         return getApiService().getActorList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -164,6 +164,13 @@ public class RestAPI {
 
     public Observable<Poll> getPoll() {
         return getApiService().getPoll()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .retry(1);
+    }
+
+    public Observable<Trivia> getTrivia() {
+        return getApiService().getTrivia()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .retry(1);

@@ -3,7 +3,11 @@ package com.cinekancha.entities.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class BoxOfficeItem {
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
+public class BoxOfficeItem extends RealmObject {
+    @PrimaryKey
     @SerializedName("movie_id")
     @Expose
     private String movieId;

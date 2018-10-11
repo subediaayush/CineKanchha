@@ -1,17 +1,14 @@
 package com.cinekancha.entities.model;
 
-import java.util.List;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
+import io.realm.RealmList;
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
-public class MovieDetail {
-
+public class MovieDetail extends RealmObject {
+    @PrimaryKey
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -41,13 +38,13 @@ public class MovieDetail {
     private Crew crew;
     @SerializedName("links")
     @Expose
-    private List<Links> links = null;
+    private RealmList<Links> links = null;
     @SerializedName("photo")
     @Expose
-    private List<Photo> photo = null;
+    private RealmList<Photo> photo = null;
     @SerializedName("articles")
     @Expose
-    private List<Article> articles = null;
+    private RealmList<Article> articles = null;
     @SerializedName("created_at")
     @Expose
     private String createdAt;
@@ -127,27 +124,27 @@ public class MovieDetail {
         this.crew = crew;
     }
 
-    public List<Links> getLinks() {
+    public RealmList<Links> getLinks() {
         return links;
     }
 
-    public void setLinks(List<Links> links) {
+    public void setLinks(RealmList<Links> links) {
         this.links = links;
     }
 
-    public List<Photo> getPhoto() {
+    public RealmList<Photo> getPhoto() {
         return photo;
     }
 
-    public void setPhoto(List<Photo> photo) {
+    public void setPhoto(RealmList<Photo> photo) {
         this.photo = photo;
     }
 
-    public List<Article> getArticles() {
+    public RealmList<Article> getArticles() {
         return articles;
     }
 
-    public void setArticles(List<Article> articles) {
+    public void setArticles(RealmList<Article> articles) {
         this.articles = articles;
     }
 

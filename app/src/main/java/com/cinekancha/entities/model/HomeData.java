@@ -5,43 +5,46 @@ import com.cinekancha.entities.Video;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
-import java.util.List;
+
+import io.realm.RealmList;
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by aayushsubedi on 3/8/18.
  */
 
 
-public class HomeData {
-
+public class HomeData extends RealmObject {
+    @PrimaryKey
+    private int id;
     @SerializedName("featuredContents")
     @Expose
-    private List<FeaturedContent> featuredContents = null;
+    private RealmList<FeaturedContent> featuredContents = null;
     @SerializedName("new_releases")
     @Expose
-    private List<Movie> newReleases = null;
+    private RealmList<Movie> newReleases = null;
     @SerializedName("movies")
     @Expose
-    private List<Movie> movies = null;
-    @SerializedName("box_office_list")
+    private RealmList<Movie> movies = null;
+    @SerializedName("box_office_RealmList")
     @Expose
-    private List<BoxOfficeItem> boxOfficeList = null;
+    private RealmList<BoxOfficeItem> boxOfficeRealmList = null;
     @SerializedName("hot_news")
     @Expose
-    private List<Article> hotNews = null;
+    private RealmList<Article> hotNews = null;
     @SerializedName("full_movies")
     @Expose
-    private List<Video> fullMovies = null;
+    private RealmList<Video> fullMovies = null;
     @SerializedName("trending_videos")
     @Expose
-    private List<Video> trendingVideo = null;
+    private RealmList<Video> trendingVideo = null;
     @SerializedName("poll")
     @Expose
     private PollData poll;
     @SerializedName("trivia")
     @Expose
-    private Trivia trivia;
+    private TriviaData triviaData;
     @SerializedName("troll")
     @Expose
     private TrollData troll;
@@ -50,56 +53,64 @@ public class HomeData {
     private Article topStory;
     @SerializedName("photo_gallery")
     @Expose
-    private List<GalleryItem> photoGallery = new ArrayList<>();
+    private RealmList<GalleryItem> photoGallery = new RealmList<>();
     @Expose
     @SerializedName("movie_reviews")
-    private List<Movie> featuredReviews = new ArrayList<>();
+    private RealmList<Movie> featuredReviews = new RealmList<>();
 
-    public List<FeaturedContent> getFeaturedContents() {
+    public RealmList<FeaturedContent> getFeaturedContents() {
         return featuredContents;
     }
 
-    public void setFeaturedContents(List<FeaturedContent> featuredContents) {
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setFeaturedContents(RealmList<FeaturedContent> featuredContents) {
         this.featuredContents = featuredContents;
     }
 
-    public List<Movie> getNewReleases() {
+    public RealmList<Movie> getNewReleases() {
         return newReleases;
     }
 
-    public void setNewReleases(List<Movie> newReleases) {
+    public void setNewReleases(RealmList<Movie> newReleases) {
         this.newReleases = newReleases;
     }
 
-    public List<Movie> getMovies() {
+    public RealmList<Movie> getMovies() {
         return movies;
     }
 
-    public void setMovies(List<Movie> movies) {
+    public void setMovies(RealmList<Movie> movies) {
         this.movies = movies;
     }
 
-    public List<BoxOfficeItem> getBoxOfficeList() {
-        return boxOfficeList;
+    public RealmList<BoxOfficeItem> getBoxOfficeList() {
+        return boxOfficeRealmList;
     }
 
-    public void setBoxOfficeList(List<BoxOfficeItem> boxOfficeList) {
-        this.boxOfficeList = boxOfficeList;
+    public void setBoxOfficeList(RealmList<BoxOfficeItem> boxOfficeRealmList) {
+        this.boxOfficeRealmList = boxOfficeRealmList;
     }
 
-    public List<Article> getHotNews() {
+    public RealmList<Article> getHotNews() {
         return hotNews;
     }
 
-    public void setHotNews(List<Article> hotNews) {
+    public void setHotNews(RealmList<Article> hotNews) {
         this.hotNews = hotNews;
     }
 
-    public List<Video> getFullMovies() {
+    public RealmList<Video> getFullMovies() {
         return fullMovies;
     }
 
-    public void setFullMovies(List<Video> fullMovies) {
+    public void setFullMovies(RealmList<Video> fullMovies) {
         this.fullMovies = fullMovies;
     }
 
@@ -111,12 +122,12 @@ public class HomeData {
         this.poll = poll;
     }
 
-    public Trivia getTrivia() {
-        return trivia;
+    public TriviaData getTriviaData() {
+        return triviaData;
     }
 
-    public void setTrivia(Trivia trivia) {
-        this.trivia = trivia;
+    public void setTriviaData(TriviaData triviaData) {
+        this.triviaData = triviaData;
     }
 
     public TrollData getTroll() {
@@ -135,27 +146,27 @@ public class HomeData {
         this.topStory = topStory;
     }
 
-    public List<GalleryItem> getPhotoGallery() {
+    public RealmList<GalleryItem> getPhotoGallery() {
         return photoGallery;
     }
 
-    public void setPhotoGallery(List<GalleryItem> photoGallery) {
+    public void setPhotoGallery(RealmList<GalleryItem> photoGallery) {
         this.photoGallery = photoGallery;
     }
 
-    public List<Movie> getFeaturedReviews() {
+    public RealmList<Movie> getFeaturedReviews() {
         return featuredReviews;
     }
 
-    public void setFeaturedReviews(List<Movie> featuredReviews) {
+    public void setFeaturedReviews(RealmList<Movie> featuredReviews) {
         this.featuredReviews = featuredReviews;
     }
 
-    public List<Video> getTrendingVideo() {
+    public RealmList<Video> getTrendingVideo() {
         return trendingVideo;
     }
 
-    public void setTrendingVideo(List<Video> trendingVideo) {
+    public void setTrendingVideo(RealmList<Video> trendingVideo) {
         this.trendingVideo = trendingVideo;
     }
 }

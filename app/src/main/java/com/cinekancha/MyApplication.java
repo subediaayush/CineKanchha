@@ -8,6 +8,9 @@ import com.cinekancha.utils.Logger;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+
 /**
  * Created by paoneking on 2/20/18.
  */
@@ -33,6 +36,11 @@ public class MyApplication extends Application {
         if (instance == null)
             instance = this;
 
+        Realm.init(this);
+        RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
+                .deleteRealmIfMigrationNeeded()
+                .build();
+        Realm.setDefaultConfiguration(realmConfiguration);
         // Obtain the FirebaseAnalytics instance.
         if (mFirebaseAnalytics == null)
             mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);

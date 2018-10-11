@@ -11,6 +11,7 @@ import com.cinekancha.entities.model.NewRelease;
 import com.cinekancha.entities.model.NewsGossip;
 import com.cinekancha.entities.model.Poll;
 import com.cinekancha.entities.model.TrendingData;
+import com.cinekancha.entities.model.Trivia;
 import com.cinekancha.entities.model.Troll;
 import com.cinekancha.entities.model.UpcomingMovie;
 
@@ -65,6 +66,9 @@ public interface ApiService {
 
     @GET("api/poll")
     Observable<Poll> getPoll();
+
+    @GET("api/trivia")
+    Observable<Trivia> getTrivia();
 
     @GET("bins/19gt0m")
     Observable<HomeData> getHomeTestData();

@@ -3,8 +3,12 @@ package com.cinekancha.entities.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class PageLink {
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
+public class PageLink extends RealmObject {
+    @PrimaryKey
+    private int id = 0;
     @SerializedName("first")
     @Expose
     private String first;
@@ -13,10 +17,10 @@ public class PageLink {
     private String last;
     @SerializedName("prev")
     @Expose
-    private Object prev;
+    private String prev;
     @SerializedName("next")
     @Expose
-    private Object next;
+    private String next;
 
     public String getFirst() {
         return first;
@@ -34,19 +38,19 @@ public class PageLink {
         this.last = last;
     }
 
-    public Object getPrev() {
+    public String getPrev() {
         return prev;
     }
 
-    public void setPrev(Object prev) {
+    public void setPrev(String prev) {
         this.prev = prev;
     }
 
-    public Object getNext() {
+    public String getNext() {
         return next;
     }
 
-    public void setNext(Object next) {
+    public void setNext(String next) {
         this.next = next;
     }
 

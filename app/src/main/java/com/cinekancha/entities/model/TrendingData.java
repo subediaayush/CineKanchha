@@ -1,15 +1,21 @@
 package com.cinekancha.entities.model;
 
 import java.util.List;
+
 import com.cinekancha.entities.Video;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class TrendingData {
+import io.realm.RealmList;
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
+public class TrendingData extends RealmObject {
+    @PrimaryKey
+    private int id = 0;
     @SerializedName("data")
     @Expose
-    private List<Video> trendingList = null;
+    private RealmList<Video> trendingList = null;
     @SerializedName("links")
     @Expose
     private PageLink links;
@@ -33,11 +39,11 @@ public class TrendingData {
         this.meta = meta;
     }
 
-    public List<Video> getTrendingList() {
+    public RealmList<Video> getTrendingList() {
         return trendingList;
     }
 
-    public void setTrendingList(List<Video> trendingList) {
+    public void setTrendingList(RealmList<Video> trendingList) {
         this.trendingList = trendingList;
     }
 }

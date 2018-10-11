@@ -3,7 +3,12 @@ package com.cinekancha.entities.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Crew {
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
+public class Crew extends RealmObject {
+    @PrimaryKey
+    private int id;
     @SerializedName("directed_by")
     @Expose
     private String directedBy;
@@ -34,6 +39,14 @@ public class Crew {
     @SerializedName("choreographer")
     @Expose
     private String choreographer;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getDirectedBy() {
         return directedBy;

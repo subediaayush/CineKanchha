@@ -16,13 +16,12 @@ import com.cinekancha.entities.model.HomeData;
 import com.cinekancha.entities.model.Movie;
 import com.cinekancha.entities.model.Option;
 import com.cinekancha.entities.model.PollData;
-import com.cinekancha.entities.model.Trivia;
+import com.cinekancha.entities.model.TriviaData;
 import com.cinekancha.entities.model.TrollData;
 import com.cinekancha.movies.MovieActivity;
 import com.cinekancha.newsGossips.NewsGossipsActivity;
 import com.cinekancha.poll.PollsActivity;
 import com.cinekancha.trolls.TrollListActivity;
-import com.cinekancha.utils.Constants;
 import com.cinekancha.utils.GlobalUtils;
 import com.cinekancha.utils.PollUtil;
 import com.cinekancha.utils.ViewIdGenerator;
@@ -202,8 +201,8 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
     @Override
     protected void setViewOfTypeSix(BaseViewHolder baseHolder, int position) {
         TriviaHolder holder = (TriviaHolder) baseHolder;
-        Trivia trivia = mData.getItem(position);
-        holder.trivia.setText(trivia.getTrivia());
+        TriviaData triviaData = mData.getItem(position);
+        holder.trivia.setText(triviaData.getTrivia());
     }
 
 

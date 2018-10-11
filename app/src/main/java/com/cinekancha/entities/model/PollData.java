@@ -5,7 +5,12 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class PollData {
+import io.realm.RealmList;
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
+public class PollData extends RealmObject {
+    @PrimaryKey
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -17,7 +22,7 @@ public class PollData {
     private String status;
     @SerializedName("options")
     @Expose
-    private List<Option> options = null;
+    private RealmList<Option> options = null;
     @SerializedName("total_votes")
     @Expose
     private Integer totalVotes;
@@ -46,11 +51,11 @@ public class PollData {
         this.status = status;
     }
 
-    public List<Option> getOptions() {
+    public RealmList<Option> getOptions() {
         return options;
     }
 
-    public void setOptions(List<Option> options) {
+    public void setOptions(RealmList<Option> options) {
         this.options = options;
     }
 

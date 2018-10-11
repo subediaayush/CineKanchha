@@ -13,11 +13,15 @@ import com.cinekancha.R;
 import com.cinekancha.activities.base.BaseNavigationActivity;
 import com.cinekancha.entities.model.Movie;
 import com.cinekancha.entities.model.MovieData;
+import com.cinekancha.entities.model.MovieDetail;
 import com.cinekancha.entities.model.UpcomingMovie;
+import com.cinekancha.entities.rest.GetDataRepository;
 import com.cinekancha.entities.rest.RestAPI;
+import com.cinekancha.entities.rest.SetDataRepository;
 import com.cinekancha.listener.OnClickListener;
 import com.cinekancha.movieDetail.MoviePostDetailActivity;
 import com.cinekancha.movies.MoviesAdapter;
+import com.cinekancha.utils.Connectivity;
 import com.cinekancha.view.CineMovieViewModel;
 
 import java.net.MalformedURLException;
@@ -87,11 +91,28 @@ public class UpcomingMovieActivity extends BaseNavigationActivity implements OnC
     }
 
     private void requestMovie() {
-        compositeDisposable.add(RestAPI.getInstance().getUpcomingMovie()
+        if (Connectivity.isConnected(this))
+            compositeDisposable.add(RestAPI.getInstance().getUpcomingMovie()
+                    .doOnSubscribe(disposable -> {
+                        homeSwipeRefreshLayout.setRefreshing(true);
+                    })
+                    .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
+                    .subscribe(this::handleDatabase, this::handleMovieFetchError));
+        else
+            compositeDisposable.add(GetDataRepository.getInstance().getUpcomingData()
+                    .doOnSubscribe(disposable -> {
+                        homeSwipeRefreshLayout.setRefreshing(true);
+                    })
+                    .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
+                    .subscribe(this::handleMovieData, this::handleMovieFetchError));
+    }
+
+    private void handleDatabase(UpcomingMovie data) {
+        compositeDisposable.add(SetDataRepository.getInstance().setUpcomingMovie(data)
                 .doOnSubscribe(disposable -> {
-                    homeSwipeRefreshLayout.setRefreshing(true);
                 })
-                .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
+                .doFinally(() -> {
+                })
                 .subscribe(this::handleMovieData, this::handleMovieFetchError));
     }
 

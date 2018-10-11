@@ -5,11 +5,16 @@ import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class NewRelease {
+import io.realm.RealmList;
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
+public class NewRelease extends RealmObject {
+    @PrimaryKey
+    private int id = 0;
     @SerializedName("data")
     @Expose
-    private List<Movie> data = null;
+    private RealmList<Movie> data = null;
     @SerializedName("links")
     @Expose
     private PageLink links;
@@ -17,11 +22,11 @@ public class NewRelease {
     @Expose
     private Meta meta;
 
-    public List<Movie> getData() {
+    public RealmList<Movie> getData() {
         return data;
     }
 
-    public void setData(List<Movie> data) {
+    public void setData(RealmList<Movie> data) {
         this.data = data;
     }
 

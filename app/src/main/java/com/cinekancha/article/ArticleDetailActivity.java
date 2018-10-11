@@ -24,54 +24,54 @@ import butterknife.BindView;
  */
 
 public class ArticleDetailActivity extends BaseNavigationActivity {
-	@BindView(R.id.image)
-	public ImageView mArticleImage;
-	
-	@BindView(R.id.title)
-	public TextView mTitle;
-	
-	@BindView(R.id.article)
-	public WebView mArticle;
-	
-	private CineArticleViewModel mCineArticleViewModel;
+    @BindView(R.id.image)
+    public ImageView mArticleImage;
 
-	public static void startActivity(Context context, Article article){
-		Intent intent = new Intent(context, ArticleDetailActivity.class );
-		intent.putExtra("article", article);
-		context.startActivity(intent);
-	}
+    @BindView(R.id.title)
+    public TextView mTitle;
 
-	@Override
-	protected void onCreate(@Nullable Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
-		mCineArticleViewModel = ViewModelProviders.of(this).get(CineArticleViewModel.class);
-		getSupportActionBar().setTitle("News Gossip");
+    @BindView(R.id.article)
+    public WebView mArticle;
 
-		if (getIntent() != null){
-			mCineArticleViewModel.setArticle((Article) getIntent().getExtras().getSerializable("article"));
-		}
+    private CineArticleViewModel mCineArticleViewModel;
 
-		if (mCineArticleViewModel.getArticle() != null){
-			renderArticle(mCineArticleViewModel.getArticle());
-		}
-	}
-	
-	@Override
-	protected int getLayoutId() {
-		return R.layout.activity_article_detail;
-	}
-	
-	@Override
-	protected void onResume() {
-		super.onResume();
-	}
-	
-	private void renderArticle(Article article) {
-		if (!TextUtils.isEmpty(article.getImage())) Picasso.with(this)
-				.load(Constants.imageUrl + article.getImage())
-				.into(mArticleImage);
-		mTitle.setText(article.getTitle());
-		mArticle.loadData(article.getContent(), "text/html", "utf-8");
-	}
+    public static void startActivity(Context context, Article article) {
+        Intent intent = new Intent(context, ArticleDetailActivity.class);
+        intent.putExtra("article", article);
+        context.startActivity(intent);
+    }
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mCineArticleViewModel = ViewModelProviders.of(this).get(CineArticleViewModel.class);
+        getSupportActionBar().setTitle("News Gossip");
+
+        if (getIntent() != null) {
+            mCineArticleViewModel.setArticle((Article) getIntent().getExtras().getParcelable("article"));
+        }
+
+        if (mCineArticleViewModel.getArticle() != null) {
+            renderArticle(mCineArticleViewModel.getArticle());
+        }
+    }
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_article_detail;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    private void renderArticle(Article article) {
+        if (!TextUtils.isEmpty(article.getImage())) Picasso.with(this)
+                .load(Constants.imageUrl + article.getImage())
+                .into(mArticleImage);
+        mTitle.setText(article.getTitle());
+        mArticle.loadData(article.getContent(), "text/html", "utf-8");
+    }
 }

@@ -3,8 +3,12 @@ package com.cinekancha.entities.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Meta {
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
+public class Meta extends RealmObject {
+    @PrimaryKey
+    private int id = 0;
     @SerializedName("current_page")
     @Expose
     private Integer currentPage;

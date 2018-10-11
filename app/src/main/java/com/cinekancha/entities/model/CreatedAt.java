@@ -4,8 +4,12 @@ package com.cinekancha.entities.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class CreatedAt {
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
+public class CreatedAt extends RealmObject {
+    @PrimaryKey
+    private int id = 0;
     @SerializedName("date")
     @Expose
     private String date;
@@ -15,6 +19,14 @@ public class CreatedAt {
     @SerializedName("timezone")
     @Expose
     private String timezone;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getDate() {
         return date;

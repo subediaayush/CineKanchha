@@ -73,7 +73,7 @@ public class HomeDataWrapper {
             wrapper.add(trendingVideo, FEATURED_TRENDING_VIDEOS);
         }
 
-        wrapper.add(data.getTrivia(), FEATURED_TRIVIA);
+        wrapper.add(data.getTriviaData(), FEATURED_TRIVIA);
 
         List<Video> fullMovies = data.getFullMovies();
         if (!ListUtils.isEmpty(fullMovies)) {

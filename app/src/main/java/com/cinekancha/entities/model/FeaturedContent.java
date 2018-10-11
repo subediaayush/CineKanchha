@@ -3,8 +3,11 @@ package com.cinekancha.entities.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class FeaturedContent {
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
+public class FeaturedContent extends RealmObject {
+    @PrimaryKey
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -19,7 +22,7 @@ public class FeaturedContent {
     private String imageUrl;
     @SerializedName("deeplink")
     @Expose
-    private Object deeplink;
+    private String deeplink;
 
     public Integer getId() {
         return id;
@@ -53,11 +56,11 @@ public class FeaturedContent {
         this.imageUrl = imageUrl;
     }
 
-    public Object getDeeplink() {
+    public String getDeeplink() {
         return deeplink;
     }
 
-    public void setDeeplink(Object deeplink) {
+    public void setDeeplink(String deeplink) {
         this.deeplink = deeplink;
     }
 

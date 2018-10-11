@@ -21,12 +21,16 @@ import com.cinekancha.R;
 import com.cinekancha.activities.base.BaseNavigationActivity;
 import com.cinekancha.adapters.base.RecyclerViewClickListener;
 import com.cinekancha.entities.model.FeaturedContent;
+import com.cinekancha.entities.model.HomeData;
 import com.cinekancha.entities.model.Links;
 import com.cinekancha.entities.model.MovieDetail;
 import com.cinekancha.entities.model.Photo;
 import com.cinekancha.entities.model.TrollData;
+import com.cinekancha.entities.rest.GetDataRepository;
 import com.cinekancha.entities.rest.RestAPI;
+import com.cinekancha.entities.rest.SetDataRepository;
 import com.cinekancha.home.OnSlideClickListener;
+import com.cinekancha.utils.Connectivity;
 import com.cinekancha.utils.Constants;
 import com.cinekancha.utils.GlobalUtils;
 import com.cinekancha.utils.ListUtils;
@@ -252,12 +256,20 @@ public class MoviePostDetailActivity extends BaseNavigationActivity implements O
     }
 
     private void requestMovie(int id) {
-        compositeDisposable.add(RestAPI.getInstance().getMovie(id)
-                .doOnSubscribe(disposable -> {
-                    swipeRefreshLayout.setRefreshing(true);
-                })
-                .doFinally(() -> swipeRefreshLayout.setRefreshing(false))
-                .subscribe(this::handleMovieData, this::handleMovieFetchError));
+        if (Connectivity.isConnected(this))
+            compositeDisposable.add(RestAPI.getInstance().getMovie(id)
+                    .doOnSubscribe(disposable -> {
+                        swipeRefreshLayout.setRefreshing(true);
+                    })
+                    .doFinally(() -> swipeRefreshLayout.setRefreshing(false))
+                    .subscribe(this::handleDatabase, this::handleMovieFetchError));
+        else
+            compositeDisposable.add(GetDataRepository.getInstance().getMovieDetail(id)
+                    .doOnSubscribe(disposable -> {
+                        swipeRefreshLayout.setRefreshing(true);
+                    })
+                    .doFinally(() -> swipeRefreshLayout.setRefreshing(false))
+                    .subscribe(this::handleMovieData, this::handleMovieFetchError));
     }
 
     private void startYoutube(String url) throws MalformedURLException {
@@ -275,6 +287,15 @@ public class MoviePostDetailActivity extends BaseNavigationActivity implements O
     private void handleMovieData(MovieDetail data) throws MalformedURLException {
         mCinePostMovieModel.setMovie(data);
         renderMovieData();
+    }
+
+    private void handleDatabase(MovieDetail data) {
+        compositeDisposable.add(SetDataRepository.getInstance().setMovieDetail(data)
+                .doOnSubscribe(disposable -> {
+                })
+                .doFinally(() -> {
+                })
+                .subscribe(this::handleMovieData, this::handleMovieFetchError));
     }
 
 

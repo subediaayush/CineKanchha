@@ -3,8 +3,11 @@ package com.cinekancha.entities.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class TopStory {
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
+public class TopStory extends RealmObject {
+    @PrimaryKey
     @SerializedName("id")
     @Expose
     private String id;
@@ -28,7 +31,7 @@ public class TopStory {
     private String url;
     @SerializedName("author")
     @Expose
-    private Object author;
+    private String author;
     @SerializedName("created_at")
     @Expose
     private String createdAt;
@@ -92,11 +95,11 @@ public class TopStory {
         this.url = url;
     }
 
-    public Object getAuthor() {
+    public String getAuthor() {
         return author;
     }
 
-    public void setAuthor(Object author) {
+    public void setAuthor(String author) {
         this.author = author;
     }
 

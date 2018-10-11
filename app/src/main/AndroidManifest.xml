@@ -24,7 +24,9 @@
             android:name=".article.ArticleDetailActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".article.ArticleListActivity" />
-        <activity android:name=".trivia.TriviaListActivity" />
+        <activity
+            android:name=".trivia.TriviaListActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".trolls.TrollListActivity"
             android:theme="@style/AppTheme.NoActionBar" />

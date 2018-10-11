@@ -7,6 +7,7 @@ import com.cinekancha.adapters.base.BaseRecyclerAdapter;
 import com.cinekancha.adapters.base.BaseViewHolder;
 import com.cinekancha.entities.model.Actor;
 import com.cinekancha.entities.model.ActorPhoto;
+import com.cinekancha.entities.model.Photos;
 import com.cinekancha.listener.OnClickListener;
 import com.cinekancha.utils.Constants;
 import com.squareup.picasso.Picasso;
@@ -18,10 +19,10 @@ import java.util.List;
  */
 
 public class ActorPhotoAdapter extends BaseRecyclerAdapter<ActorPhotoHolder> {
-    private List<String> actorPhotoList;
+    private List<Photos> actorPhotoList;
     private OnClickListener listener;
 
-    public ActorPhotoAdapter(List<String> actorPhotoList, OnClickListener listener) {
+    public ActorPhotoAdapter(List<Photos> actorPhotoList, OnClickListener listener) {
         this.actorPhotoList = actorPhotoList;
         this.listener = listener;
     }
@@ -41,8 +42,8 @@ public class ActorPhotoAdapter extends BaseRecyclerAdapter<ActorPhotoHolder> {
     @Override
     protected void setViewOfTypeZero(BaseViewHolder baseHolder, int position) {
         ActorPhotoHolder holder = (ActorPhotoHolder) baseHolder;
-        String photos = actorPhotoList.get(position);
-        Picasso.with(holder.itemView.getContext()).load(Constants.imageUrl + photos).into(holder.imgActorPic);
+        Photos photos = actorPhotoList.get(position);
+        Picasso.with(holder.itemView.getContext()).load(Constants.imageUrl + photos.getUrl()).into(holder.imgActorPic);
     }
 
     @Override

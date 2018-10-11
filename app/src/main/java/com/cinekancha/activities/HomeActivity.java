@@ -16,10 +16,13 @@ import com.cinekancha.activities.base.BaseNavigationActivity;
 import com.cinekancha.entities.model.FeaturedContent;
 import com.cinekancha.entities.model.HomeData;
 import com.cinekancha.entities.model.Links;
+import com.cinekancha.entities.rest.GetDataRepository;
+import com.cinekancha.entities.rest.SetDataRepository;
 import com.cinekancha.entities.rest.RestAPI;
 import com.cinekancha.home.HomeDataAdapter;
 import com.cinekancha.home.OnSlideClickListener;
 import com.cinekancha.home.SlideShowAdapter;
+import com.cinekancha.utils.Connectivity;
 import com.cinekancha.view.CineHomeViewModel;
 import com.google.gson.Gson;
 
@@ -101,17 +104,35 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
     }
 
     private void requestHomeData() {
-        compositeDisposable.add(RestAPI.getInstance().getHomeData()
-                .doOnSubscribe(disposable -> {
-                    mSwipeRefreshLayout.setRefreshing(true);
-                })
-                .doFinally(() -> mSwipeRefreshLayout.setRefreshing(false))
-                .subscribe(this::handleHomeData, this::handleHomeFetchError));
+        if (Connectivity.isConnected(this)) {
+            compositeDisposable.add(RestAPI.getInstance().getHomeData()
+                    .doOnSubscribe(disposable -> {
+                        mSwipeRefreshLayout.setRefreshing(true);
+                    })
+                    .doFinally(() -> mSwipeRefreshLayout.setRefreshing(false))
+                    .subscribe(this::handleDatabase, this::handleHomeFetchError));
+        } else {
+            compositeDisposable.add(GetDataRepository.getInstance().getHomeData()
+                    .doOnSubscribe(disposable -> {
+                        mSwipeRefreshLayout.setRefreshing(true);
+                    })
+                    .doFinally(() -> mSwipeRefreshLayout.setRefreshing(false))
+                    .subscribe(this::handleHomeData, this::handleHomeFetchError));
+        }
     }
 
     private void handleHomeFetchError(Throwable throwable) {
         throwable.printStackTrace();
         Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
+    }
+
+    private void handleDatabase(HomeData data) {
+        compositeDisposable.add(SetDataRepository.getInstance().setHomeData(data)
+                .doOnSubscribe(disposable -> {
+                })
+                .doFinally(() -> {
+                })
+                .subscribe(this::handleHomeData, this::handleHomeFetchError));
     }
 
     private void handleHomeData(HomeData data) {
