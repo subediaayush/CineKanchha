@@ -12,16 +12,17 @@ import android.widget.Toast;
 
 import com.cinekancha.R;
 import com.cinekancha.activities.base.BaseNavigationActivity;
-import com.cinekancha.entities.Video;
-import com.cinekancha.entities.model.TrendingData;
+import com.cinekancha.entities.model.Video;
+import com.cinekancha.entities.model.FullMovies;
+import com.cinekancha.entities.rest.GetDataRepository;
 import com.cinekancha.entities.rest.RestAPI;
+import com.cinekancha.entities.rest.SetDataRepository;
 import com.cinekancha.listener.OnClickListener;
+import com.cinekancha.utils.Connectivity;
 import com.cinekancha.utils.GlobalUtils;
 import com.cinekancha.view.CineFullMoviesViewModel;
-import com.cinekancha.view.CineTrendingViewModel;
 
 import java.net.MalformedURLException;
-import java.util.List;
 
 import butterknife.BindView;
 
@@ -87,12 +88,20 @@ public class FullMoviesActivity extends BaseNavigationActivity implements OnClic
     }
 
     private void requestMovie() {
-        compositeDisposable.add(RestAPI.getInstance().getFullMovies()
-                .doOnSubscribe(disposable -> {
-                    homeSwipeRefreshLayout.setRefreshing(true);
-                })
-                .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
-                .subscribe(this::handleMovieData, this::handleMovieFetchError));
+        if (Connectivity.isConnected(this))
+            compositeDisposable.add((RestAPI.getInstance().getFullMovies())
+                    .doOnSubscribe(disposable -> {
+                        homeSwipeRefreshLayout.setRefreshing(true);
+                    })
+                    .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
+                    .subscribe(this::handleDatabase, this::handleMovieFetchError));
+        else
+            compositeDisposable.add(GetDataRepository.getInstance().getFullMovies()
+                    .doOnSubscribe(disposable -> {
+                        homeSwipeRefreshLayout.setRefreshing(true);
+                    })
+                    .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
+                    .subscribe(this::handleMovieData, this::handleMovieFetchError));
     }
 
     private void handleMovieFetchError(Throwable throwable) {
@@ -100,9 +109,20 @@ public class FullMoviesActivity extends BaseNavigationActivity implements OnClic
         Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }
 
-    private void handleMovieData(TrendingData data) throws MalformedURLException {
-        cineFullMoviesViewModel.setTrendingList(data.getTrendingList());
-        renderMovieData();
+    private void handleDatabase(FullMovies data) {
+        compositeDisposable.add(SetDataRepository.getInstance().setFullMovies(data).toObservable()
+                .doOnSubscribe(disposable -> {
+                })
+                .doFinally(() -> {
+                })
+                .subscribe(this::handleMovieData, this::handleMovieFetchError));
+    }
+
+    private void handleMovieData(FullMovies data) throws MalformedURLException {
+        if (data != null && data.getTrendingList() != null) {
+            cineFullMoviesViewModel.setTrendingList(data.getTrendingList());
+            renderMovieData();
+        } else Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }
 
     @Override

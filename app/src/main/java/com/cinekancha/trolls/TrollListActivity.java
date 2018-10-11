@@ -12,9 +12,13 @@ import android.widget.Toast;
 import com.cinekancha.R;
 import com.cinekancha.activities.base.BaseNavigationActivity;
 import com.cinekancha.adapters.base.RecyclerViewClickListener;
+import com.cinekancha.entities.model.TrendingData;
 import com.cinekancha.entities.model.Troll;
 import com.cinekancha.entities.model.TrollData;
+import com.cinekancha.entities.rest.GetDataRepository;
 import com.cinekancha.entities.rest.RestAPI;
+import com.cinekancha.entities.rest.SetDataRepository;
+import com.cinekancha.utils.Connectivity;
 import com.cinekancha.view.CineTrollViewModel;
 import com.stfalcon.frescoimageviewer.ImageViewer;
 
@@ -42,6 +46,7 @@ public class TrollListActivity extends BaseNavigationActivity implements Recycle
         mTrollAdapter = new TrollAdapter();
 
         mArticleList.setLayoutManager(new LinearLayoutManager(this));
+        mArticleList.setNestedScrollingEnabled(false);
         mArticleList.setAdapter(mTrollAdapter);
         mTrollAdapter.setOnClickListener(this);
         swipeRefreshLayout.setOnRefreshListener(this);
@@ -69,13 +74,31 @@ public class TrollListActivity extends BaseNavigationActivity implements Recycle
     }
 
     private void requestArticles(String cursor, int count) {
-        compositeDisposable.add(RestAPI.getInstance().getTroll()
+        if (Connectivity.isConnected(this))
+            compositeDisposable.add(RestAPI.getInstance().getTroll()
+                    .doOnSubscribe(disposable -> {
+                        swipeRefreshLayout.setRefreshing(true);
+                    })
+                    .doFinally(() -> swipeRefreshLayout.setRefreshing(false))
+                    .subscribe(this::handleDatabase, this::handleMovieFetchError));
+        else
+            compositeDisposable.add(GetDataRepository.getInstance().getTroll()
+                    .doOnSubscribe(disposable -> {
+                        swipeRefreshLayout.setRefreshing(true);
+                    })
+                    .doFinally(() -> swipeRefreshLayout.setRefreshing(false))
+                    .subscribe(this::handleTrollData, this::handleMovieFetchError));
+    }
+
+    private void handleDatabase(Troll data) {
+        compositeDisposable.add(SetDataRepository.getInstance().setTroll(data).toObservable()
                 .doOnSubscribe(disposable -> {
-                    swipeRefreshLayout.setRefreshing(true);
                 })
-                .doFinally(() -> swipeRefreshLayout.setRefreshing(false))
+                .doFinally(() -> {
+                })
                 .subscribe(this::handleTrollData, this::handleMovieFetchError));
     }
+
 
     private void handleMovieFetchError(Throwable throwable) {
         throwable.printStackTrace();
@@ -83,8 +106,10 @@ public class TrollListActivity extends BaseNavigationActivity implements Recycle
     }
 
     private void handleTrollData(Troll troll) {
-        mCineTrollViewModel.setArticles(troll.getData());
-        renderData();
+        if (troll != null && troll.getData() != null) {
+            mCineTrollViewModel.setArticles(troll.getData());
+            renderData();
+        } else Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }
 
     @Override

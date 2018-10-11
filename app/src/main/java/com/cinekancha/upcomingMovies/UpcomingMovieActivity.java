@@ -87,7 +87,10 @@ public class UpcomingMovieActivity extends BaseNavigationActivity implements OnC
         if (cineMovieViewModel.getMovieList() != null && cineMovieViewModel.getMovieList().size() > 0) {
             adapter = new MoviesAdapter(cineMovieViewModel.getMovieList(), this);
             recyclerView.setAdapter(adapter);
-        } else requestMovie();
+        } else if (Connectivity.isConnected(this))
+            requestMovie();
+        else
+            Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }
 
     private void requestMovie() {
@@ -108,7 +111,7 @@ public class UpcomingMovieActivity extends BaseNavigationActivity implements OnC
     }
 
     private void handleDatabase(UpcomingMovie data) {
-        compositeDisposable.add(SetDataRepository.getInstance().setUpcomingMovie(data)
+        compositeDisposable.add(SetDataRepository.getInstance().setUpcomingMovie(data).toObservable()
                 .doOnSubscribe(disposable -> {
                 })
                 .doFinally(() -> {
@@ -122,8 +125,10 @@ public class UpcomingMovieActivity extends BaseNavigationActivity implements OnC
     }
 
     private void handleMovieData(UpcomingMovie data) throws MalformedURLException {
-        cineMovieViewModel.setMovieList(data.getData());
-        renderMovieData();
+        if (data != null && data.getData() != null) {
+            cineMovieViewModel.setMovieList(data.getData());
+            renderMovieData();
+        } else Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }
 
     @Override

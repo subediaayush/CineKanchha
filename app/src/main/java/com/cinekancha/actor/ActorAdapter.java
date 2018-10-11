@@ -5,7 +5,6 @@ import android.view.View;
 import com.cinekancha.R;
 import com.cinekancha.adapters.base.BaseRecyclerAdapter;
 import com.cinekancha.adapters.base.BaseViewHolder;
-import com.cinekancha.entities.Video;
 import com.cinekancha.entities.model.Actor;
 import com.cinekancha.listener.OnClickListener;
 import com.cinekancha.utils.Constants;

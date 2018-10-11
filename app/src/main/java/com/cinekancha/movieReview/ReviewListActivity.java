@@ -1,4 +1,4 @@
-package com.cinekancha.trivia;
+package com.cinekancha.movieReview;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
@@ -12,11 +12,14 @@ import android.widget.Toast;
 import com.cinekancha.R;
 import com.cinekancha.activities.base.BaseNavigationActivity;
 import com.cinekancha.adapters.base.RecyclerViewClickListener;
+import com.cinekancha.entities.model.Reviews;
 import com.cinekancha.entities.model.Trivia;
 import com.cinekancha.entities.rest.GetDataRepository;
-import com.cinekancha.entities.rest.SetDataRepository;
 import com.cinekancha.entities.rest.RestAPI;
+import com.cinekancha.entities.rest.SetDataRepository;
+import com.cinekancha.trivia.TriviaAdapter;
 import com.cinekancha.utils.Connectivity;
+import com.cinekancha.view.CineReviewViewModel;
 import com.cinekancha.view.CineTriviaViewModel;
 
 import butterknife.BindView;
@@ -25,12 +28,12 @@ import butterknife.BindView;
  * Created by aayushsubedi on 3/19/18.
  */
 
-public class TriviaListActivity extends BaseNavigationActivity implements RecyclerViewClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class ReviewListActivity extends BaseNavigationActivity implements RecyclerViewClickListener, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.list_view)
     public RecyclerView mArticleList;
 
-    private CineTriviaViewModel mCineTriviaViewModel;
-    private TriviaAdapter mArticleAdapter;
+    private CineReviewViewModel cineReviewViewModel;
+    private ReviewAdapter mArticleAdapter;
 
     @BindView(R.id.homeSwipeRefreshLayout)
     protected SwipeRefreshLayout homeSwipeRefreshLayout;
@@ -38,10 +41,10 @@ public class TriviaListActivity extends BaseNavigationActivity implements Recycl
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().setTitle(R.string.trivia);
-        mCineTriviaViewModel = ViewModelProviders.of(this).get(CineTriviaViewModel.class);
+        getSupportActionBar().setTitle(R.string.moviesReviews);
+        cineReviewViewModel = ViewModelProviders.of(this).get(CineReviewViewModel.class);
 
-        mArticleAdapter = new TriviaAdapter();
+        mArticleAdapter = new ReviewAdapter();
 
         mArticleList.setLayoutManager(new LinearLayoutManager(this));
         mArticleList.setAdapter(mArticleAdapter);
@@ -58,23 +61,23 @@ public class TriviaListActivity extends BaseNavigationActivity implements Recycl
     protected void onResume() {
         super.onResume();
 
-        if (mCineTriviaViewModel.getTrivias() == null) {
+        if (cineReviewViewModel.getReviews() == null) {
             requestTrivia(null, 50);
         } else {
-            mArticleAdapter.setTrivias(mCineTriviaViewModel.getTrivias());
+            mArticleAdapter.setTrivias(cineReviewViewModel.getReviews().getData());
         }
     }
 
     private void requestTrivia(String cursor, int count) {
         if (Connectivity.isConnected(this))
-            compositeDisposable.add(RestAPI.getInstance().getTrivia()
+            compositeDisposable.add(RestAPI.getInstance().getReviews()
                     .doOnSubscribe(disposable -> {
                         homeSwipeRefreshLayout.setRefreshing(true);
                     })
                     .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
                     .subscribe(this::handleDatabase, this::handleFetchError));
         else
-            compositeDisposable.add(GetDataRepository.getInstance().getTrivia()
+            compositeDisposable.add(GetDataRepository.getInstance().getReviews()
                     .doOnSubscribe(disposable -> {
                         homeSwipeRefreshLayout.setRefreshing(true);
                     })
@@ -82,16 +85,16 @@ public class TriviaListActivity extends BaseNavigationActivity implements Recycl
                     .subscribe(this::handleTriviaData, this::handleFetchError));
     }
 
-    private void handleTriviaData(Trivia trivia) {
-        if (trivia != null && trivia.getData() != null) {
-            mCineTriviaViewModel.setArticles(trivia.getData());
+    private void handleTriviaData(Reviews reviews) {
+        if (reviews != null && reviews.getData() != null) {
+            cineReviewViewModel.setReviews(reviews);
             renderTrivia();
         } else Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
 
     }
 
-    private void handleDatabase(Trivia trivia) {
-        compositeDisposable.add(SetDataRepository.getInstance().setTriviaData(trivia).toObservable()
+    private void handleDatabase(Reviews reviews) {
+        compositeDisposable.add(SetDataRepository.getInstance().setReviewData(reviews).toObservable()
                 .doOnSubscribe(disposable -> {
                 })
                 .doFinally(() -> {
@@ -105,8 +108,8 @@ public class TriviaListActivity extends BaseNavigationActivity implements Recycl
     }
 
     private void renderTrivia() {
-        if (mCineTriviaViewModel.getTrivias() != null && mCineTriviaViewModel.getTrivias().size() > 0) {
-            mArticleAdapter.setTrivias(mCineTriviaViewModel.getTrivias());
+        if (cineReviewViewModel.getReviews() != null && cineReviewViewModel.getReviews().getData().size() > 0) {
+            mArticleAdapter.setTrivias(cineReviewViewModel.getReviews().getData());
         } else {
             requestTrivia(null, 50);
         }

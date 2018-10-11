@@ -13,10 +13,9 @@ import com.cinekancha.R;
 import com.cinekancha.actor.ActorDetailActivity;
 import com.cinekancha.actor.ActorListActivity;
 import com.cinekancha.adapters.base.BaseRecyclerAdapter;
-import com.cinekancha.entities.GalleryItem;
+import com.cinekancha.entities.model.GalleryItem;
 import com.cinekancha.entities.ThumbWrapper;
 import com.cinekancha.entities.ThumbnailConverter;
-import com.cinekancha.entities.model.Actor;
 import com.cinekancha.listener.OnClickListener;
 import com.cinekancha.utils.GlobalUtils;
 

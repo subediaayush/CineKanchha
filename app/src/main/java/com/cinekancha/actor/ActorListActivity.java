@@ -2,7 +2,6 @@ package com.cinekancha.actor;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,19 +11,16 @@ import android.widget.Toast;
 
 import com.cinekancha.R;
 import com.cinekancha.activities.base.BaseNavigationActivity;
-import com.cinekancha.entities.Video;
 import com.cinekancha.entities.model.Actor;
 import com.cinekancha.entities.model.ActorGallery;
-import com.cinekancha.entities.model.TrendingData;
+import com.cinekancha.entities.rest.GetDataRepository;
 import com.cinekancha.entities.rest.RestAPI;
+import com.cinekancha.entities.rest.SetDataRepository;
 import com.cinekancha.listener.OnClickListener;
-import com.cinekancha.movieDetail.MoviePostDetailActivity;
-import com.cinekancha.trending.TrendingAdapter;
-import com.cinekancha.utils.GlobalUtils;
+import com.cinekancha.utils.Connectivity;
 import com.cinekancha.view.CineActorViewModel;
 
 import java.net.MalformedURLException;
-import java.util.List;
 
 import butterknife.BindView;
 
@@ -89,11 +85,28 @@ public class ActorListActivity extends BaseNavigationActivity implements OnClick
     }
 
     private void requestMovie() {
-        compositeDisposable.add(RestAPI.getInstance().getActorList()
+        if (Connectivity.isConnected(this))
+            compositeDisposable.add(RestAPI.getInstance().getActorList()
+                    .doOnSubscribe(disposable -> {
+                        homeSwipeRefreshLayout.setRefreshing(true);
+                    })
+                    .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
+                    .subscribe(this::handleDatabase, this::handleMovieFetchError));
+        else
+            compositeDisposable.add(GetDataRepository.getInstance().getActorGallery()
+                    .doOnSubscribe(disposable -> {
+                        homeSwipeRefreshLayout.setRefreshing(true);
+                    })
+                    .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
+                    .subscribe(this::handleMovieData, this::handleMovieFetchError));
+    }
+
+    private void handleDatabase(ActorGallery data) {
+        compositeDisposable.add(SetDataRepository.getInstance().setActorList(data).toObservable()
                 .doOnSubscribe(disposable -> {
-                    homeSwipeRefreshLayout.setRefreshing(true);
                 })
-                .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
+                .doFinally(() -> {
+                })
                 .subscribe(this::handleMovieData, this::handleMovieFetchError));
     }
 
@@ -103,8 +116,11 @@ public class ActorListActivity extends BaseNavigationActivity implements OnClick
     }
 
     private void handleMovieData(ActorGallery data) throws MalformedURLException {
-        cineActorViewModel.setActorList(data.getData());
-        renderMovieData();
+        if (data != null && data.getData() != null) {
+            cineActorViewModel.setActorList(data.getData());
+            renderMovieData();
+        } else
+            Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }
 
     @Override

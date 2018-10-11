@@ -10,9 +10,13 @@ import android.widget.Toast;
 
 import com.cinekancha.R;
 import com.cinekancha.activities.base.BaseNavigationActivity;
+import com.cinekancha.entities.model.NewRelease;
 import com.cinekancha.entities.model.Poll;
+import com.cinekancha.entities.rest.GetDataRepository;
 import com.cinekancha.entities.rest.RestAPI;
+import com.cinekancha.entities.rest.SetDataRepository;
 import com.cinekancha.listener.OnClickListener;
+import com.cinekancha.utils.Connectivity;
 import com.cinekancha.view.CinePollViewModel;
 
 import java.net.MalformedURLException;
@@ -65,7 +69,6 @@ public class PollsActivity extends BaseNavigationActivity implements OnClickList
     }
 
     private void renderMovieData() {
-
         if (cinePollViewModel.getPollData().getData() != null && cinePollViewModel.getPollData().getData().size() > 0) {
             adapter = new PollAdapter(cinePollViewModel.getPollData().getData(), this);
             recyclerView.setAdapter(adapter);
@@ -73,11 +76,28 @@ public class PollsActivity extends BaseNavigationActivity implements OnClickList
     }
 
     private void requestMovie() {
-        compositeDisposable.add(RestAPI.getInstance().getPoll()
+        if (Connectivity.isConnected(this))
+            compositeDisposable.add(RestAPI.getInstance().getPoll()
+                    .doOnSubscribe(disposable -> {
+                        homeSwipeRefreshLayout.setRefreshing(true);
+                    })
+                    .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
+                    .subscribe(this::handleDatabase, this::handleMovieFetchError));
+        else
+            compositeDisposable.add(GetDataRepository.getInstance().getPollData()
+                    .doOnSubscribe(disposable -> {
+                        homeSwipeRefreshLayout.setRefreshing(true);
+                    })
+                    .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
+                    .subscribe(this::handleMovieData, this::handleMovieFetchError));
+    }
+
+    private void handleDatabase(Poll data) {
+        compositeDisposable.add(SetDataRepository.getInstance().setPoll(data).toObservable()
                 .doOnSubscribe(disposable -> {
-                    homeSwipeRefreshLayout.setRefreshing(true);
                 })
-                .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
+                .doFinally(() -> {
+                })
                 .subscribe(this::handleMovieData, this::handleMovieFetchError));
     }
 
@@ -87,8 +107,11 @@ public class PollsActivity extends BaseNavigationActivity implements OnClickList
     }
 
     private void handleMovieData(Poll data) throws MalformedURLException {
-        cinePollViewModel.setPollData(data);
-        renderMovieData();
+        if (data != null && data.getData() != null) {
+            cinePollViewModel.setPollData(data);
+            renderMovieData();
+        } else Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
+
     }
 
 

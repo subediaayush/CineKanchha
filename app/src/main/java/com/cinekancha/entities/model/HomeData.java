@@ -1,7 +1,5 @@
 package com.cinekancha.entities.model;
 
-import com.cinekancha.entities.GalleryItem;
-import com.cinekancha.entities.Video;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 

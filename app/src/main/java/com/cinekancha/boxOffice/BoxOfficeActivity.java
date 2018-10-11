@@ -10,8 +10,12 @@ import android.widget.Toast;
 import com.cinekancha.R;
 import com.cinekancha.activities.base.BaseNavigationActivity;
 import com.cinekancha.entities.model.BoxOfficeItem;
+import com.cinekancha.entities.model.UpcomingMovie;
+import com.cinekancha.entities.rest.GetDataRepository;
 import com.cinekancha.entities.rest.RestAPI;
+import com.cinekancha.entities.rest.SetDataRepository;
 import com.cinekancha.listener.OnClickListener;
+import com.cinekancha.utils.Connectivity;
 import com.cinekancha.view.CineBoxOfficeViewModel;
 
 import java.util.List;
@@ -69,11 +73,28 @@ public class BoxOfficeActivity extends BaseNavigationActivity implements OnClick
     }
 
     private void requestBoxOffice() {
-        compositeDisposable.add(RestAPI.getInstance().getBOxOffice()
+        if (Connectivity.isConnected(this))
+            compositeDisposable.add(RestAPI.getInstance().getBOxOffice()
+                    .doOnSubscribe(disposable -> {
+                        swipeRefreshLayout.setRefreshing(true);
+                    })
+                    .doFinally(() -> swipeRefreshLayout.setRefreshing(false))
+                    .subscribe(this::handleDatabase, this::handleMovieFetchError));
+        else
+            compositeDisposable.add(GetDataRepository.getInstance().getBoxOffice()
+                    .doOnSubscribe(disposable -> {
+                        swipeRefreshLayout.setRefreshing(true);
+                    })
+                    .doFinally(() -> swipeRefreshLayout.setRefreshing(false))
+                    .subscribe(this::handleBoxOfficeData, this::handleMovieFetchError));
+    }
+
+    private void handleDatabase(List<BoxOfficeItem> boxOffice) {
+        compositeDisposable.add(SetDataRepository.getInstance().setBoxOffice(boxOffice)
                 .doOnSubscribe(disposable -> {
-                    swipeRefreshLayout.setRefreshing(true);
                 })
-                .doFinally(() -> swipeRefreshLayout.setRefreshing(false))
+                .doFinally(() -> {
+                })
                 .subscribe(this::handleBoxOfficeData, this::handleMovieFetchError));
     }
 
@@ -83,8 +104,11 @@ public class BoxOfficeActivity extends BaseNavigationActivity implements OnClick
     }
 
     private void handleBoxOfficeData(List<BoxOfficeItem> boxOffice) {
-        cineBoxOfficeViewModel.setBoxOffice(boxOffice);
-        renderBoxOfficeData();
+        if (boxOffice.size() > 0 && boxOffice != null) {
+            cineBoxOfficeViewModel.setBoxOffice(boxOffice);
+            renderBoxOfficeData();
+        } else
+            Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }
 
     @Override

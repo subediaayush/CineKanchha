@@ -285,8 +285,10 @@ public class MoviePostDetailActivity extends BaseNavigationActivity implements O
     }
 
     private void handleMovieData(MovieDetail data) throws MalformedURLException {
-        mCinePostMovieModel.setMovie(data);
-        renderMovieData();
+        if (data != null) {
+            mCinePostMovieModel.setMovie(data);
+            renderMovieData();
+        } else Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }
 
     private void handleDatabase(MovieDetail data) {

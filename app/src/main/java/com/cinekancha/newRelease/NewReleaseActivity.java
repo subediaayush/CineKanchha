@@ -14,10 +14,13 @@ import com.cinekancha.activities.base.BaseNavigationActivity;
 import com.cinekancha.entities.model.Movie;
 import com.cinekancha.entities.model.MovieData;
 import com.cinekancha.entities.model.NewRelease;
+import com.cinekancha.entities.rest.GetDataRepository;
 import com.cinekancha.entities.rest.RestAPI;
+import com.cinekancha.entities.rest.SetDataRepository;
 import com.cinekancha.listener.OnClickListener;
 import com.cinekancha.movieDetail.MoviePostDetailActivity;
 import com.cinekancha.movies.MoviesAdapter;
+import com.cinekancha.utils.Connectivity;
 import com.cinekancha.view.CineMovieViewModel;
 
 import java.net.MalformedURLException;
@@ -88,15 +91,36 @@ public class NewReleaseActivity extends BaseNavigationActivity implements OnClic
         if (movieList != null && movieList.size() > 0) {
             adapter = new MoviesAdapter(movieList, this);
             recyclerView.setAdapter(adapter);
-        } else requestMovie();
+        } else if (Connectivity.isConnected(this))
+            requestMovie();
+        else
+            Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }
 
     private void requestMovie() {
-        compositeDisposable.add(RestAPI.getInstance().getNewRelease()
+        if (Connectivity.isConnected(this))
+            compositeDisposable.add(RestAPI.getInstance().getNewRelease()
+                    .doOnSubscribe(disposable -> {
+                        homeSwipeRefreshLayout.setRefreshing(true);
+                    })
+                    .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
+                    .subscribe(this::handleDatabase, this::handleMovieFetchError));
+        else
+            compositeDisposable.add(GetDataRepository.getInstance().getNewReleaseData()
+                    .doOnSubscribe(disposable -> {
+                        homeSwipeRefreshLayout.setRefreshing(true);
+                    })
+                    .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
+                    .subscribe(this::handleMovieData, this::handleMovieFetchError));
+
+    }
+
+    private void handleDatabase(NewRelease data) {
+        compositeDisposable.add(SetDataRepository.getInstance().setNewRelease(data).toObservable()
                 .doOnSubscribe(disposable -> {
-                    homeSwipeRefreshLayout.setRefreshing(true);
                 })
-                .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
+                .doFinally(() -> {
+                })
                 .subscribe(this::handleMovieData, this::handleMovieFetchError));
     }
 
@@ -105,9 +129,11 @@ public class NewReleaseActivity extends BaseNavigationActivity implements OnClic
         Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }
 
-    private void handleMovieData(List<Movie> movieList) throws MalformedURLException {
-        cineMovieViewModel.setMovieList(movieList);
-        renderMovieData();
+    private void handleMovieData(NewRelease data) throws MalformedURLException {
+        if (data != null && data.getData() != null) {
+            cineMovieViewModel.setMovieList(data.getData());
+            renderMovieData();
+        } else Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }
 
     @Override

@@ -2,21 +2,12 @@ package com.cinekancha.poll;
 
 import android.support.v4.content.ContextCompat;
 import android.view.View;
-import android.widget.RadioButton;
 
 import com.cinekancha.R;
 import com.cinekancha.adapters.base.BaseRecyclerAdapter;
 import com.cinekancha.adapters.base.BaseViewHolder;
-import com.cinekancha.entities.Video;
-import com.cinekancha.entities.model.Option;
 import com.cinekancha.entities.model.PollData;
 import com.cinekancha.listener.OnClickListener;
-import com.cinekancha.trending.TrendingHolder;
-import com.cinekancha.utils.Constants;
-import com.cinekancha.utils.GlobalUtils;
-import com.cinekancha.utils.PollUtil;
-import com.cinekancha.utils.ViewIdGenerator;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 

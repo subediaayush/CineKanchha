@@ -4,7 +4,7 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.support.annotation.NonNull;
 
-import com.cinekancha.entities.Video;
+import com.cinekancha.entities.model.Video;
 
 import java.util.List;
 

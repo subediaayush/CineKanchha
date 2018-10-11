@@ -14,8 +14,7 @@ import com.cinekancha.R;
 import com.cinekancha.adapters.base.BaseRecyclerAdapter;
 import com.cinekancha.entities.ThumbWrapper;
 import com.cinekancha.entities.ThumbnailConverter;
-import com.cinekancha.entities.Video;
-import com.cinekancha.listener.OnClickListener;
+import com.cinekancha.entities.model.Video;
 import com.cinekancha.trending.TrendingActivity;
 import com.cinekancha.utils.GlobalUtils;
 

@@ -10,9 +10,15 @@ import android.widget.Toast;
 
 import com.cinekancha.R;
 import com.cinekancha.activities.base.BaseNavigationActivity;
+import com.cinekancha.entities.model.ActorGallery;
 import com.cinekancha.entities.model.ActorPhoto;
+import com.cinekancha.entities.model.Photo;
+import com.cinekancha.entities.model.Photos;
+import com.cinekancha.entities.rest.GetDataRepository;
 import com.cinekancha.entities.rest.RestAPI;
+import com.cinekancha.entities.rest.SetDataRepository;
 import com.cinekancha.listener.OnClickListener;
+import com.cinekancha.utils.Connectivity;
 import com.cinekancha.utils.Constants;
 import com.cinekancha.utils.ItemOffsetDecoration;
 import com.cinekancha.view.CineActorPhotoViewModel;
@@ -78,11 +84,28 @@ public class ActorDetailActivity extends BaseNavigationActivity implements OnCli
     }
 
     private void requestMovie() {
-        compositeDisposable.add(RestAPI.getInstance().getActorPhoto(cineActorPhotoViewModel.getActorID())
+        if (Connectivity.isConnected(this))
+            compositeDisposable.add(RestAPI.getInstance().getActorPhoto(cineActorPhotoViewModel.getActorID())
+                    .doOnSubscribe(disposable -> {
+                        homeSwipeRefreshLayout.setRefreshing(true);
+                    })
+                    .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
+                    .subscribe(this::handleDatabase, this::handleMovieFetchError));
+        else
+            compositeDisposable.add(GetDataRepository.getInstance().getActorPhoto()
+                    .doOnSubscribe(disposable -> {
+                        homeSwipeRefreshLayout.setRefreshing(true);
+                    })
+                    .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
+                    .subscribe(this::handleMovieData, this::handleMovieFetchError));
+    }
+
+    private void handleDatabase(ActorPhoto data) {
+        compositeDisposable.add(SetDataRepository.getInstance().setActorPhoto(data)
                 .doOnSubscribe(disposable -> {
-                    homeSwipeRefreshLayout.setRefreshing(true);
                 })
-                .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
+                .doFinally(() -> {
+                })
                 .subscribe(this::handleMovieData, this::handleMovieFetchError));
     }
 
@@ -92,14 +115,18 @@ public class ActorDetailActivity extends BaseNavigationActivity implements OnCli
     }
 
     private void handleMovieData(ActorPhoto data) {
-        cineActorPhotoViewModel.setActorPhoto(data);
-        renderMovieData();
+        if (data!=null) {
+            cineActorPhotoViewModel.setActorPhoto(data);
+            renderMovieData();
+        }
+        else
+            Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onClick(int id) {
         new ImageViewer.Builder<>(this, cineActorPhotoViewModel.getActorPhoto().getPhotos())
-                .setFormatter(photos -> Constants.imageUrl + photos)
+                .setFormatter(Photos::getUrl)
                 .setStartPosition(id)
                 .show();
     }

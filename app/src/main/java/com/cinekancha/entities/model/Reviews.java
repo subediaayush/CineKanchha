@@ -5,20 +5,26 @@ import com.google.gson.annotations.SerializedName;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
 
-public class TrendingData extends RealmObject {
-    @PrimaryKey
-    private int id = 0;
+public class Reviews extends RealmObject {
+
     @SerializedName("data")
     @Expose
-    private RealmList<Video> trendingList = new RealmList<>();
+    private RealmList<ReviewData> data = null;
     @SerializedName("links")
     @Expose
     private PageLink links;
     @SerializedName("meta")
     @Expose
     private Meta meta;
+
+    public RealmList<ReviewData> getData() {
+        return data;
+    }
+
+    public void setData(RealmList<ReviewData> data) {
+        this.data = data;
+    }
 
     public PageLink getLinks() {
         return links;
@@ -36,11 +42,4 @@ public class TrendingData extends RealmObject {
         this.meta = meta;
     }
 
-    public RealmList<Video> getTrendingList() {
-        return trendingList;
-    }
-
-    public void setTrendingList(RealmList<Video> trendingList) {
-        this.trendingList = trendingList;
-    }
 }

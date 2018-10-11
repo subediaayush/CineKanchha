@@ -2,8 +2,8 @@ package com.cinekancha.home;
 
 import android.util.SparseIntArray;
 
-import com.cinekancha.entities.GalleryItem;
-import com.cinekancha.entities.Video;
+import com.cinekancha.entities.model.GalleryItem;
+import com.cinekancha.entities.model.Video;
 import com.cinekancha.entities.model.BoxOfficeItem;
 import com.cinekancha.entities.model.HomeData;
 import com.cinekancha.entities.model.Movie;

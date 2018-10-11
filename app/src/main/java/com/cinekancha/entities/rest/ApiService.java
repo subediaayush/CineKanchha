@@ -3,6 +3,7 @@ package com.cinekancha.entities.rest;
 import com.cinekancha.entities.model.ActorGallery;
 import com.cinekancha.entities.model.ActorPhoto;
 import com.cinekancha.entities.model.BoxOfficeItem;
+import com.cinekancha.entities.model.FullMovies;
 import com.cinekancha.entities.model.HomeData;
 import com.cinekancha.entities.model.Movie;
 import com.cinekancha.entities.model.MovieData;
@@ -10,6 +11,7 @@ import com.cinekancha.entities.model.MovieDetail;
 import com.cinekancha.entities.model.NewRelease;
 import com.cinekancha.entities.model.NewsGossip;
 import com.cinekancha.entities.model.Poll;
+import com.cinekancha.entities.model.Reviews;
 import com.cinekancha.entities.model.TrendingData;
 import com.cinekancha.entities.model.Trivia;
 import com.cinekancha.entities.model.Troll;
@@ -34,7 +36,7 @@ public interface ApiService {
     Observable<MovieData> getMovieList();
 
     @GET("api/new_releases")
-    Observable<List<Movie>> getNewRelease();
+    Observable<NewRelease> getNewRelease();
 
     @GET("api/upcoming_movies")
     Observable<UpcomingMovie> getUpcomingMovie();
@@ -57,12 +59,15 @@ public interface ApiService {
     @GET("api/actorGallery")
     Observable<ActorGallery> getActorList();
 
+    @GET("api/movie_reviews")
+    Observable<Reviews> getReviews();
+
     @GET("api/actorGallery/{actorId}")
     Observable<ActorPhoto> getActorPhoto(
             @Path("actorId") int actorId);
 
     @GET("api/full_movies")
-    Observable<TrendingData> getFullMovies();
+    Observable<FullMovies> getFullMovies();
 
     @GET("api/poll")
     Observable<Poll> getPoll();

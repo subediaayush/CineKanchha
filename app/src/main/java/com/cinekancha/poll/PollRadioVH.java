@@ -10,10 +10,10 @@ import butterknife.BindView;
 
 public class PollRadioVH extends PollVH {
 
-    @BindView(R.id.rdPoll)
     public RadioButton rdPoll;
 
     public PollRadioVH(View itemView) {
         super(itemView);
+        rdPoll = itemView.findViewById(R.id.rdPoll);
     }
 }

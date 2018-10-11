@@ -7,12 +7,12 @@ import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
-public class TrendingData extends RealmObject {
+public class FullMovies extends RealmObject {
     @PrimaryKey
     private int id = 0;
     @SerializedName("data")
     @Expose
-    private RealmList<Video> trendingList = new RealmList<>();
+    private RealmList<Video> trendingList = null;
     @SerializedName("links")
     @Expose
     private PageLink links;

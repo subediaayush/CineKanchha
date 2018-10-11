@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.cinekancha.R;
 import com.cinekancha.adapters.base.BaseRecyclerAdapter;
-import com.cinekancha.entities.GalleryItem;
+import com.cinekancha.entities.model.GalleryItem;
 import com.cinekancha.entities.ThumbWrapper;
 import com.cinekancha.entities.ThumbnailConverter;
 import com.cinekancha.listener.OnClickListener;

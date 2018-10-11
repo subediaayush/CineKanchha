@@ -28,6 +28,9 @@
             android:name=".trivia.TriviaListActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".movieReview.ReviewListActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".trolls.TrollListActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

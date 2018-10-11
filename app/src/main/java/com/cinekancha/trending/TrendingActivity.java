@@ -12,19 +12,17 @@ import android.widget.Toast;
 
 import com.cinekancha.R;
 import com.cinekancha.activities.base.BaseNavigationActivity;
-import com.cinekancha.entities.Video;
-import com.cinekancha.entities.model.Movie;
-import com.cinekancha.entities.model.MovieData;
+import com.cinekancha.entities.model.Video;
 import com.cinekancha.entities.model.TrendingData;
+import com.cinekancha.entities.rest.GetDataRepository;
 import com.cinekancha.entities.rest.RestAPI;
+import com.cinekancha.entities.rest.SetDataRepository;
 import com.cinekancha.listener.OnClickListener;
-import com.cinekancha.movieDetail.MoviePostDetailActivity;
-import com.cinekancha.movies.MoviesAdapter;
+import com.cinekancha.utils.Connectivity;
 import com.cinekancha.utils.GlobalUtils;
 import com.cinekancha.view.CineTrendingViewModel;
 
 import java.net.MalformedURLException;
-import java.util.List;
 
 import butterknife.BindView;
 
@@ -40,7 +38,7 @@ public class TrendingActivity extends BaseNavigationActivity implements OnClickL
     private CineTrendingViewModel cineTrendingViewModel;
 
     private TrendingAdapter adapter;
-     private String videoId = "";
+    private String videoId = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,18 +82,38 @@ public class TrendingActivity extends BaseNavigationActivity implements OnClickL
     }
 
     private void renderMovieData() throws MalformedURLException {
-         if (cineTrendingViewModel.getTrendingList() != null && cineTrendingViewModel.getTrendingList().size() > 0) {
+        if (cineTrendingViewModel.getTrendingList() != null && cineTrendingViewModel.getTrendingList().size() > 0) {
             adapter = new TrendingAdapter(cineTrendingViewModel.getTrendingList(), this);
             recyclerView.setAdapter(adapter);
-        } else requestMovie();
+        } else if (Connectivity.isConnected(this))
+            requestMovie();
+        else
+            Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }
 
     private void requestMovie() {
-        compositeDisposable.add(RestAPI.getInstance().getTrending()
+        if (Connectivity.isConnected(this))
+            compositeDisposable.add((RestAPI.getInstance().getTrending())
+                    .doOnSubscribe(disposable -> {
+                        homeSwipeRefreshLayout.setRefreshing(true);
+                    })
+                    .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
+                    .subscribe(this::handleDatabase, this::handleMovieFetchError));
+        else
+            compositeDisposable.add(GetDataRepository.getInstance().getTrendingData()
+                    .doOnSubscribe(disposable -> {
+                        homeSwipeRefreshLayout.setRefreshing(true);
+                    })
+                    .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
+                    .subscribe(this::handleMovieData, this::handleMovieFetchError));
+    }
+
+    private void handleDatabase(TrendingData data) {
+        compositeDisposable.add(SetDataRepository.getInstance().setTrending(data).toObservable()
                 .doOnSubscribe(disposable -> {
-                    homeSwipeRefreshLayout.setRefreshing(true);
                 })
-                .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
+                .doFinally(() -> {
+                })
                 .subscribe(this::handleMovieData, this::handleMovieFetchError));
     }
 
@@ -105,8 +123,12 @@ public class TrendingActivity extends BaseNavigationActivity implements OnClickL
     }
 
     private void handleMovieData(TrendingData data) throws MalformedURLException {
-        cineTrendingViewModel.setTrendingList(data.getTrendingList());
-        renderMovieData();
+        if (data != null && data.getTrendingList() != null) {
+            cineTrendingViewModel.setTrendingList(data.getTrendingList());
+            renderMovieData();
+        } else {
+            Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

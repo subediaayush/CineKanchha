@@ -15,6 +15,7 @@ import com.cinekancha.activities.HomeActivity;
 import com.cinekancha.actor.ActorListActivity;
 import com.cinekancha.boxOffice.BoxOfficeActivity;
 import com.cinekancha.entities.model.UpcomingMovie;
+import com.cinekancha.movieReview.ReviewListActivity;
 import com.cinekancha.movies.MovieActivity;
 import com.cinekancha.newRelease.NewReleaseActivity;
 import com.cinekancha.newsGossips.NewsGossipsActivity;
@@ -83,6 +84,7 @@ public abstract class BaseNavigationActivity extends BaseActivity implements Nav
             GlobalUtils.navigateActivity(this, true, FullMoviesActivity.class);
 
         } else if (id == R.id.menMovieReviews) {
+            GlobalUtils.navigateActivity(this, true, ReviewListActivity.class);
 
         } else if (id == R.id.menuPhotoGallery) {
             GlobalUtils.navigateActivity(this, true, ActorListActivity.class);

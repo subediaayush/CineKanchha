@@ -142,9 +142,9 @@ public class SlideaYoutubeAdapter extends FragmentPagerAdapter {
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             View view = super.onCreateView(inflater, container, savedInstanceState);
-             if (!TextUtils.isEmpty(mFeaturedItem.getYoutubeImageUrl())) {
-                 Log.d("ImageUrl", mFeaturedItem.getYoutubeImageUrl());
-                Picasso.with(getContext()).load(mFeaturedItem.getYoutubeImageUrl()).into(mImage);
+            if (!TextUtils.isEmpty(mFeaturedItem.getYoutubeImageUrl())) {
+                Log.d("ImageUrl", mFeaturedItem.getYoutubeImageUrl());
+                Picasso.with(getContext()).load(mFeaturedItem.getYoutubeImageUrl()).placeholder(R.drawable.placeholder_movie).into(mImage);
             }
             mImage.setBackgroundColor(getRandomColor());
             String type = (mFeaturedItem.getType() == null) ? "" : mFeaturedItem.getType();

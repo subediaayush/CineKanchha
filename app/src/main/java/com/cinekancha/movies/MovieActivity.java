@@ -13,9 +13,13 @@ import com.cinekancha.R;
 import com.cinekancha.activities.base.BaseNavigationActivity;
 import com.cinekancha.entities.model.Movie;
 import com.cinekancha.entities.model.MovieData;
+import com.cinekancha.entities.model.UpcomingMovie;
+import com.cinekancha.entities.rest.GetDataRepository;
 import com.cinekancha.entities.rest.RestAPI;
+import com.cinekancha.entities.rest.SetDataRepository;
 import com.cinekancha.listener.OnClickListener;
 import com.cinekancha.movieDetail.MoviePostDetailActivity;
+import com.cinekancha.utils.Connectivity;
 import com.cinekancha.view.CineMovieViewModel;
 
 import java.net.MalformedURLException;
@@ -81,11 +85,28 @@ public class MovieActivity extends BaseNavigationActivity implements OnClickList
     }
 
     private void requestMovie() {
-        compositeDisposable.add(RestAPI.getInstance().getMovie()
+        if (Connectivity.isConnected(this))
+            compositeDisposable.add(RestAPI.getInstance().getMovie()
+                    .doOnSubscribe(disposable -> {
+                        homeSwipeRefreshLayout.setRefreshing(true);
+                    })
+                    .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
+                    .subscribe(this::handleDatabase, this::handleMovieFetchError));
+        else
+            compositeDisposable.add(GetDataRepository.getInstance().getMovieData()
+                    .doOnSubscribe(disposable -> {
+                        homeSwipeRefreshLayout.setRefreshing(true);
+                    })
+                    .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
+                    .subscribe(this::handleMovieData, this::handleMovieFetchError));
+    }
+
+    private void handleDatabase(MovieData data) {
+        compositeDisposable.add(SetDataRepository.getInstance().setMovie(data).toObservable()
                 .doOnSubscribe(disposable -> {
-                    homeSwipeRefreshLayout.setRefreshing(true);
                 })
-                .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
+                .doFinally(() -> {
+                })
                 .subscribe(this::handleMovieData, this::handleMovieFetchError));
     }
 
@@ -95,8 +116,10 @@ public class MovieActivity extends BaseNavigationActivity implements OnClickList
     }
 
     private void handleMovieData(MovieData data) throws MalformedURLException {
-        cineMovieViewModel.setMovieList(data.getData());
-        renderMovieData();
+        if (data != null && data.getData() != null) {
+            cineMovieViewModel.setMovieList(data.getData());
+            renderMovieData();
+        } else Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }
 
     @Override

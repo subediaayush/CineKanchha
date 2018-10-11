@@ -127,7 +127,7 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
     }
 
     private void handleDatabase(HomeData data) {
-        compositeDisposable.add(SetDataRepository.getInstance().setHomeData(data)
+        compositeDisposable.add(SetDataRepository.getInstance().setHomeData(data).toObservable()
                 .doOnSubscribe(disposable -> {
                 })
                 .doFinally(() -> {
@@ -136,8 +136,10 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
     }
 
     private void handleHomeData(HomeData data) {
-        mCineHomeViewModel.setHomeData(data);
-        renderHomeData();
+        if (data != null) {
+            mCineHomeViewModel.setHomeData(data);
+            renderHomeData();
+        } else Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }
 
     @Override

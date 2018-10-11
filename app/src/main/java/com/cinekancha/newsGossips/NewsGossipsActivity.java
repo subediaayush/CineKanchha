@@ -49,11 +49,11 @@ public class NewsGossipsActivity extends BaseNavigationActivity implements OnSli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mCineNewsGossipsModel = ViewModelProviders.of(this).get(CineNewsGossipsViewModel.class);
-        toolbar.setTitle(getString(R.string.app_name));
         init();
     }
 
     private void init() {
+        getSupportActionBar().setTitle(R.string.newReleases);
         recyclerViewNews.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerViewNews.setNestedScrollingEnabled(false);
         recyclerViewNews.setHasFixedSize(true);
@@ -86,7 +86,10 @@ public class NewsGossipsActivity extends BaseNavigationActivity implements OnSli
         newsSwipeToRefresh.setRefreshing(false);
         if (adapter != null && mCineNewsGossipsModel.getNewsGossip() != null) {
             adapter.setArticles(mCineNewsGossipsModel.getNewsGossip().getData());
-        }
+        } else if (Connectivity.isConnected(this))
+            requestNewsGossipList();
+        else
+            Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }
 
     private void requestNewsGossipList() {
@@ -120,12 +123,14 @@ public class NewsGossipsActivity extends BaseNavigationActivity implements OnSli
     }
 
     private void handleNewsGossipData(NewsGossip data) throws MalformedURLException {
-        mCineNewsGossipsModel.setNewsGossip(data);
-        renderNewsGossip();
+        if (data != null && data.getData() != null) {
+            mCineNewsGossipsModel.setNewsGossip(data);
+            renderNewsGossip();
+        } else Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }
 
     private void handleDatabase(NewsGossip data) {
-        compositeDisposable.add(SetDataRepository.getInstance().setNewsGossip(data)
+        compositeDisposable.add(SetDataRepository.getInstance().setNewsGossip(data).toObservable()
                 .doOnSubscribe(disposable -> {
                 })
                 .doFinally(() -> {

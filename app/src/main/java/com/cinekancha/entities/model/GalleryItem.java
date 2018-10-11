@@ -1,4 +1,4 @@
-package com.cinekancha.entities;
+package com.cinekancha.entities.model;
 
 import com.google.gson.annotations.SerializedName;
 

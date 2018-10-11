@@ -1,5 +1,6 @@
 package com.cinekancha.entities.model;
 
+import com.cinekancha.utils.Constants;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -14,7 +15,7 @@ public class Photos extends RealmObject {
     private String url;
 
     public String getUrl() {
-        return url;
+        return Constants.imageUrl + url;
     }
 
     public void setUrl(String url) {
