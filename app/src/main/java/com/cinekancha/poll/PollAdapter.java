@@ -1,13 +1,20 @@
 package com.cinekancha.poll;
 
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
+import android.widget.RadioButton;
 
 import com.cinekancha.R;
 import com.cinekancha.adapters.base.BaseRecyclerAdapter;
 import com.cinekancha.adapters.base.BaseViewHolder;
+import com.cinekancha.entities.model.Option;
 import com.cinekancha.entities.model.PollData;
 import com.cinekancha.listener.OnClickListener;
+import com.cinekancha.listener.OnPollClickListener;
+import com.cinekancha.utils.GlobalUtils;
+import com.cinekancha.utils.PollUtil;
+import com.cinekancha.utils.ViewIdGenerator;
 
 import java.util.List;
 
@@ -17,9 +24,9 @@ import java.util.List;
 
 public class PollAdapter extends BaseRecyclerAdapter<PollsHolder> {
     private List<PollData> pollDataList;
-    private OnClickListener listener;
+    private OnPollClickListener listener;
 
-    public PollAdapter(List<PollData> pollDataList, OnClickListener listener) {
+    public PollAdapter(List<PollData> pollDataList, OnPollClickListener listener) {
         this.pollDataList = pollDataList;
         this.listener = listener;
     }
@@ -40,17 +47,20 @@ public class PollAdapter extends BaseRecyclerAdapter<PollsHolder> {
     protected void setViewOfTypeZero(BaseViewHolder baseHolder, int position) {
         PollsHolder holder = (PollsHolder) baseHolder;
         PollData poll = pollDataList.get(position);
+        holder.txtQuestion.setText(poll.getQuestion());
         if (poll.getStatus().equalsIgnoreCase("INACTIVE")) {
-            holder.txtPreviousResult.setVisibility(View.VISIBLE);
-            holder.submitButton.setVisibility(View.GONE);
-            holder.lytBorder.setVisibility(View.VISIBLE);
-            holder.lytWhole.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.white));
+            pollInactive(holder, poll);
         } else {
-            holder.txtPreviousResult.setVisibility(View.GONE);
-            holder.submitButton.setVisibility(View.VISIBLE);
-            holder.lytBorder.setVisibility(View.GONE);
-            holder.lytWhole.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.backgroundPoll));
+            pollActive(holder, poll);
         }
+    }
+
+    private void pollInactive(PollsHolder holder, PollData poll) {
+        holder.txtPreviousResult.setVisibility(View.VISIBLE);
+        holder.submitButton.setVisibility(View.GONE);
+        holder.lytBorder.setVisibility(View.VISIBLE);
+        holder.answerContainer.setVisibility(View.GONE);
+        holder.lytWhole.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.white));
         PollItemAdapter adapter = new PollItemAdapter(poll.getOptions(), new OnClickListener() {
             @Override
             public void onClick(int id) {
@@ -58,9 +68,43 @@ public class PollAdapter extends BaseRecyclerAdapter<PollsHolder> {
             }
         }, poll.getStatus(), poll.getTotalVotes());
         holder.answerRecycler.setAdapter(adapter);
+    }
 
-        holder.txtQuestion.setText(poll.getQuestion());
 
+    private void pollActive(PollsHolder holder, PollData poll) {
+        holder.txtPreviousResult.setVisibility(View.GONE);
+        holder.answerRecycler.setVisibility(View.GONE);
+        holder.submitButton.setVisibility(View.VISIBLE);
+        holder.lytBorder.setVisibility(View.GONE);
+        holder.lytWhole.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.backgroundPoll));
+        holder.answerContainer.removeAllViews();
+
+        holder.answerContainer.setTag(poll.getId());
+        boolean isAnswered = PollUtil.isAnswered(poll.getId());
+        int answerIndex = PollUtil.getAnswered(poll.getId());
+
+        List<Option> options = poll.getOptions();
+
+        for (int i = 0; i < options.size(); i++) {
+            Option option = options.get(i);
+            RadioButton optionButton = new RadioButton((holder.itemView.getContext()));
+            optionButton.setId(options.get(i).getId());
+            optionButton.setTag(i);
+            optionButton.setText(option.getText());
+            holder.answerContainer.addView(optionButton);
+
+            if (isAnswered && answerIndex == i)
+                holder.answerContainer.check(optionButton.getId());
+        }
+        if (isAnswered) {
+            holder.answerContainer.setEnabled(false);
+            holder.submitButton.setEnabled(false);
+        } else {
+            holder.answerContainer.setEnabled(true);
+            holder.submitButton.setEnabled(true);
+            holder.submitButton.setOnClickListener(view ->
+                    listener.onClick(holder.answerContainer.getCheckedRadioButtonId(), poll.getId()));
+        }
     }
 
     @Override

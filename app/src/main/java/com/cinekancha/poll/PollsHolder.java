@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.cinekancha.R;
@@ -29,6 +30,9 @@ public class PollsHolder extends HomeItemHolder {
     public LinearLayout lytWhole;
     @BindView(R.id.lytBorder)
     public View lytBorder;
+
+    @BindView(R.id.options_container)
+    public RadioGroup answerContainer;
 
     @BindView(R.id.submit)
     public Button submitButton;

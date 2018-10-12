@@ -6,16 +6,19 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.cinekancha.R;
 import com.cinekancha.activities.base.BaseNavigationActivity;
 import com.cinekancha.entities.model.NewRelease;
 import com.cinekancha.entities.model.Poll;
+import com.cinekancha.entities.model.PollDatabase;
 import com.cinekancha.entities.rest.GetDataRepository;
 import com.cinekancha.entities.rest.RestAPI;
 import com.cinekancha.entities.rest.SetDataRepository;
 import com.cinekancha.listener.OnClickListener;
+import com.cinekancha.listener.OnPollClickListener;
 import com.cinekancha.utils.Connectivity;
 import com.cinekancha.view.CinePollViewModel;
 
@@ -23,7 +26,7 @@ import java.net.MalformedURLException;
 
 import butterknife.BindView;
 
-public class PollsActivity extends BaseNavigationActivity implements OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class PollsActivity extends BaseNavigationActivity implements OnPollClickListener, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.toolbar)
     protected Toolbar toolbar;
 
@@ -116,8 +119,20 @@ public class PollsActivity extends BaseNavigationActivity implements OnClickList
 
 
     @Override
-    public void onClick(int id) {
+    public void onClick(int optionId, int pollId) {
+        PollDatabase pollDatabase = new PollDatabase();
+        pollDatabase.setOptionId(optionId);
+        pollDatabase.setPollId(optionId);
+        compositeDisposable.add(SetDataRepository.getInstance().setPollDatabase(pollDatabase).toObservable()
+                .doOnSubscribe(disposable -> {
+                })
+                .doFinally(() -> {
+                })
+                .subscribe(this::handle, this::handleMovieFetchError));
+    }
 
+    private void handle(PollDatabase data) throws MalformedURLException {
+         Log.d("Database", "Saved data");
     }
 
     @Override

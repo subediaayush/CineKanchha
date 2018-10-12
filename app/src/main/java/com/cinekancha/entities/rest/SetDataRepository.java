@@ -20,6 +20,7 @@ import com.cinekancha.entities.model.Option;
 import com.cinekancha.entities.model.PageLink;
 import com.cinekancha.entities.model.Poll;
 import com.cinekancha.entities.model.PollData;
+import com.cinekancha.entities.model.PollDatabase;
 import com.cinekancha.entities.model.ReviewData;
 import com.cinekancha.entities.model.Reviews;
 import com.cinekancha.entities.model.TrendingData;
@@ -356,6 +357,20 @@ public class SetDataRepository {
                         , error -> Log.d("Error", "Data saved error"));
             });
         }
+    }
+
+    public Single<PollDatabase> setPollDatabase(PollDatabase data) {
+        Realm realm = Realm.getDefaultInstance();
+
+        return Single.create(e -> {
+            realm.executeTransactionAsync(realm1 -> {
+                        realm1.copyToRealmOrUpdate(data);
+                    }, () -> {
+                        e.onSuccess(data);
+                        Log.d("Success", "Data saved");
+                    }
+                    , error -> Log.d("Error", "Data saved error"));
+        });
     }
 
 }

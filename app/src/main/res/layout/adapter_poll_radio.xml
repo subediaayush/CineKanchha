@@ -4,10 +4,9 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <RadioButton
-        android:id="@+id/rdPoll"
+    <RadioGroup
+        android:id="@+id/options_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Sujan" />
-
+        android:padding="8dp" />
 </LinearLayout>
