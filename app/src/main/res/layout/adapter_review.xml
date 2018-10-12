@@ -3,8 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:background="@drawable/bg_card_review"
+    android:elevation="5dp"
     android:gravity="center_horizontal"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:padding="10dp">
 
     <ImageView
         android:id="@+id/imgFeature"
@@ -30,6 +34,8 @@
             android:id="@+id/txtSubTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:lines="3"
+            android:paddingTop="5dp"
             android:textAllCaps="true"
             android:textColor="@android:color/black"
             android:textSize="14sp" />

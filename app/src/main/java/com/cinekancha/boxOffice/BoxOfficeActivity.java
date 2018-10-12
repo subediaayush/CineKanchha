@@ -1,6 +1,7 @@
 package com.cinekancha.boxOffice;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,11 +11,13 @@ import android.widget.Toast;
 import com.cinekancha.R;
 import com.cinekancha.activities.base.BaseNavigationActivity;
 import com.cinekancha.entities.model.BoxOfficeItem;
+import com.cinekancha.entities.model.Movie;
 import com.cinekancha.entities.model.UpcomingMovie;
 import com.cinekancha.entities.rest.GetDataRepository;
 import com.cinekancha.entities.rest.RestAPI;
 import com.cinekancha.entities.rest.SetDataRepository;
 import com.cinekancha.listener.OnClickListener;
+import com.cinekancha.movieDetail.MoviePostDetailActivity;
 import com.cinekancha.utils.Connectivity;
 import com.cinekancha.view.CineBoxOfficeViewModel;
 
@@ -113,7 +116,9 @@ public class BoxOfficeActivity extends BaseNavigationActivity implements OnClick
 
     @Override
     public void onClick(int id) {
-
+        Intent detail = new Intent(this, MoviePostDetailActivity.class);
+        detail.putExtra("movie", String.valueOf(cineBoxOfficeViewModel.getBoxOffice().get(id).getMovieId()));
+        startActivity(detail);
     }
 
     @Override

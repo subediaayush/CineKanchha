@@ -25,9 +25,9 @@ public class HomeData extends RealmObject {
     @SerializedName("movies")
     @Expose
     private RealmList<Movie> movies = null;
-    @SerializedName("box_office_RealmList")
+    @SerializedName("box_office_list")
     @Expose
-    private RealmList<BoxOfficeItem> boxOfficeRealmList = null;
+    private RealmList<BoxOfficeItem> boxOfficeList = null;
     @SerializedName("hot_news")
     @Expose
     private RealmList<Article> hotNews = null;
@@ -89,11 +89,11 @@ public class HomeData extends RealmObject {
     }
 
     public RealmList<BoxOfficeItem> getBoxOfficeList() {
-        return boxOfficeRealmList;
+        return boxOfficeList;
     }
 
     public void setBoxOfficeList(RealmList<BoxOfficeItem> boxOfficeRealmList) {
-        this.boxOfficeRealmList = boxOfficeRealmList;
+        this.boxOfficeList = boxOfficeRealmList;
     }
 
     public RealmList<Article> getHotNews() {

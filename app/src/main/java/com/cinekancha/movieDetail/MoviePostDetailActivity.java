@@ -23,13 +23,16 @@ import com.cinekancha.adapters.base.RecyclerViewClickListener;
 import com.cinekancha.entities.model.FeaturedContent;
 import com.cinekancha.entities.model.HomeData;
 import com.cinekancha.entities.model.Links;
+import com.cinekancha.entities.model.Movie;
 import com.cinekancha.entities.model.MovieDetail;
 import com.cinekancha.entities.model.Photo;
+import com.cinekancha.entities.model.ReviewData;
 import com.cinekancha.entities.model.TrollData;
 import com.cinekancha.entities.rest.GetDataRepository;
 import com.cinekancha.entities.rest.RestAPI;
 import com.cinekancha.entities.rest.SetDataRepository;
 import com.cinekancha.home.OnSlideClickListener;
+import com.cinekancha.movieReview.ReviewDetailActivity;
 import com.cinekancha.utils.Connectivity;
 import com.cinekancha.utils.Constants;
 import com.cinekancha.utils.GlobalUtils;
@@ -104,21 +107,25 @@ public class MoviePostDetailActivity extends BaseNavigationActivity implements O
     @BindView(R.id.recylerViewPhotos)
     public RecyclerView recylerViewPhotos;
 
+    @BindView(R.id.recylerView)
+    public RecyclerView recylerView;
+
     private CinePostMovieViewModel mCinePostMovieModel;
 
     private RatingAdapter adapter;
     private PhotoAdapter photoAdapter;
+    private MovieArticleAdapter articleAdapter;
 
     private String videoId = "";
     private SlideaYoutubeAdapter mSlideAdapter;
     String days = "";
+    private MovieDetail data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mCinePostMovieModel = ViewModelProviders.of(this).get(CinePostMovieViewModel.class);
         mCinePostMovieModel.setMovieID(Integer.parseInt(getIntent().getStringExtra("movie")));
-        toolbar.setTitle(getString(R.string.app_name));
         init();
     }
 
@@ -131,13 +138,20 @@ public class MoviePostDetailActivity extends BaseNavigationActivity implements O
         recylerViewPhotos.setNestedScrollingEnabled(false);
         recylerViewPhotos.setHasFixedSize(true);
 
+
+        recylerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        recylerView.setNestedScrollingEnabled(false);
+        recylerView.setHasFixedSize(true);
+
         adapter = new RatingAdapter();
+        articleAdapter = new MovieArticleAdapter();
         photoAdapter = new PhotoAdapter();
 
         photoAdapter.setOnClickListener(this);
 
         recylerViewPhotos.setAdapter(photoAdapter);
         recyclerViewRating.setAdapter(adapter);
+        recylerView.setAdapter(articleAdapter);
         swipeRefreshLayout.setOnRefreshListener(this);
 
         mSlideAdapter = new SlideaYoutubeAdapter(getSupportFragmentManager(), viewPagerYoutube);
@@ -157,6 +171,18 @@ public class MoviePostDetailActivity extends BaseNavigationActivity implements O
 
         mIndicator.setViewPager(viewPagerYoutube);
         mSlideAdapter.registerDataSetObserver(mIndicator.getDataSetObserver());
+        btnReview.setOnClickListener(view -> {
+            if (data != null && !TextUtils.isEmpty(data.getReview()) && data.getReview() != null) {
+                ReviewData reviewData = new ReviewData();
+                reviewData.setId(data.getId());
+                reviewData.setFeaturedImage(data.getFeaturedImage());
+                reviewData.setName(data.getName());
+                reviewData.setReview(data.getReview());
+                Intent intent = new Intent(MoviePostDetailActivity.this, ReviewDetailActivity.class);
+                intent.putExtra("review", reviewData);
+                startActivity(intent);
+            }
+        });
     }
 
     private String compareDate(String releaseDateApi) {
@@ -204,7 +230,8 @@ public class MoviePostDetailActivity extends BaseNavigationActivity implements O
 
     private void renderMovieData() throws MalformedURLException {
         swipeRefreshLayout.setRefreshing(false);
-        MovieDetail data = mCinePostMovieModel.getMovie();
+        data = mCinePostMovieModel.getMovie();
+        getSupportActionBar().setTitle(data.getName());
         if (data != null) {
             String releaseType = "";
             if (data.getReleaseDate() != null)
@@ -226,6 +253,11 @@ public class MoviePostDetailActivity extends BaseNavigationActivity implements O
                 photoAdapter.setData(data.getPhoto());
             } else
                 recylerViewPhotos.setVisibility(View.GONE);
+            if (data.getArticles().size() > 0 && data.getArticles() != null) {
+                recylerView.setVisibility(View.VISIBLE);
+                articleAdapter.setArticles(data.getArticles());
+            } else
+                recylerView.setVisibility(View.GONE);
             List<Links> links = new ArrayList<>();
             links.clear();
             for (Links item : data.getLinks()) {

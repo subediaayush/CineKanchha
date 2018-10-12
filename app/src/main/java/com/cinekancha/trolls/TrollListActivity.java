@@ -40,6 +40,7 @@ public class TrollListActivity extends BaseNavigationActivity implements Recycle
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setTitle(R.string.troll);
 
         mCineTrollViewModel = ViewModelProviders.of(this).get(CineTrollViewModel.class);
 

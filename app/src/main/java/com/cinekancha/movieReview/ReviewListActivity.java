@@ -1,6 +1,7 @@
 package com.cinekancha.movieReview;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -12,15 +13,22 @@ import android.widget.Toast;
 import com.cinekancha.R;
 import com.cinekancha.activities.base.BaseNavigationActivity;
 import com.cinekancha.adapters.base.RecyclerViewClickListener;
+import com.cinekancha.article.ArticleDetailActivity;
+import com.cinekancha.entities.model.ReviewData;
 import com.cinekancha.entities.model.Reviews;
 import com.cinekancha.entities.model.Trivia;
 import com.cinekancha.entities.rest.GetDataRepository;
 import com.cinekancha.entities.rest.RestAPI;
 import com.cinekancha.entities.rest.SetDataRepository;
+import com.cinekancha.listener.OnClickListener;
 import com.cinekancha.trivia.TriviaAdapter;
 import com.cinekancha.utils.Connectivity;
+import com.cinekancha.utils.GlobalUtils;
 import com.cinekancha.view.CineReviewViewModel;
 import com.cinekancha.view.CineTriviaViewModel;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 
@@ -28,7 +36,7 @@ import butterknife.BindView;
  * Created by aayushsubedi on 3/19/18.
  */
 
-public class ReviewListActivity extends BaseNavigationActivity implements RecyclerViewClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class ReviewListActivity extends BaseNavigationActivity implements SwipeRefreshLayout.OnRefreshListener, OnClickListener {
     @BindView(R.id.list_view)
     public RecyclerView mArticleList;
 
@@ -44,11 +52,10 @@ public class ReviewListActivity extends BaseNavigationActivity implements Recycl
         getSupportActionBar().setTitle(R.string.moviesReviews);
         cineReviewViewModel = ViewModelProviders.of(this).get(CineReviewViewModel.class);
 
-        mArticleAdapter = new ReviewAdapter();
+        mArticleAdapter = new ReviewAdapter(this);
 
         mArticleList.setLayoutManager(new LinearLayoutManager(this));
         mArticleList.setAdapter(mArticleAdapter);
-        mArticleAdapter.setOnClickListener(this);
         homeSwipeRefreshLayout.setOnRefreshListener(this);
     }
 
@@ -115,12 +122,17 @@ public class ReviewListActivity extends BaseNavigationActivity implements Recycl
         }
     }
 
-    @Override
-    public void onClick(View v, int position) {
-    }
 
     @Override
     public void onRefresh() {
         requestTrivia(null, 50);
+    }
+
+    @Override
+    public void onClick(int position) {
+        ReviewData reviewData = cineReviewViewModel.getReviews().getData().get(position);
+        Intent intent = new Intent(this, ReviewDetailActivity.class);
+        intent.putExtra("review", reviewData);
+        startActivity(intent);
     }
 }

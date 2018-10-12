@@ -22,11 +22,14 @@ import com.cinekancha.movies.MovieActivity;
 import com.cinekancha.newsGossips.NewsGossipsActivity;
 import com.cinekancha.poll.PollsActivity;
 import com.cinekancha.trolls.TrollListActivity;
+import com.cinekancha.utils.Constants;
 import com.cinekancha.utils.GlobalUtils;
 import com.cinekancha.utils.PollUtil;
 import com.cinekancha.utils.ViewIdGenerator;
 import com.squareup.picasso.Picasso;
+import com.stfalcon.frescoimageviewer.ImageViewer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.cinekancha.home.HomeDataWrapper.FEATURED_ARTICLE;
@@ -187,7 +190,8 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
     protected void setViewOfTypeSeven(BaseViewHolder baseHolder, int position) {
         TrollHolder holder = (TrollHolder) baseHolder;
         TrollData troll = mData.getItem(position);
-
+        List<TrollData> trollDataList = new ArrayList<>();
+        trollDataList.add(troll);
         if (!TextUtils.isEmpty(troll.getImageUrl())) {
             String newString = troll.getImageUrl().replace("\\", "");
             Picasso.with(baseHolder.itemView.getContext())
@@ -195,7 +199,12 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
                     .into(holder.troll);
         }
         holder.txtViewAll.setVisibility(View.VISIBLE);
-        holder.txtViewAll.setOnClickListener(view -> GlobalUtils.navigateActivity(holder.itemView.getContext(), true, TrollListActivity.class));
+        holder.txtViewAll.setOnClickListener(view -> GlobalUtils.navigateActivity(holder.itemView.getContext(), false, TrollListActivity.class));
+        holder.troll.setOnClickListener(view -> {
+            new ImageViewer.Builder<>(holder.itemView.getContext(), trollDataList)
+                    .setFormatter(TrollData::getImageUrl)
+                    .setStartPosition(position).show();
+        });
     }
 
     @Override

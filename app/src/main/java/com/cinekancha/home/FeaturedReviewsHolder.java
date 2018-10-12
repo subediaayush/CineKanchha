@@ -1,6 +1,7 @@
 package com.cinekancha.home;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,7 +14,12 @@ import com.cinekancha.adapters.base.BaseRecyclerAdapter;
 import com.cinekancha.entities.ThumbWrapper;
 import com.cinekancha.entities.ThumbnailConverter;
 import com.cinekancha.entities.model.Movie;
+import com.cinekancha.entities.model.ReviewData;
 import com.cinekancha.listener.OnClickListener;
+import com.cinekancha.movieReview.ReviewDetailActivity;
+import com.cinekancha.movieReview.ReviewListActivity;
+import com.cinekancha.trolls.TrollListActivity;
+import com.cinekancha.utils.GlobalUtils;
 
 import java.util.List;
 
@@ -30,10 +36,17 @@ public class FeaturedReviewsHolder extends HomeItemHolder {
     public RecyclerView upcomingMoviesList;
     @BindView(R.id.label)
     public TextView title;
+    @BindView(R.id.txtViewAll)
+    public TextView txtViewAll;
+
+    public List<Movie> movieList;
+
 
     public FeaturedReviewsHolder(BaseRecyclerAdapter baseRecyclerAdapter, View view) {
         super(baseRecyclerAdapter, view);
         setIsRecyclable(false);
+        txtViewAll.setVisibility(View.VISIBLE);
+        txtViewAll.setOnClickListener(view1 -> GlobalUtils.navigateActivity(itemView.getContext(), false, ReviewListActivity.class));
         adapter = new ThumbnailAdapter<>(R.layout.layout_featured_review, new ThumbnailConverter<Movie>() {
             @Override
             public ThumbWrapper convert(Movie data) {
@@ -46,7 +59,15 @@ public class FeaturedReviewsHolder extends HomeItemHolder {
         }, new OnClickListener() {
             @Override
             public void onClick(int id) {
-
+                Movie movie = movieList.get(id);
+                ReviewData reviewData = new ReviewData();
+                reviewData.setId(movie.getId());
+                reviewData.setFeaturedImage(movie.getFeaturedImage());
+                reviewData.setName(movie.getName());
+                reviewData.setReview(movie.getReview());
+                Intent intent = new Intent(itemView.getContext(), ReviewDetailActivity.class);
+                intent.putExtra("review", reviewData);
+                itemView.getContext().startActivity(intent);
             }
         });
         upcomingMoviesList.setAdapter(adapter);
@@ -68,6 +89,7 @@ public class FeaturedReviewsHolder extends HomeItemHolder {
     }
 
     public void setMovies(List<Movie> movies) {
+        this.movieList = movies;
         adapter.setThumbnails(movies);
     }
 

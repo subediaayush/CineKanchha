@@ -29,6 +29,9 @@ public class Movie extends RealmObject {
     @SerializedName("created_at")
     @Expose
     private String createdAt;
+    @SerializedName("review")
+    @Expose
+    private String review;
     @SerializedName("updated_at")
     @Expose
     private String updatedAt;
@@ -79,5 +82,13 @@ public class Movie extends RealmObject {
 
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getReview() {
+        return review;
+    }
+
+    public void setReview(String review) {
+        this.review = review;
     }
 }

@@ -13,14 +13,17 @@ import butterknife.BindView;
  */
 
 public class TriviaHolder extends HomeItemHolder {
-	
+
 //	@BindView(R.id.title)
 //	public TextView title;
-	
-	@BindView(R.id.trivia)
-	public TextView trivia;
-	
-	public TriviaHolder(BaseRecyclerAdapter baseRecyclerAdapter, View view) {
-		super(baseRecyclerAdapter, view);
-	}
+
+    @BindView(R.id.trivia)
+    public TextView trivia;
+
+    public TriviaHolder(BaseRecyclerAdapter baseRecyclerAdapter, View view) {
+        super(baseRecyclerAdapter, view);
+        itemView.setOnClickListener(view1 -> {
+
+        });
+    }
 }

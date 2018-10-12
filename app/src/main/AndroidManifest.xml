@@ -56,15 +56,18 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".trending.TrendingActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".trending.FullMoviesActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".actor.ActorListActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".actor.ActorDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".movieReview.ReviewDetailActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
