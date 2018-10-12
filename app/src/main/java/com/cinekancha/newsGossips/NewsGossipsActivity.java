@@ -23,6 +23,7 @@ import com.cinekancha.entities.rest.GetDataRepository;
 import com.cinekancha.entities.rest.RestAPI;
 import com.cinekancha.entities.rest.SetDataRepository;
 import com.cinekancha.home.OnSlideClickListener;
+import com.cinekancha.listener.OnClickListener;
 import com.cinekancha.utils.Connectivity;
 import com.cinekancha.utils.GlobalUtils;
 import com.cinekancha.utils.ListUtils;
@@ -32,7 +33,7 @@ import java.net.MalformedURLException;
 
 import butterknife.BindView;
 
-public class NewsGossipsActivity extends BaseNavigationActivity implements OnSlideClickListener, SwipeRefreshLayout.OnRefreshListener, RecyclerViewClickListener {
+public class NewsGossipsActivity extends BaseNavigationActivity implements OnSlideClickListener, SwipeRefreshLayout.OnRefreshListener, OnClickListener {
     @BindView(R.id.toolbar)
     public Toolbar toolbar;
 
@@ -53,13 +54,11 @@ public class NewsGossipsActivity extends BaseNavigationActivity implements OnSli
     }
 
     private void init() {
-        getSupportActionBar().setTitle(R.string.newReleases);
+        getSupportActionBar().setTitle(R.string.newsGossips);
         recyclerViewNews.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerViewNews.setNestedScrollingEnabled(false);
         recyclerViewNews.setHasFixedSize(true);
-        adapter = new NewsGossipAdapter();
-        adapter.setOnClickListener(this);
-        recyclerViewNews.setAdapter(adapter);
+
         newsSwipeToRefresh.setOnRefreshListener(this);
     }
 
@@ -83,9 +82,9 @@ public class NewsGossipsActivity extends BaseNavigationActivity implements OnSli
     }
 
     private void renderNewsGossip() throws MalformedURLException {
-        newsSwipeToRefresh.setRefreshing(false);
-        if (adapter != null && mCineNewsGossipsModel.getNewsGossip() != null) {
-            adapter.setArticles(mCineNewsGossipsModel.getNewsGossip().getData());
+        if (mCineNewsGossipsModel.getNewsGossip() != null && mCineNewsGossipsModel.getNewsGossip().getData() != null) {
+            adapter = new NewsGossipAdapter(mCineNewsGossipsModel.getNewsGossip().getData(), this);
+            recyclerViewNews.setAdapter(adapter);
         } else if (Connectivity.isConnected(this))
             requestNewsGossipList();
         else
@@ -157,10 +156,9 @@ public class NewsGossipsActivity extends BaseNavigationActivity implements OnSli
         requestNewsGossipList();
     }
 
+
     @Override
-    public void onClick(View v, int position) {
-        if (v.getId() == R.id.holder) {
-            ArticleDetailActivity.startActivity(this, mCineNewsGossipsModel.getNewsGossip().getData().get(position));
-        }
+    public void onClick(int id) {
+        ArticleDetailActivity.startActivity(this, mCineNewsGossipsModel.getNewsGossip().getData().get(id));
     }
 }

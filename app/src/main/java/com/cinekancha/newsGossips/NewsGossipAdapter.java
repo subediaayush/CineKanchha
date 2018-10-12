@@ -1,11 +1,14 @@
 package com.cinekancha.newsGossips;
 
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.cinekancha.R;
-import com.cinekancha.adapters.base.BaseRecyclerAdapter;
-import com.cinekancha.adapters.base.BaseViewHolder;
 import com.cinekancha.entities.model.Article;
+import com.cinekancha.listener.OnClickListener;
+import com.cinekancha.poll.PollProgressVH;
 import com.cinekancha.utils.Constants;
 import com.squareup.picasso.Picasso;
 
@@ -16,52 +19,63 @@ import java.util.List;
  * Created by aayushsubedi on 3/19/18.
  */
 
-public class NewsGossipAdapter extends BaseRecyclerAdapter<NewsGossipHolder> {
+public class NewsGossipAdapter extends RecyclerView.Adapter<NewsGossipVH> {
     private List<Article> mData = new ArrayList<>();
+    private OnClickListener listener;
+    private static final int HEADER = 2001;
+    private static final int ITEM = 2002;
 
-    @Override
-    public NewsGossipHolder onCreateView(int viewType, View view) {
-        return new NewsGossipHolder(this, view);
+    public NewsGossipAdapter(List<Article> mData, OnClickListener listener) {
+        this.mData = mData;
+        this.listener = listener;
     }
 
     @Override
-    public int[] getLayoutsForViewType() {
-        return new int[]{
-                R.layout.adapter_news_gossip_featured,
-                R.layout.adapter_news_gossips
-        };
+    public NewsGossipVH onCreateViewHolder(ViewGroup parent, int viewType) {
+        if (viewType == ITEM) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_news_gossips, parent, false);
+            return new NewsGossipBackgroundHolder(view);
+        } else {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_news_gossip_featured, parent, false);
+            return new NewsGossipHolder(view);
+        }
+    }
+
+    @Override
+    public void onBindViewHolder(NewsGossipVH holder, int position) {
+        if (position == 0) {
+            Picasso.with(holder.itemView.getContext())
+                    .load(Constants.imageUrl + mData.get(position).getImage())
+                    .into(((NewsGossipHolder) holder).imgNewsGossip);
+            ((NewsGossipHolder) holder).txtNewsGossip.setText(mData.get(position).getTitle());
+        } else if (position == mData.size() - 1) {
+            Picasso.with(holder.itemView.getContext())
+                    .load(Constants.imageUrl + mData.get(position).getImage())
+                    .into(((NewsGossipHolder) holder).imgNewsGossip);
+            ((NewsGossipHolder) holder).txtNewsGossip.setText(mData.get(position).getTitle());
+        } else {
+            NewsGossipBackgroundHolder newsGossipHolder = (NewsGossipBackgroundHolder) holder;
+            Picasso.with(holder.itemView.getContext())
+                    .load(Constants.imageUrl + mData.get(position).getImage())
+                    .into(newsGossipHolder.imgNewsGossip);
+            newsGossipHolder.txtNewsGossip.setText(mData.get(position).getTitle());
+        }
+        holder.itemView.setOnClickListener(view -> {
+            listener.onClick(position);
+        });
     }
 
     @Override
     public int getItemViewType(int position) {
-        return position == 0 ? 0 : 1;
-    }
-
-    @Override
-    protected void setViewOfTypeZero(BaseViewHolder baseHolder, int position) {
-        NewsGossipHolder newsGossipHolder = (NewsGossipHolder) baseHolder;
-        Picasso.with(newsGossipHolder.imgNewsGossip.getContext())
-                .load(Constants.imageUrl + mData.get(position).getImage())
-                .into(newsGossipHolder.imgNewsGossip);
-        newsGossipHolder.txtNewsGossip.setText(mData.get(position).getTitle());
-    }
-
-    @Override
-    protected void setViewOfTypeOne(BaseViewHolder baseHolder, int position) {
-        NewsGossipHolder newsGossipHolder = (NewsGossipHolder) baseHolder;
-        Picasso.with(newsGossipHolder.imgNewsGossip.getContext())
-                .load(Constants.imageUrl + mData.get(position).getImage())
-                .into(newsGossipHolder.imgNewsGossip);
-        newsGossipHolder.txtNewsGossip.setText(mData.get(position).getTitle());
+        if (position != 0 && position != mData.size() - 1) {
+            return ITEM;
+        } else {
+            return HEADER;
+        }
     }
 
     @Override
     public int getItemCount() {
         return mData.size();
-    }
-
-    public void setArticles(List<Article> articles) {
-        this.mData = articles;
-        notifyDataSetChanged();
     }
 }
