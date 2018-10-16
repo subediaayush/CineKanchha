@@ -4,6 +4,7 @@ import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 
 import com.cinekancha.R;
@@ -30,6 +31,7 @@ import com.cinekancha.trolls.TrollListActivity;
 import com.cinekancha.utils.Constants;
 import com.cinekancha.utils.GlobalUtils;
 import com.cinekancha.utils.PollUtil;
+import com.cinekancha.utils.ScreenUtils;
 import com.cinekancha.utils.ViewIdGenerator;
 import com.squareup.picasso.Picasso;
 import com.stfalcon.frescoimageviewer.ImageViewer;
@@ -240,6 +242,13 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
     @Override
     protected void setViewOfTypeFive(BaseViewHolder baseHolder, int position) {
         PollsHolder holder = (PollsHolder) baseHolder;
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        int dp = ScreenUtils.dpToPx(holder.itemView.getContext(), 8);
+        layoutParams.setMargins(dp, dp, dp, dp);
+        holder.lytMain.setLayoutParams(layoutParams);
+        holder.lytTitle.setVisibility(View.VISIBLE);
+        holder.txtViewAll.setOnClickListener(view -> GlobalUtils.navigateActivity(holder.itemView.getContext(), false, PollsActivity.class));
         PollData poll = mData.getItem(position);
         holder.txtQuestion.setText(poll.getQuestion());
         if (poll.getStatus().equalsIgnoreCase("INACTIVE")) {
@@ -322,7 +331,7 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
         holder.submitButton.setVisibility(View.GONE);
         holder.lytBorder.setVisibility(View.VISIBLE);
         holder.answerContainer.setVisibility(View.GONE);
-        holder.lytWhole.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.white));
+        holder.lytMain.setBackgroundResource(R.drawable.bg_card);
         PollItemAdapter adapter = new PollItemAdapter(poll.getOptions(), new OnClickListener() {
             @Override
             public void onClick(int id) {
@@ -338,7 +347,7 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
         holder.answerRecycler.setVisibility(View.GONE);
         holder.submitButton.setVisibility(View.VISIBLE);
         holder.lytBorder.setVisibility(View.GONE);
-        holder.lytWhole.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.backgroundPoll));
+        holder.lytMain.setBackgroundResource(R.drawable.bg_card_poll_active);
         holder.answerContainer.removeAllViews();
 
         holder.answerContainer.setTag(poll.getId());
