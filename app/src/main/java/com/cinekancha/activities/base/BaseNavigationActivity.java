@@ -95,10 +95,6 @@ public abstract class BaseNavigationActivity extends BaseActivity implements Nav
 
         } else if (id == R.id.menuFilmyTroll) {
             GlobalUtils.navigateActivity(this, true, TrollListActivity.class);
-        } else if (id == R.id.menuSettings) {
-
-        } else if (id == R.id.menuContact) {
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

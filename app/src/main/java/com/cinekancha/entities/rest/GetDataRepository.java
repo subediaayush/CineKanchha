@@ -10,6 +10,7 @@ import com.cinekancha.entities.model.MovieDetail;
 import com.cinekancha.entities.model.NewRelease;
 import com.cinekancha.entities.model.NewsGossip;
 import com.cinekancha.entities.model.Poll;
+import com.cinekancha.entities.model.PollDatabase;
 import com.cinekancha.entities.model.Reviews;
 import com.cinekancha.entities.model.TrendingData;
 import com.cinekancha.entities.model.Trivia;
@@ -148,6 +149,17 @@ public class GetDataRepository {
         List<BoxOfficeItem> data = new ArrayList<>();
         Realm realm = Realm.getDefaultInstance();
         RealmResults object = realm.where(BoxOfficeItem.class).findAll();
+        if (object != null) {
+            data = realm.copyToRealm(object);
+            return Observable.just(data);
+        } else
+            return Observable.just(data);
+    }
+
+    public Observable<List<PollDatabase>> getPollDatabase() {
+        List<PollDatabase> data = new ArrayList<>();
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults object = realm.where(PollDatabase.class).findAll();
         if (object != null) {
             data = realm.copyToRealm(object);
             return Observable.just(data);

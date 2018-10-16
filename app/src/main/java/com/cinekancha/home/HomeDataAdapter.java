@@ -1,5 +1,6 @@
 package com.cinekancha.home;
 
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -18,9 +19,13 @@ import com.cinekancha.entities.model.Option;
 import com.cinekancha.entities.model.PollData;
 import com.cinekancha.entities.model.TriviaData;
 import com.cinekancha.entities.model.TrollData;
+import com.cinekancha.listener.OnClickListener;
+import com.cinekancha.listener.OnPollClickListener;
 import com.cinekancha.movies.MovieActivity;
 import com.cinekancha.newsGossips.NewsGossipsActivity;
+import com.cinekancha.poll.PollItemAdapter;
 import com.cinekancha.poll.PollsActivity;
+import com.cinekancha.poll.PollsHolder;
 import com.cinekancha.trolls.TrollListActivity;
 import com.cinekancha.utils.Constants;
 import com.cinekancha.utils.GlobalUtils;
@@ -52,10 +57,14 @@ import static com.cinekancha.home.HomeDataWrapper.UPCOMING_MOVIES;
 /**
  * Created by aayushsubedi on 3/8/18.
  */
-
 public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
     private static final String TAG = "HomeDataAdapter";
     private HomeDataWrapper mData;
+    private OnPollClickListener listener;
+
+    public HomeDataAdapter(OnPollClickListener listener) {
+        this.listener = listener;
+    }
 
     @Override
     public HomeItemHolder onCreateView(int viewType, View view) {
@@ -77,7 +86,7 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
                 return new FeaturedNewsListHolder(this, view);
             }
             case FEATURED_POLL: {
-                return new PollHolder(this, view);
+                return new PollsHolder(this, view);
             }
             case FEATURED_TRIVIA: {
                 return new TriviaHolder(this, view);
@@ -138,7 +147,7 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
                 R.layout.layout_featured_thumbnails,    // 2
                 R.layout.layout_featured_articles,      // 3
                 R.layout.layout_featured_thumbnails,    // 4
-                R.layout.layout_featured_poll,          // 5
+                R.layout.adapter_poll,          // 5
                 R.layout.layout_featured_trivia,        // 6
                 R.layout.layout_featured_trolls,        // 7
                 R.layout.layout_featured_movie,         // 8
@@ -230,37 +239,13 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
 
     @Override
     protected void setViewOfTypeFive(BaseViewHolder baseHolder, int position) {
-        PollHolder holder = (PollHolder) baseHolder;
+        PollsHolder holder = (PollsHolder) baseHolder;
         PollData poll = mData.getItem(position);
-
-        holder.question.setText(poll.getQuestion());
-        holder.answerContainer.removeAllViews();
-
-        holder.answerContainer.setTag(poll.getId());
-        holder.txtViewAll.setVisibility(View.VISIBLE);
-        holder.txtViewAll.setOnClickListener(view -> GlobalUtils.navigateActivity(holder.itemView.getContext(), true, PollsActivity.class));
-        boolean isAnswered = PollUtil.isAnswered(poll.getId());
-        int answerIndex = PollUtil.getAnswered(poll.getId());
-
-        List<Option> options = poll.getOptions();
-
-        for (int i = 0; i < options.size(); i++) {
-            Option option = options.get(i);
-            RadioButton optionButton = new RadioButton((baseHolder.itemView.getContext()));
-            optionButton.setId(ViewIdGenerator.generateViewId());
-            optionButton.setTag(i);
-            optionButton.setText(option.getText());
-            holder.answerContainer.addView(optionButton);
-
-            if (isAnswered && answerIndex == i) holder.answerContainer.check(optionButton.getId());
-        }
-
-        if (isAnswered) {
-            holder.answerContainer.setEnabled(false);
-            holder.submitButton.setEnabled(false);
+        holder.txtQuestion.setText(poll.getQuestion());
+        if (poll.getStatus().equalsIgnoreCase("INACTIVE")) {
+            pollInactive(holder, poll);
         } else {
-            holder.answerContainer.setEnabled(true);
-            holder.submitButton.setEnabled(true);
+            pollActive(holder, poll);
         }
     }
 
@@ -284,7 +269,7 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
     protected void setViewOfTypeTwo(BaseViewHolder baseHolder, int position) {
         UpcomingReleaseHolder holder = (UpcomingReleaseHolder) baseHolder;
         holder.setMovies(mData.getItem(position));
-        holder.title.setText("Movies");
+        holder.title.setText("Upcoming Movies");
         holder.txtViewAll.setVisibility(View.VISIBLE);
         holder.txtViewAll.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -329,6 +314,58 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
         if (this.mData != null) {
             int start = this.mData.addMovies(movies);
             notifyItemRangeInserted(start, movies.size());
+        }
+    }
+
+    private void pollInactive(PollsHolder holder, PollData poll) {
+        holder.txtPreviousResult.setVisibility(View.VISIBLE);
+        holder.submitButton.setVisibility(View.GONE);
+        holder.lytBorder.setVisibility(View.VISIBLE);
+        holder.answerContainer.setVisibility(View.GONE);
+        holder.lytWhole.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.white));
+        PollItemAdapter adapter = new PollItemAdapter(poll.getOptions(), new OnClickListener() {
+            @Override
+            public void onClick(int id) {
+
+            }
+        }, poll.getStatus(), poll.getTotalVotes());
+        holder.answerRecycler.setAdapter(adapter);
+    }
+
+
+    private void pollActive(PollsHolder holder, PollData poll) {
+        holder.txtPreviousResult.setVisibility(View.GONE);
+        holder.answerRecycler.setVisibility(View.GONE);
+        holder.submitButton.setVisibility(View.VISIBLE);
+        holder.lytBorder.setVisibility(View.GONE);
+        holder.lytWhole.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.backgroundPoll));
+        holder.answerContainer.removeAllViews();
+
+        holder.answerContainer.setTag(poll.getId());
+        boolean isAnswered = PollUtil.isAnswered(poll.getId());
+        int answerIndex = PollUtil.getAnswered(poll.getId());
+
+        List<Option> options = poll.getOptions();
+
+        for (int i = 0; i < options.size(); i++) {
+            Option option = options.get(i);
+            RadioButton optionButton = new RadioButton((holder.itemView.getContext()));
+            optionButton.setId(options.get(i).getId());
+            optionButton.setTag(i);
+            optionButton.setText(option.getText());
+            holder.answerContainer.addView(optionButton);
+
+            if (isAnswered && answerIndex == i)
+                holder.answerContainer.check(optionButton.getId());
+        }
+        if (isAnswered) {
+            holder.answerContainer.setEnabled(false);
+            holder.submitButton.setEnabled(false);
+        } else {
+            holder.answerContainer.setEnabled(true);
+            holder.submitButton.setEnabled(true);
+            holder.submitButton.setOnClickListener(view ->
+                    listener.onClick(holder.answerContainer.getCheckedRadioButtonId(), poll.getId()));
         }
     }
 }

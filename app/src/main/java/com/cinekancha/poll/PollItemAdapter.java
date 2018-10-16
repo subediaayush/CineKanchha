@@ -49,7 +49,7 @@ public class PollItemAdapter extends RecyclerView.Adapter<PollVH> {
     public void onBindViewHolder(PollVH holder, int position) {
         Option option = pollDataList.get(position);
         if (option.getVote() != 0) {
-            int percentage = calculatePercentage(option.getVote(), totalVote);
+            int percentage = (int) calculatePercentage(option.getVote(), totalVote);
             int screenWidth = ScreenUtils.getScreenWidthInDp((Activity) holder.itemView.getContext());
             screenWidth = screenWidth * percentage / 100;
             screenWidth = ScreenUtils.dpToPx(holder.itemView.getContext(), screenWidth);
@@ -67,8 +67,8 @@ public class PollItemAdapter extends RecyclerView.Adapter<PollVH> {
     }
 
 
-    private int calculatePercentage(int vote, int totalVote) {
-        int percentage = (vote / totalVote) * 100;
+    private double calculatePercentage(int vote, int totalVote) {
+        double percentage =((double)vote/totalVote) * 100;
         return percentage;
     }
 

@@ -7,6 +7,7 @@ import com.cinekancha.adapters.base.BaseRecyclerAdapter;
 import com.cinekancha.adapters.base.BaseViewHolder;
 import com.cinekancha.entities.model.Article;
 import com.cinekancha.home.FeaturedNewsHolder;
+import com.cinekancha.listener.OnClickListener;
 import com.cinekancha.utils.Constants;
 import com.squareup.picasso.Picasso;
 
@@ -21,6 +22,11 @@ import io.reactivex.annotations.NonNull;
 
 public class MovieArticleAdapter extends BaseRecyclerAdapter<ArticleHolder> {
     private List<Article> mData;
+    private OnClickListener listener;
+
+    public MovieArticleAdapter(OnClickListener listener) {
+        this.listener = listener;
+    }
 
     @Override
     public ArticleHolder onCreateView(int viewType, View view) {
@@ -40,6 +46,7 @@ public class MovieArticleAdapter extends BaseRecyclerAdapter<ArticleHolder> {
         Article article = mData.get(position);
         holder.txtMovieName.setText(article.getTitle());
         holder.txtSummary.setText(article.getSummary());
+        holder.itemView.setOnClickListener(view -> listener.onClick(position));
         Picasso.with(holder.itemView.getContext()).load(Constants.imageUrl + article.getImage()).placeholder(R.drawable.placeholder_movie).into(holder.imgArticle);
     }
 

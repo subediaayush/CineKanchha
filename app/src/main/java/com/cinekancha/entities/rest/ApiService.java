@@ -20,7 +20,9 @@ import com.cinekancha.entities.model.UpcomingMovie;
 import java.util.List;
 
 import io.reactivex.Observable;
+import retrofit2.Response;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 /**
@@ -71,6 +73,9 @@ public interface ApiService {
 
     @GET("api/poll")
     Observable<Poll> getPoll();
+
+    @GET("api/poll/upvote/{id}")
+    Observable<Response<Void>> postPoll(@Path("id") long optionId);
 
     @GET("api/trivia")
     Observable<Trivia> getTrivia();

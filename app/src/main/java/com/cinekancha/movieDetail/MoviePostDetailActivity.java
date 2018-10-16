@@ -20,6 +20,8 @@ import android.widget.Toast;
 import com.cinekancha.R;
 import com.cinekancha.activities.base.BaseNavigationActivity;
 import com.cinekancha.adapters.base.RecyclerViewClickListener;
+import com.cinekancha.article.ArticleDetailActivity;
+import com.cinekancha.entities.model.Article;
 import com.cinekancha.entities.model.FeaturedContent;
 import com.cinekancha.entities.model.HomeData;
 import com.cinekancha.entities.model.Links;
@@ -32,6 +34,7 @@ import com.cinekancha.entities.rest.GetDataRepository;
 import com.cinekancha.entities.rest.RestAPI;
 import com.cinekancha.entities.rest.SetDataRepository;
 import com.cinekancha.home.OnSlideClickListener;
+import com.cinekancha.listener.OnClickListener;
 import com.cinekancha.movieReview.ReviewDetailActivity;
 import com.cinekancha.utils.Connectivity;
 import com.cinekancha.utils.Constants;
@@ -52,7 +55,7 @@ import java.util.List;
 import butterknife.BindView;
 import me.relex.circleindicator.CircleIndicator;
 
-public class MoviePostDetailActivity extends BaseNavigationActivity implements OnSlideClickListener, SwipeRefreshLayout.OnRefreshListener, RecyclerViewClickListener {
+public class MoviePostDetailActivity extends BaseNavigationActivity implements OnSlideClickListener, SwipeRefreshLayout.OnRefreshListener, RecyclerViewClickListener, OnClickListener {
     @BindView(R.id.imgFeature)
     public ImageView imgFeature;
 
@@ -144,7 +147,7 @@ public class MoviePostDetailActivity extends BaseNavigationActivity implements O
         recylerView.setHasFixedSize(true);
 
         adapter = new RatingAdapter();
-        articleAdapter = new MovieArticleAdapter();
+        articleAdapter = new MovieArticleAdapter(this);
         photoAdapter = new PhotoAdapter();
 
         photoAdapter.setOnClickListener(this);
@@ -357,5 +360,11 @@ public class MoviePostDetailActivity extends BaseNavigationActivity implements O
         new ImageViewer.Builder<>(this, mCinePostMovieModel.getMovie().getPhoto())
                 .setFormatter(Photo::getUrl)
                 .setStartPosition(position).show();
+    }
+
+    @Override
+    public void onClick(int id) {
+        Article article = mCinePostMovieModel.getMovie().getArticles().get(id);
+        ArticleDetailActivity.startActivity(this, article);
     }
 }

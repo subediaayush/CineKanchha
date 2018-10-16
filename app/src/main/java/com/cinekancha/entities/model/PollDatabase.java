@@ -5,23 +5,23 @@ import io.realm.annotations.PrimaryKey;
 
 public class PollDatabase extends RealmObject {
     @PrimaryKey
-    private int pollId;
-    private int optionId;
+    private long pollId;
+    private long optionId;
 
-    public int getOptionId() {
+    public long getOptionId() {
         return optionId;
     }
 
-    public void setOptionId(int optionId) {
+    public void setOptionId(long optionId) {
         this.optionId = optionId;
     }
 
-    public int getPollId() {
+    public long getPollId() {
 
         return pollId;
     }
 
-    public void setPollId(int pollId) {
+    public void setPollId(long pollId) {
         this.pollId = pollId;
     }
 }
