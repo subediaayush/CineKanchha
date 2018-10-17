@@ -26,10 +26,20 @@ public class PollsHolder extends HomeItemHolder {
     @BindView(R.id.txtPreviousResult)
     public TextView txtPreviousResult;
 
-    @BindView(R.id.lytWhole)
-    public LinearLayout lytWhole;
+    @BindView(R.id.txtViewAll)
+    public TextView txtViewAll;
+
+    @BindView(R.id.lytMain)
+    public LinearLayout lytMain;
+
+    @BindView(R.id.lytTitle)
+    public LinearLayout lytTitle;
+
     @BindView(R.id.lytBorder)
     public View lytBorder;
+
+    @BindView(R.id.lytWhole)
+    public View lytWhole;
 
     @BindView(R.id.options_container)
     public RadioGroup answerContainer;

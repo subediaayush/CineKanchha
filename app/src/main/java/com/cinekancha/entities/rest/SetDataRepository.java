@@ -367,7 +367,7 @@ public class SetDataRepository {
                         realm1.copyToRealmOrUpdate(data);
                     }, () -> {
                         e.onSuccess(data);
-                        Log.d("Success", "Data saved");
+                        Log.d("SuccessPoll", "Data saved");
                     }
                     , error -> Log.d("Error", "Data saved error"));
         });

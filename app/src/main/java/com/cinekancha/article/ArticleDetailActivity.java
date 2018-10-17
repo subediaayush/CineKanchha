@@ -72,6 +72,9 @@ public class ArticleDetailActivity extends BaseNavigationActivity {
                 .load(Constants.imageUrl + article.getImage())
                 .into(mArticleImage);
         mTitle.setText(article.getTitle());
-        mArticle.loadData(article.getContent(), "text/html", "utf-8");
+        if (article.getContent() != null)
+            mArticle.loadData(article.getContent(), "text/html", "utf-8");
+        else
+            mArticle.loadData(article.getSummary(), "text/html", "utf-8");
     }
 }

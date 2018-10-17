@@ -45,7 +45,7 @@ public class HomeDataWrapper {
 
         wrapper.add(data.getHotNews(), FEATURED_ARTICLE);
 
-        if (data.getTopStory().getSummary() != null) {
+        if (data.getTopStory() != null && data.getTopStory().getSummary() != null) {
             wrapper.add(data.getTopStory(), FEATURED_TOP_STORIES);
         }
 

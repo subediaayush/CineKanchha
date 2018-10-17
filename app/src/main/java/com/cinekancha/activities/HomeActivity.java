@@ -16,20 +16,27 @@ import com.cinekancha.activities.base.BaseNavigationActivity;
 import com.cinekancha.entities.model.FeaturedContent;
 import com.cinekancha.entities.model.HomeData;
 import com.cinekancha.entities.model.Links;
+import com.cinekancha.entities.model.PollDatabase;
 import com.cinekancha.entities.rest.GetDataRepository;
 import com.cinekancha.entities.rest.SetDataRepository;
 import com.cinekancha.entities.rest.RestAPI;
 import com.cinekancha.home.HomeDataAdapter;
 import com.cinekancha.home.OnSlideClickListener;
 import com.cinekancha.home.SlideShowAdapter;
+import com.cinekancha.listener.OnPollClickListener;
 import com.cinekancha.utils.Connectivity;
 import com.cinekancha.view.CineHomeViewModel;
 import com.google.gson.Gson;
 
+import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import me.relex.circleindicator.CircleIndicator;
+import retrofit2.Response;
 
-public class HomeActivity extends BaseNavigationActivity implements OnSlideClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class HomeActivity extends BaseNavigationActivity implements OnSlideClickListener, SwipeRefreshLayout.OnRefreshListener, OnPollClickListener {
     private static final String TAG = "HomeActivity";
 
     @BindView(R.id.homeSwipeRefreshLayout)
@@ -53,6 +60,10 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
     private CineHomeViewModel mCineHomeViewModel;
     private SlideShowAdapter mSlideAdapter;
 
+    private long optionId;
+    private long pollId;
+    private List<PollDatabase> pollDatabaseList = new ArrayList();
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_home;
@@ -65,7 +76,7 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
 
         mCineHomeViewModel = ViewModelProviders.of(this).get(CineHomeViewModel.class);
 
-        mHomeDataAdapter = new HomeDataAdapter();
+        mHomeDataAdapter = new HomeDataAdapter(this);
         mSlideAdapter = new SlideShowAdapter(getSupportFragmentManager(), mFeaturedPager);
         mFeaturedPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
@@ -97,6 +108,7 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
     }
 
     private void renderHomeData() {
+        checkPollData();
         HomeData data = mCineHomeViewModel.getHomeData();
         mHomeDataAdapter.setHomeData(data);
         mSlideAdapter.setFeaturedItems(data.getFeaturedContents());
@@ -135,11 +147,36 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
                 .subscribe(this::handleHomeData, this::handleHomeFetchError));
     }
 
+    private void checkPollData() {
+        if (pollDatabaseList != null && pollDatabaseList.size() > 0) {
+            for (PollDatabase item : pollDatabaseList) {
+                if (item.getPollId() == mCineHomeViewModel.getHomeData().getPoll().getId()) {
+                    mCineHomeViewModel.getHomeData().getPoll().setStatus("INACTIVE");
+                }
+            }
+        }
+    }
+
     private void handleHomeData(HomeData data) {
+        compositeDisposable.add(GetDataRepository.getInstance().getPollDatabase()
+                .doOnSubscribe(disposable -> {
+                    mSwipeRefreshLayout.setRefreshing(true);
+                })
+                .doFinally(() -> mSwipeRefreshLayout.setRefreshing(false))
+                .subscribe(this::handlePollDatabase, this::handleHomeFetchError));
         if (data != null) {
             mCineHomeViewModel.setHomeData(data);
             renderHomeData();
         } else Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
+    }
+
+    private void handlePollDatabase(List<PollDatabase> pollDatabases) {
+        if (pollDatabaseList == null) {
+            pollDatabaseList = pollDatabases;
+        } else {
+            pollDatabaseList.clear();
+            pollDatabaseList.addAll(pollDatabases);
+        }
     }
 
     @Override
@@ -170,4 +207,38 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
     public void onRefresh() {
         requestHomeData();
     }
+
+    @Override
+    public void onClick(int optionId, int pollId) {
+        this.pollId = pollId;
+        this.optionId = optionId;
+        compositeDisposable.add(RestAPI.getInstance().postPoll(optionId)
+                .doOnSubscribe(disposable -> {
+                })
+                .doFinally(() -> {
+                })
+                .subscribe(this::handlePostPoll, this::handleHomeFetchError));
+    }
+
+    private void handlePostPoll(Response<Void> data) throws MalformedURLException {
+        Log.d("ResponseCode", String.valueOf(data));
+        if (data.code() == 200) {
+            PollDatabase pollDatabase = new PollDatabase();
+            pollDatabase.setOptionId(optionId);
+            pollDatabase.setPollId(pollId);
+            compositeDisposable.add(SetDataRepository.getInstance().setPollDatabase(pollDatabase).toObservable()
+                    .doOnSubscribe(disposable -> {
+                    })
+                    .doFinally(() -> {
+                    })
+                    .subscribe(this::notifyDataPoll, this::handleHomeFetchError));
+        }
+
+    }
+
+    private void notifyDataPoll(PollDatabase pollDatabase) {
+        requestHomeData();
+
+    }
+
 }

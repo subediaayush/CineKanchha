@@ -23,8 +23,11 @@ import com.cinekancha.utils.Connectivity;
 import com.cinekancha.view.CinePollViewModel;
 
 import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
+import retrofit2.Response;
 
 public class PollsActivity extends BaseNavigationActivity implements OnPollClickListener, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.toolbar)
@@ -39,6 +42,9 @@ public class PollsActivity extends BaseNavigationActivity implements OnPollClick
     private CinePollViewModel cinePollViewModel;
 
     private PollAdapter adapter;
+    private long optionId;
+    private long pollId;
+    private List<PollDatabase> pollDatabaseList = new ArrayList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,9 +79,22 @@ public class PollsActivity extends BaseNavigationActivity implements OnPollClick
 
     private void renderMovieData() {
         if (cinePollViewModel.getPollData().getData() != null && cinePollViewModel.getPollData().getData().size() > 0) {
+            checkPollData();
             adapter = new PollAdapter(cinePollViewModel.getPollData().getData(), this);
             recyclerView.setAdapter(adapter);
         } else requestMovie();
+    }
+
+    private void checkPollData() {
+        if (pollDatabaseList != null && pollDatabaseList.size() > 0) {
+            for (PollDatabase item : pollDatabaseList) {
+                for (int i = 0; i < cinePollViewModel.getPollData().getData().size(); i++) {
+                    if (item.getPollId() == cinePollViewModel.getPollData().getData().get(i).getId()) {
+                        cinePollViewModel.getPollData().getData().get(i).setStatus("INACTIVE");
+                    }
+                }
+            }
+        }
     }
 
     private void requestMovie() {
@@ -110,6 +129,12 @@ public class PollsActivity extends BaseNavigationActivity implements OnPollClick
     }
 
     private void handleMovieData(Poll data) throws MalformedURLException {
+        compositeDisposable.add(GetDataRepository.getInstance().getPollDatabase()
+                .doOnSubscribe(disposable -> {
+                    homeSwipeRefreshLayout.setRefreshing(true);
+                })
+                .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
+                .subscribe(this::handlePollDatabase, this::handleMovieFetchError));
         if (data != null && data.getData() != null) {
             cinePollViewModel.setPollData(data);
             renderMovieData();
@@ -117,22 +142,47 @@ public class PollsActivity extends BaseNavigationActivity implements OnPollClick
 
     }
 
+    private void handlePollDatabase(List<PollDatabase> pollDatabases) {
+        if (pollDatabaseList == null) {
+            pollDatabaseList = pollDatabases;
+        } else {
+            pollDatabaseList.clear();
+            pollDatabaseList.addAll(pollDatabases);
+        }
+    }
+
 
     @Override
     public void onClick(int optionId, int pollId) {
-        PollDatabase pollDatabase = new PollDatabase();
-        pollDatabase.setOptionId(optionId);
-        pollDatabase.setPollId(optionId);
-        compositeDisposable.add(SetDataRepository.getInstance().setPollDatabase(pollDatabase).toObservable()
+        this.pollId = pollId;
+        this.optionId = optionId;
+        compositeDisposable.add(RestAPI.getInstance().postPoll(optionId)
                 .doOnSubscribe(disposable -> {
                 })
                 .doFinally(() -> {
                 })
-                .subscribe(this::handle, this::handleMovieFetchError));
+                .subscribe(this::handlePostPoll, this::handleMovieFetchError));
     }
 
-    private void handle(PollDatabase data) throws MalformedURLException {
-         Log.d("Database", "Saved data");
+    private void handlePostPoll(Response<Void> data) throws MalformedURLException {
+        Log.d("ResponseCode",String.valueOf(data));
+        if (data.code() == 200) {
+            PollDatabase pollDatabase = new PollDatabase();
+            pollDatabase.setOptionId(optionId);
+            pollDatabase.setPollId(pollId);
+            compositeDisposable.add(SetDataRepository.getInstance().setPollDatabase(pollDatabase).toObservable()
+                    .doOnSubscribe(disposable -> {
+                    })
+                    .doFinally(() -> {
+                    })
+                    .subscribe(this::notifyDataPoll, this::handleMovieFetchError));
+        }
+
+    }
+
+    private void notifyDataPoll(PollDatabase pollDatabase) {
+        requestMovie();
+
     }
 
     @Override
