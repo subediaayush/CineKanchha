@@ -38,6 +38,9 @@ public class PollsHolder extends HomeItemHolder {
     @BindView(R.id.lytBorder)
     public View lytBorder;
 
+    @BindView(R.id.lytWhole)
+    public View lytWhole;
+
     @BindView(R.id.options_container)
     public RadioGroup answerContainer;
 

@@ -9,7 +9,9 @@
         android:id="@+id/lytTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="16dp"
         android:visibility="gone">
 
         <TextView
@@ -24,7 +26,6 @@
             android:id="@+id/txtViewAll"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="16dp"
             android:text="View All>"
             android:textColor="@color/colorPrimary" />
 
