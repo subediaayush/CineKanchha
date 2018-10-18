@@ -13,6 +13,8 @@ import android.widget.Toast;
 
 import com.cinekancha.R;
 import com.cinekancha.activities.base.BaseNavigationActivity;
+import com.cinekancha.article.ArticleDetailActivity;
+import com.cinekancha.entities.model.Article;
 import com.cinekancha.entities.model.FeaturedContent;
 import com.cinekancha.entities.model.HomeData;
 import com.cinekancha.entities.model.Links;
@@ -196,6 +198,12 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
     @Override
     public void onSlideClicked(FeaturedContent item) {
         Log.d(TAG, "clicked on item " + new Gson().toJson(item));
+        Article article = new Article();
+        article.setId(item.getId());
+        article.setTitle(item.getTitle());
+        article.setContent(item.getSubtitle());
+        article.setImage(item.getImageUrl());
+        ArticleDetailActivity.startActivity(this, article);
     }
 
     @Override
