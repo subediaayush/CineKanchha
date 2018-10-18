@@ -32,6 +32,8 @@ public class NewReleaseHolder extends HomeItemHolder {
     public TextView title;
     private ThumbnailAdapter<Movie> adapter;
     public List<Movie> movieList;
+    @BindView(R.id.txtViewAll)
+    public TextView txtViewAll;
 
     public NewReleaseHolder(BaseRecyclerAdapter baseRecyclerAdapter, View view) {
         super(baseRecyclerAdapter, view);

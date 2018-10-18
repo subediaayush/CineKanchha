@@ -23,11 +23,13 @@ import com.cinekancha.entities.model.TrollData;
 import com.cinekancha.listener.OnClickListener;
 import com.cinekancha.listener.OnPollClickListener;
 import com.cinekancha.movies.MovieActivity;
+import com.cinekancha.newRelease.NewReleaseActivity;
 import com.cinekancha.newsGossips.NewsGossipsActivity;
 import com.cinekancha.poll.PollItemAdapter;
 import com.cinekancha.poll.PollsActivity;
 import com.cinekancha.poll.PollsHolder;
 import com.cinekancha.trolls.TrollListActivity;
+import com.cinekancha.upcomingMovies.UpcomingMovieActivity;
 import com.cinekancha.utils.Constants;
 import com.cinekancha.utils.GlobalUtils;
 import com.cinekancha.utils.PollUtil;
@@ -263,7 +265,7 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
         FeaturedNewsListHolder holder = (FeaturedNewsListHolder) baseHolder;
         holder.setNews(mData.getItem(position));
         holder.txtViewAll.setVisibility(View.VISIBLE);
-        holder.txtViewAll.setOnClickListener(view -> GlobalUtils.navigateActivity(holder.itemView.getContext(), true, NewsGossipsActivity.class));
+        holder.txtViewAll.setOnClickListener(view -> GlobalUtils.navigateActivity(holder.itemView.getContext(), false, NewsGossipsActivity.class));
         holder.title.setText("Hot News");
     }
 
@@ -283,7 +285,7 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
         holder.txtViewAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                GlobalUtils.navigateActivity(holder.itemView.getContext(), false, MovieActivity.class);
+                GlobalUtils.navigateActivity(holder.itemView.getContext(), false, UpcomingMovieActivity.class);
             }
         });
     }
@@ -293,6 +295,13 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
         NewReleaseHolder holder = (NewReleaseHolder) baseHolder;
         holder.setMovies(mData.getItem(position));
         holder.title.setText("New Releases");
+        holder.txtViewAll.setVisibility(View.VISIBLE);
+        holder.txtViewAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GlobalUtils.navigateActivity(holder.itemView.getContext(), false, NewReleaseActivity.class);
+            }
+        });
     }
 
     @Override

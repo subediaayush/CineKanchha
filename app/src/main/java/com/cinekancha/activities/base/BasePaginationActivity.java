@@ -3,6 +3,7 @@ package com.cinekancha.activities.base;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 
 public abstract class BasePaginationActivity extends BaseNavigationActivity {
@@ -14,27 +15,28 @@ public abstract class BasePaginationActivity extends BaseNavigationActivity {
 
     protected abstract NestedScrollView getNestedScrollView();
 
-    protected abstract LinearLayoutManager getLayoutManager();
+    protected abstract GridLayoutManager getLayoutManager();
 
-    protected void loadMoreData() {
-        setLoadData(true);
-    }
+    protected abstract void loadMoreData();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getNestedScrollView().setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
-            if (v.getChildAt(v.getChildCount() - 1) != null) {
-                if ((scrollY >= (v.getChildAt(v.getChildCount() - 1).getMeasuredHeight() - v.getMeasuredHeight())) && scrollY > oldScrollY) {
+        getNestedScrollView().setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (v.getChildAt(v.getChildCount() - 1) != null) {
+                    if ((scrollY >= (v.getChildAt(v.getChildCount() - 1).getMeasuredHeight() - v.getMeasuredHeight())) && scrollY > oldScrollY) {
 
-                    visibleItemCount = getLayoutManager().getChildCount();
-                    totalItemCount = getLayoutManager().getItemCount();
-                    pastVisiblesItems = getLayoutManager().findFirstVisibleItemPosition();
+                        visibleItemCount = BasePaginationActivity.this.getLayoutManager().getChildCount();
+                        totalItemCount = BasePaginationActivity.this.getLayoutManager().getItemCount();
+                        pastVisiblesItems = BasePaginationActivity.this.getLayoutManager().findFirstVisibleItemPosition();
 
-                    if (isLoadData()) {
-                        if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
-                            currentPage++;
-                            loadMoreData();
+                        if (BasePaginationActivity.this.isLoadData()) {
+                            if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+                                currentPage++;
+                                BasePaginationActivity.this.loadMoreData();
+                            }
                         }
                     }
                 }

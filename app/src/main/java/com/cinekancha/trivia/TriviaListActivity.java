@@ -44,6 +44,7 @@ public class TriviaListActivity extends BaseNavigationActivity implements Recycl
         mArticleAdapter = new TriviaAdapter();
 
         mArticleList.setLayoutManager(new LinearLayoutManager(this));
+        mArticleList.setNestedScrollingEnabled(false);
         mArticleList.setAdapter(mArticleAdapter);
         mArticleAdapter.setOnClickListener(this);
         homeSwipeRefreshLayout.setOnRefreshListener(this);

@@ -5,7 +5,6 @@ import com.cinekancha.entities.model.ActorPhoto;
 import com.cinekancha.entities.model.BoxOfficeItem;
 import com.cinekancha.entities.model.FullMovies;
 import com.cinekancha.entities.model.HomeData;
-import com.cinekancha.entities.model.Movie;
 import com.cinekancha.entities.model.MovieData;
 import com.cinekancha.entities.model.MovieDetail;
 import com.cinekancha.entities.model.NewRelease;
@@ -22,8 +21,8 @@ import java.util.List;
 import io.reactivex.Observable;
 import retrofit2.Response;
 import retrofit2.http.GET;
-import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /**
  * Created by paoneking on 3/3/18.
@@ -35,7 +34,7 @@ public interface ApiService {
             @Path("movieId") int movieId);
 
     @GET("api/movie")
-    Observable<MovieData> getMovieList();
+    Observable<MovieData> getMovieList(@Query("page") int currentPage);
 
     @GET("api/new_releases")
     Observable<NewRelease> getNewRelease();

@@ -14,7 +14,6 @@ import com.cinekancha.R;
 import com.cinekancha.activities.HomeActivity;
 import com.cinekancha.actor.ActorListActivity;
 import com.cinekancha.boxOffice.BoxOfficeActivity;
-import com.cinekancha.entities.model.UpcomingMovie;
 import com.cinekancha.movieReview.ReviewListActivity;
 import com.cinekancha.movies.MovieActivity;
 import com.cinekancha.newRelease.NewReleaseActivity;
@@ -31,11 +30,10 @@ import butterknife.BindView;
 
 
 public abstract class BaseNavigationActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
-    @BindView(R.id.drawer_layout)
-    DrawerLayout drawer;
-
     @BindView(R.id.toolbar)
     protected Toolbar toolbar;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout drawer;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,39 +65,39 @@ public abstract class BaseNavigationActivity extends BaseActivity implements Nav
 
         if (id == R.id.menuHome) {
             GlobalUtils.navigateActivity(this, true, HomeActivity.class);
-            // Handle the camera action
         } else if (id == R.id.menuNewsGossips) {
-            GlobalUtils.navigateActivity(this, true, NewsGossipsActivity.class);
+            GlobalUtils.navigateActivity(this, !isHomeActivity(), NewsGossipsActivity.class);
         } else if (id == R.id.menuNewRelease) {
-            GlobalUtils.navigateActivity(this, true, NewReleaseActivity.class);
+            GlobalUtils.navigateActivity(this, !isHomeActivity(), NewReleaseActivity.class);
         } else if (id == R.id.menuUpComing) {
-            GlobalUtils.navigateActivity(this, true, UpcomingMovieActivity.class);
+            GlobalUtils.navigateActivity(this, !isHomeActivity(), UpcomingMovieActivity.class);
+        } else if (id == R.id.menuAllMovies) {
+            GlobalUtils.navigateActivity(this, !isHomeActivity(), MovieActivity.class);
         } else if (id == R.id.menuBoxOffice) {
-            GlobalUtils.navigateActivity(this, true, BoxOfficeActivity.class);
-
+            GlobalUtils.navigateActivity(this, !isHomeActivity(), BoxOfficeActivity.class);
         } else if (id == R.id.menuTrending) {
-            GlobalUtils.navigateActivity(this, true, TrendingActivity.class);
-
+            GlobalUtils.navigateActivity(this, !isHomeActivity(), TrendingActivity.class);
         } else if (id == R.id.menuWatchFull) {
-            GlobalUtils.navigateActivity(this, true, FullMoviesActivity.class);
-
+            GlobalUtils.navigateActivity(this, !isHomeActivity(), FullMoviesActivity.class);
         } else if (id == R.id.menMovieReviews) {
-            GlobalUtils.navigateActivity(this, true, ReviewListActivity.class);
-
+            GlobalUtils.navigateActivity(this, !isHomeActivity(), ReviewListActivity.class);
         } else if (id == R.id.menuPhotoGallery) {
-            GlobalUtils.navigateActivity(this, true, ActorListActivity.class);
+            GlobalUtils.navigateActivity(this, !isHomeActivity(), ActorListActivity.class);
         } else if (id == R.id.menuFuchePoll) {
-            GlobalUtils.navigateActivity(this, true, PollsActivity.class);
+            GlobalUtils.navigateActivity(this, !isHomeActivity(), PollsActivity.class);
         } else if (id == R.id.menuFilmyTrivias) {
-            GlobalUtils.navigateActivity(this, true, TriviaListActivity.class);
-
+            GlobalUtils.navigateActivity(this, !isHomeActivity(), TriviaListActivity.class);
         } else if (id == R.id.menuFilmyTroll) {
-            GlobalUtils.navigateActivity(this, true, TrollListActivity.class);
+            GlobalUtils.navigateActivity(this, !isHomeActivity(), TrollListActivity.class);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    protected boolean isHomeActivity() {
+        return this instanceof HomeActivity;
     }
 
     private void initToolbar(String title) {

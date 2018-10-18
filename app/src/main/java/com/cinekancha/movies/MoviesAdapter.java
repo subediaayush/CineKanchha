@@ -12,6 +12,7 @@ import com.cinekancha.movieDetail.RatingHolder;
 import com.cinekancha.utils.Constants;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,12 +20,27 @@ import java.util.List;
  */
 
 public class MoviesAdapter extends BaseRecyclerAdapter<MovieHolder> {
-    private List<Movie> movieList;
+    private List<Movie> movieList = new ArrayList<>();
     private OnClickListener listener;
 
     public MoviesAdapter(List<Movie> movieList, OnClickListener listener) {
         this.movieList = movieList;
         this.listener = listener;
+    }
+
+    public MoviesAdapter(OnClickListener listener) {
+        this.listener = listener;
+    }
+
+    public void setMovieList(List<Movie> movieList) {
+        this.movieList.clear();
+        this.movieList.addAll(movieList);
+        notifyDataSetChanged();
+    }
+
+    public void addMovieList(List<Movie> moviesList){
+        this.movieList.addAll(moviesList);
+        notifyDataSetChanged();
     }
 
     @Override

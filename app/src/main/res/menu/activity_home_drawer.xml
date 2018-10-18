@@ -14,6 +14,11 @@
         <item
             android:id="@+id/menuUpComing"
             android:title="@string/upcomingMovies" />
+
+        <item
+            android:id="@+id/menuAllMovies"
+            android:title="@string/allMovies" />
+
         <item
             android:id="@+id/menuBoxOffice"
             android:title="@string/boxOffice" />

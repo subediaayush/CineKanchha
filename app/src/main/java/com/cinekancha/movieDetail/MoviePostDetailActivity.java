@@ -23,13 +23,10 @@ import com.cinekancha.adapters.base.RecyclerViewClickListener;
 import com.cinekancha.article.ArticleDetailActivity;
 import com.cinekancha.entities.model.Article;
 import com.cinekancha.entities.model.FeaturedContent;
-import com.cinekancha.entities.model.HomeData;
 import com.cinekancha.entities.model.Links;
-import com.cinekancha.entities.model.Movie;
 import com.cinekancha.entities.model.MovieDetail;
 import com.cinekancha.entities.model.Photo;
 import com.cinekancha.entities.model.ReviewData;
-import com.cinekancha.entities.model.TrollData;
 import com.cinekancha.entities.rest.GetDataRepository;
 import com.cinekancha.entities.rest.RestAPI;
 import com.cinekancha.entities.rest.SetDataRepository;
@@ -39,7 +36,6 @@ import com.cinekancha.movieReview.ReviewDetailActivity;
 import com.cinekancha.utils.Connectivity;
 import com.cinekancha.utils.Constants;
 import com.cinekancha.utils.GlobalUtils;
-import com.cinekancha.utils.ListUtils;
 import com.cinekancha.view.CinePostMovieViewModel;
 import com.squareup.picasso.Picasso;
 import com.stfalcon.frescoimageviewer.ImageViewer;
@@ -292,7 +288,7 @@ public class MoviePostDetailActivity extends BaseNavigationActivity implements O
 
     private void requestMovie(int id) {
         if (Connectivity.isConnected(this))
-            compositeDisposable.add(RestAPI.getInstance().getMovie(id)
+            compositeDisposable.add(RestAPI.getInstance().getMovieDetail(id)
                     .doOnSubscribe(disposable -> {
                         swipeRefreshLayout.setRefreshing(true);
                     })

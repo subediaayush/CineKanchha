@@ -51,7 +51,7 @@ public class FeaturedNewsListHolder extends HomeItemHolder {
         txtViewAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                GlobalUtils.navigateActivity(view.getContext(), true, NewsGossipsActivity.class);
+                GlobalUtils.navigateActivity(view.getContext(), false, NewsGossipsActivity.class);
             }
         });
         adapter = new ThumbnailAdapter<>(R.layout.layout_featured_news, new ThumbnailConverter<Article>() {

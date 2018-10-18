@@ -6,7 +6,6 @@ import com.cinekancha.entities.model.ActorPhoto;
 import com.cinekancha.entities.model.BoxOfficeItem;
 import com.cinekancha.entities.model.FullMovies;
 import com.cinekancha.entities.model.HomeData;
-import com.cinekancha.entities.model.Movie;
 import com.cinekancha.entities.model.MovieData;
 import com.cinekancha.entities.model.MovieDetail;
 import com.cinekancha.entities.model.NewRelease;
@@ -79,15 +78,15 @@ public class RestAPI {
             call.cancel();
     }
 
-    public Observable<MovieDetail> getMovie(int id) {
+    public Observable<MovieDetail> getMovieDetail(int id) {
         return getApiService().getMovie(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .retry(1);
     }
 
-    public Observable<MovieData> getMovie() {
-        return getApiService().getMovieList()
+    public Observable<MovieData> getMovie(int currentPage) {
+        return getApiService().getMovieList(currentPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .retry(1);
