@@ -92,15 +92,15 @@ public class RestAPI {
                 .retry(1);
     }
 
-    public Observable<NewRelease> getNewRelease() {
-        return getApiService().getNewRelease()
+    public Observable<NewRelease> getNewRelease(int currentPage) {
+        return getApiService().getNewRelease(currentPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .retry(1);
     }
 
-    public Observable<UpcomingMovie> getUpcomingMovie() {
-        return getApiService().getUpcomingMovie()
+    public Observable<UpcomingMovie> getUpcomingMovie(int currentPage) {
+        return getApiService().getUpcomingMovie(currentPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .retry(1);

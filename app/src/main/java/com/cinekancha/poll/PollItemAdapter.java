@@ -1,23 +1,16 @@
 package com.cinekancha.poll;
 
-import android.app.Activity;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
+import android.view.ViewTreeObserver;
 
 import com.cinekancha.R;
-import com.cinekancha.adapters.base.BaseRecyclerAdapter;
-import com.cinekancha.adapters.base.BaseViewHolder;
 import com.cinekancha.entities.model.Option;
-import com.cinekancha.entities.model.PollData;
 import com.cinekancha.listener.OnClickListener;
-import com.cinekancha.utils.PollUtil;
 import com.cinekancha.utils.ScreenUtils;
-import com.cinekancha.utils.ViewIdGenerator;
 
 import java.util.List;
 
@@ -48,28 +41,29 @@ public class PollItemAdapter extends RecyclerView.Adapter<PollVH> {
     @Override
     public void onBindViewHolder(PollVH holder, int position) {
         Option option = pollDataList.get(position);
-        if (option.getVote() != 0) {
-            int percentage = (int) calculatePercentage(option.getVote(), totalVote);
-            int screenWidth = ScreenUtils.getScreenWidthInDp((Activity) holder.itemView.getContext());
-            screenWidth = screenWidth * percentage / 100;
-            screenWidth = ScreenUtils.dpToPx(holder.itemView.getContext(), screenWidth);
-            ((PollProgressVH) holder).txtProgress.setWidth(screenWidth);
-            ((PollProgressVH) holder).txtMovieName.setText(option.getText());
-            ((PollProgressVH) holder).txtPercentage.setText(String.valueOf(percentage) + "%");
-
-        } else {
-            int screenWidth = ScreenUtils.getScreenWidthInDp((Activity) holder.itemView.getContext());
-            screenWidth = ScreenUtils.dpToPx(holder.itemView.getContext(), screenWidth);
-            ((PollProgressVH) holder).txtProgress.setWidth(screenWidth);
-            ((PollProgressVH) holder).txtMovieName.setText(option.getText());
-            ((PollProgressVH) holder).txtPercentage.setText("100%");
-        }
+        int percentage = (int) calculatePercentage(option.getVote(), totalVote);
+        ViewTreeObserver viewTreeObserver = ((PollProgressVH) holder).rlyt.getViewTreeObserver();
+        viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if (Build.VERSION.SDK_INT < 16) {
+                    ((PollProgressVH) holder).rlyt.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                } else {
+                    ((PollProgressVH) holder).rlyt.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                }
+                int screenWidth = ((PollProgressVH) holder).rlyt.getMeasuredWidth() - ScreenUtils.dpToPx(((PollProgressVH) holder).itemView.getContext(), 43);
+                screenWidth = screenWidth * percentage / 100;
+                ((PollProgressVH) holder).txtMovieName.setText(option.getText());
+                ((PollProgressVH) holder).txtProgress.setWidth(screenWidth);
+                ((PollProgressVH) holder).txtPercentage.setText(String.valueOf(percentage) + "%");
+            }
+        });
     }
 
 
     private double calculatePercentage(int vote, int totalVote) {
-        double percentage =((double)vote/totalVote) * 100;
-        return percentage;
+        if (vote == 0) return 0;
+        return ((double) vote / totalVote) * 100;
     }
 
     @Override

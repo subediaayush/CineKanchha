@@ -3,6 +3,7 @@ package com.cinekancha.upcomingMovies;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 
 import com.cinekancha.R;
 import com.cinekancha.activities.base.BaseNavigationActivity;
+import com.cinekancha.activities.base.PaginationNestedOnScrollListener;
 import com.cinekancha.entities.model.Movie;
 import com.cinekancha.entities.model.MovieData;
 import com.cinekancha.entities.model.MovieDetail;
@@ -38,9 +40,13 @@ public class UpcomingMovieActivity extends BaseNavigationActivity implements OnC
     @BindView(R.id.movieRecyclerView)
     public RecyclerView recyclerView;
 
+    @BindView(R.id.nestedScrollView)
+    NestedScrollView nestedScrollView;
+
     private CineMovieViewModel cineMovieViewModel;
 
     private MoviesAdapter adapter;
+    private PaginationNestedOnScrollListener paginationNestedOnScrollListener;
 
 
     @Override
@@ -48,30 +54,6 @@ public class UpcomingMovieActivity extends BaseNavigationActivity implements OnC
         super.onCreate(savedInstanceState);
         cineMovieViewModel = ViewModelProviders.of(this).get(CineMovieViewModel.class);
         init();
-    }
-
-    private void initToolbar() {
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.movies);
-    }
-
-    private void init() {
-        getSupportActionBar().setTitle(R.string.upcomingMovies);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-        recyclerView.setNestedScrollingEnabled(false);
-        recyclerView.setHasFixedSize(true);
-        homeSwipeRefreshLayout.setOnRefreshListener(this);
-    }
-
-
-    @Override
-    protected int getLayoutId() {
-        return R.layout.activity_movie;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         if (cineMovieViewModel.getMovieList() == null) {
             requestMovie();
         } else {
@@ -83,19 +65,59 @@ public class UpcomingMovieActivity extends BaseNavigationActivity implements OnC
         }
     }
 
+    private void initToolbar() {
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(R.string.movies);
+    }
+
+    private void init() {
+        getSupportActionBar().setTitle(R.string.upcomingMovies);
+        homeSwipeRefreshLayout.setOnRefreshListener(this);
+        adapter = new MoviesAdapter(this);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        recyclerView.setNestedScrollingEnabled(false);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setAdapter(adapter);
+        paginationNestedOnScrollListener = new PaginationNestedOnScrollListener(recyclerView, (GridLayoutManager) recyclerView.getLayoutManager(), cineMovieViewModel) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                requestMovie();
+            }
+        };
+        nestedScrollView.setOnScrollChangeListener(paginationNestedOnScrollListener);
+    }
+
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_movie;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
     private void renderMovieData() throws MalformedURLException {
-        if (cineMovieViewModel.getMovieList() != null && cineMovieViewModel.getMovieList().size() > 0) {
+        if (cineMovieViewModel.isToAppend()) {
+            adapter.addMovieList(cineMovieViewModel.getAppendMovieList());
+            cineMovieViewModel.setToAppend(false);
+        } else {
+            adapter.setMovieList(cineMovieViewModel.getMovieList());
+            cineMovieViewModel.setToAppend(false);
+        }
+        /*if (cineMovieViewModel.getMovieList() != null && cineMovieViewModel.getMovieList().size() > 0) {
             adapter = new MoviesAdapter(cineMovieViewModel.getMovieList(), this);
             recyclerView.setAdapter(adapter);
         } else if (Connectivity.isConnected(this))
             requestMovie();
         else
-            Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();*/
     }
 
     private void requestMovie() {
         if (Connectivity.isConnected(this))
-            compositeDisposable.add(RestAPI.getInstance().getUpcomingMovie()
+            compositeDisposable.add(RestAPI.getInstance().getUpcomingMovie(cineMovieViewModel.getCurrentPage())
                     .doOnSubscribe(disposable -> {
                         homeSwipeRefreshLayout.setRefreshing(true);
                     })
@@ -127,8 +149,14 @@ public class UpcomingMovieActivity extends BaseNavigationActivity implements OnC
     private void handleMovieData(UpcomingMovie data) throws MalformedURLException {
         if (data != null && data.getData() != null) {
             cineMovieViewModel.setMovieList(data.getData());
+            cineMovieViewModel.setAppendMovieList(data.getData());
+            cineMovieViewModel.setLastPage(data.getMeta().getLastPage());
             renderMovieData();
         } else Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
+        /*if (data != null && data.getData() != null) {
+            cineMovieViewModel.setMovieList(data.getData());
+            renderMovieData();
+        } else Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();*/
     }
 
     @Override
@@ -141,6 +169,8 @@ public class UpcomingMovieActivity extends BaseNavigationActivity implements OnC
 
     @Override
     public void onRefresh() {
+        cineMovieViewModel.resetState();
+        paginationNestedOnScrollListener.resetState();
         requestMovie();
     }
 }

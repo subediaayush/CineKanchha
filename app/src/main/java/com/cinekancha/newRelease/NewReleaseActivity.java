@@ -3,6 +3,7 @@ package com.cinekancha.newRelease;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 
 import com.cinekancha.R;
 import com.cinekancha.activities.base.BaseNavigationActivity;
+import com.cinekancha.activities.base.PaginationNestedOnScrollListener;
 import com.cinekancha.entities.model.Movie;
 import com.cinekancha.entities.model.MovieData;
 import com.cinekancha.entities.model.NewRelease;
@@ -37,11 +39,14 @@ public class NewReleaseActivity extends BaseNavigationActivity implements OnClic
 
     @BindView(R.id.homeSwipeRefreshLayout)
     protected SwipeRefreshLayout homeSwipeRefreshLayout;
+    @BindView(R.id.nestedScrollView)
+    NestedScrollView nestedScrollView;
 
     private CineMovieViewModel cineMovieViewModel;
 
     private MoviesAdapter adapter;
     private List<Movie> movieList;
+    private PaginationNestedOnScrollListener paginationNestedOnScrollListener;
 
 
     @Override
@@ -49,32 +54,6 @@ public class NewReleaseActivity extends BaseNavigationActivity implements OnClic
         super.onCreate(savedInstanceState);
         cineMovieViewModel = ViewModelProviders.of(this).get(CineMovieViewModel.class);
         init();
-    }
-
-    private void initToolbar() {
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.newReleases);
-    }
-
-    private void init() {
-        getSupportActionBar().setTitle(R.string.newReleases);
-
-        homeSwipeRefreshLayout.setOnRefreshListener(this);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-        recyclerView.setNestedScrollingEnabled(false);
-        recyclerView.setHasFixedSize(true);
-
-    }
-
-
-    @Override
-    protected int getLayoutId() {
-        return R.layout.activity_movie;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         if (cineMovieViewModel.getMovieList() == null) {
             requestMovie();
         } else {
@@ -86,20 +65,61 @@ public class NewReleaseActivity extends BaseNavigationActivity implements OnClic
         }
     }
 
+    private void initToolbar() {
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(R.string.newReleases);
+    }
+
+    private void init() {
+        getSupportActionBar().setTitle(R.string.newReleases);
+        homeSwipeRefreshLayout.setOnRefreshListener(this);
+        adapter = new MoviesAdapter(this);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        recyclerView.setNestedScrollingEnabled(false);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setAdapter(adapter);
+        paginationNestedOnScrollListener = new PaginationNestedOnScrollListener(recyclerView, (GridLayoutManager) recyclerView.getLayoutManager(), cineMovieViewModel) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                requestMovie();
+            }
+        };
+        nestedScrollView.setOnScrollChangeListener(paginationNestedOnScrollListener);
+    }
+
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_movie;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
     private void renderMovieData() throws MalformedURLException {
-        this.movieList = cineMovieViewModel.getMovieList();
+        if (cineMovieViewModel.isToAppend()) {
+            adapter.addMovieList(cineMovieViewModel.getAppendMovieList());
+            cineMovieViewModel.setToAppend(false);
+        } else {
+            adapter.setMovieList(cineMovieViewModel.getMovieList());
+            cineMovieViewModel.setToAppend(false);
+        }
+
+        /*this.movieList = cineMovieViewModel.getMovieList();
         if (movieList != null && movieList.size() > 0) {
             adapter = new MoviesAdapter(movieList, this);
             recyclerView.setAdapter(adapter);
         } else if (Connectivity.isConnected(this))
             requestMovie();
         else
-            Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();*/
     }
 
     private void requestMovie() {
         if (Connectivity.isConnected(this))
-            compositeDisposable.add(RestAPI.getInstance().getNewRelease()
+            compositeDisposable.add(RestAPI.getInstance().getNewRelease(cineMovieViewModel.getCurrentPage())
                     .doOnSubscribe(disposable -> {
                         homeSwipeRefreshLayout.setRefreshing(true);
                     })
@@ -132,13 +152,15 @@ public class NewReleaseActivity extends BaseNavigationActivity implements OnClic
     private void handleMovieData(NewRelease data) throws MalformedURLException {
         if (data != null && data.getData() != null) {
             cineMovieViewModel.setMovieList(data.getData());
+            cineMovieViewModel.setAppendMovieList(data.getData());
+            cineMovieViewModel.setLastPage(data.getMeta().getLastPage());
             renderMovieData();
         } else Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onClick(int id) {
-        Movie movie = movieList.get(id);
+        Movie movie = cineMovieViewModel.getMovieList().get(id);
         Intent detail = new Intent(this, MoviePostDetailActivity.class);
         detail.putExtra("movie", String.valueOf(movie.getId()));
         startActivity(detail);
@@ -146,11 +168,8 @@ public class NewReleaseActivity extends BaseNavigationActivity implements OnClic
 
     @Override
     public void onRefresh() {
+        cineMovieViewModel.resetState();
+        paginationNestedOnScrollListener.resetState();
         requestMovie();
-    }
-
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
-
     }
 }

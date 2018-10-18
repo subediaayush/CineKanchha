@@ -37,10 +37,10 @@ public interface ApiService {
     Observable<MovieData> getMovieList(@Query("page") int currentPage);
 
     @GET("api/new_releases")
-    Observable<NewRelease> getNewRelease();
+    Observable<NewRelease> getNewRelease(@Query("page") int currentPage);
 
     @GET("api/upcoming_movies")
-    Observable<UpcomingMovie> getUpcomingMovie();
+    Observable<UpcomingMovie> getUpcomingMovie(@Query("page") int currentPage);
 
     @GET("api/home")
     Observable<HomeData> getHomeData();

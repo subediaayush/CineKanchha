@@ -92,8 +92,13 @@ public abstract class PaginationNestedOnScrollListener implements NestedScrollVi
                 // the visibleThreshold and need to reload more data.
                 // If we do need to reload some more data, we execute onLoadMore to fetch the data.
                 // threshold should reflect how many total columns there are too
+
+                if (mPaginationViewModel.getCurrentPage() > mPaginationViewModel.getLastPage()) {
+                }
+
                 if (!loading && (lastVisibleItemPosition + visibleThreshold) > totalItemCount
-                        && mRecyclerView.getAdapter().getItemCount() > visibleThreshold) {// This condition will useful when recyclerview has less than visibleThreshold items
+                        && mRecyclerView.getAdapter().getItemCount() > visibleThreshold
+                        && mPaginationViewModel.getCurrentPage() < mPaginationViewModel.getLastPage()) {// This condition will useful when recyclerview has less than visibleThreshold items
 //                    currentPage++;
                     mPaginationViewModel.setCurrentPage(mPaginationViewModel.getCurrentPage() + 1);
                     mPaginationViewModel.setToAppend(true);
