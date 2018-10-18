@@ -1,7 +1,6 @@
 package com.cinekancha.poll;
 
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.View;
 import android.widget.RadioButton;
 
@@ -12,10 +11,9 @@ import com.cinekancha.entities.model.Option;
 import com.cinekancha.entities.model.PollData;
 import com.cinekancha.listener.OnClickListener;
 import com.cinekancha.listener.OnPollClickListener;
-import com.cinekancha.utils.GlobalUtils;
 import com.cinekancha.utils.PollUtil;
-import com.cinekancha.utils.ViewIdGenerator;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,12 +21,27 @@ import java.util.List;
  */
 
 public class PollAdapter extends BaseRecyclerAdapter<PollsHolder> {
-    private List<PollData> pollDataList;
+    private List<PollData> pollDataList = new ArrayList<>();
     private OnPollClickListener listener;
 
     public PollAdapter(List<PollData> pollDataList, OnPollClickListener listener) {
         this.pollDataList = pollDataList;
         this.listener = listener;
+    }
+
+    public PollAdapter(OnPollClickListener listener) {
+        this.listener = listener;
+    }
+
+    public void setPollDataList(List<PollData> pollDataList) {
+        this.pollDataList.clear();
+        this.pollDataList.addAll(pollDataList);
+        notifyDataSetChanged();
+    }
+
+    public void addPollDataList(List<PollData> pollDataList) {
+        this.pollDataList.addAll(pollDataList);
+        notifyDataSetChanged();
     }
 
     @Override

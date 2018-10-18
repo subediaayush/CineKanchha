@@ -10,6 +10,7 @@ import com.cinekancha.listener.OnClickListener;
 import com.cinekancha.utils.Constants;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,12 +18,27 @@ import java.util.List;
  */
 
 public class ActorAdapter extends BaseRecyclerAdapter<ActorHolder> {
-    private List<Actor> actorList;
+    private List<Actor> actorList = new ArrayList<>();
     private OnClickListener listener;
 
     public ActorAdapter(List<Actor> actorList, OnClickListener listener) {
         this.actorList = actorList;
         this.listener = listener;
+    }
+
+    public ActorAdapter(OnClickListener listener) {
+        this.listener = listener;
+    }
+
+    public void setMovieList(List<Actor> actorList) {
+        this.actorList.clear();
+        this.actorList.addAll(actorList);
+        notifyDataSetChanged();
+    }
+
+    public void addMovieList(List<Actor> actorList) {
+        this.actorList.addAll(actorList);
+        notifyDataSetChanged();
     }
 
     @Override

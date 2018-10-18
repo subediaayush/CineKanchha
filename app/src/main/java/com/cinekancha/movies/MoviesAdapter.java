@@ -5,10 +5,8 @@ import android.view.View;
 import com.cinekancha.R;
 import com.cinekancha.adapters.base.BaseRecyclerAdapter;
 import com.cinekancha.adapters.base.BaseViewHolder;
-import com.cinekancha.entities.model.Article;
 import com.cinekancha.entities.model.Movie;
 import com.cinekancha.listener.OnClickListener;
-import com.cinekancha.movieDetail.RatingHolder;
 import com.cinekancha.utils.Constants;
 import com.squareup.picasso.Picasso;
 
@@ -38,8 +36,8 @@ public class MoviesAdapter extends BaseRecyclerAdapter<MovieHolder> {
         notifyDataSetChanged();
     }
 
-    public void addMovieList(List<Movie> moviesList){
-        this.movieList.addAll(moviesList);
+    public void addMovieList(List<Movie> movieList) {
+        this.movieList.addAll(movieList);
         notifyDataSetChanged();
     }
 

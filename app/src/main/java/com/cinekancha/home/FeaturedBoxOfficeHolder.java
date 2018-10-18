@@ -45,7 +45,7 @@ class FeaturedBoxOfficeHolder extends HomeItemHolder {
         });
 
         txtViewAll.setOnClickListener(view1 -> {
-            GlobalUtils.navigateActivity(view.getContext(), true, BoxOfficeActivity.class);
+            GlobalUtils.navigateActivity(view.getContext(), false, BoxOfficeActivity.class);
         });
 
         adapter = new FeatureBoxOfficeAdapter();

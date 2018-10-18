@@ -1,27 +1,45 @@
 package com.cinekancha.view;
 
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
 import android.support.annotation.NonNull;
 
-import com.cinekancha.entities.model.NewsGossip;
+import com.cinekancha.entities.model.Article;
+
+import java.util.List;
 
 /**
  * Created by aayushsubedi on 3/8/18.
  */
 
-public class CineNewsGossipsViewModel extends AndroidViewModel {
-    private NewsGossip mNewsGossip;
+public class CineNewsGossipsViewModel extends BasePaginationViewModel {
+    private List<Article> newsGossipList;
+    private List<Article> appendNewsGossipList;
 
     public CineNewsGossipsViewModel(@NonNull Application application) {
         super(application);
     }
 
-    public NewsGossip getNewsGossip() {
-        return mNewsGossip;
+    @Override
+    public void resetState() {
+        newsGossipList = null;
+        appendNewsGossipList = null;
     }
 
-    public void setNewsGossip(NewsGossip newsGossip) {
-        this.mNewsGossip = newsGossip;
+    public List<Article> getNewsGossipList() {
+        return newsGossipList;
+    }
+
+    public void setNewsGossipList(List<Article> newsGossipList) {
+        if (this.newsGossipList == null) {
+            this.newsGossipList = newsGossipList;
+        } else this.newsGossipList.addAll(newsGossipList);
+    }
+
+    public List<Article> getAppendNewsGossipList() {
+        return appendNewsGossipList;
+    }
+
+    public void setAppendNewsGossipList(List<Article> appendNewsGossipList) {
+        this.appendNewsGossipList = appendNewsGossipList;
     }
 }

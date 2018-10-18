@@ -1,6 +1,5 @@
 package com.cinekancha.home;
 
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -22,19 +21,17 @@ import com.cinekancha.entities.model.TriviaData;
 import com.cinekancha.entities.model.TrollData;
 import com.cinekancha.listener.OnClickListener;
 import com.cinekancha.listener.OnPollClickListener;
-import com.cinekancha.movies.MovieActivity;
 import com.cinekancha.newRelease.NewReleaseActivity;
 import com.cinekancha.newsGossips.NewsGossipsActivity;
 import com.cinekancha.poll.PollItemAdapter;
 import com.cinekancha.poll.PollsActivity;
 import com.cinekancha.poll.PollsHolder;
+import com.cinekancha.trivia.TriviaListActivity;
 import com.cinekancha.trolls.TrollListActivity;
 import com.cinekancha.upcomingMovies.UpcomingMovieActivity;
-import com.cinekancha.utils.Constants;
 import com.cinekancha.utils.GlobalUtils;
 import com.cinekancha.utils.PollUtil;
 import com.cinekancha.utils.ScreenUtils;
-import com.cinekancha.utils.ViewIdGenerator;
 import com.squareup.picasso.Picasso;
 import com.stfalcon.frescoimageviewer.ImageViewer;
 
@@ -225,6 +222,13 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
         TriviaHolder holder = (TriviaHolder) baseHolder;
         TriviaData triviaData = mData.getItem(position);
         holder.trivia.setText(triviaData.getTrivia());
+        holder.viewMore.setVisibility(View.VISIBLE);
+        holder.viewMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GlobalUtils.navigateActivity(holder.itemView.getContext(), false, TriviaListActivity.class);
+            }
+        });
     }
 
 

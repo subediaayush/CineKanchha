@@ -21,9 +21,11 @@
         tools:text="Box office collections 2018" />
 
     <TextView
+        android:id="@+id/viewMore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="16dp"
+        android:visibility="gone"
         android:text="View more tivia"
         android:textAllCaps="true"
         android:textAppearance="@style/TextAppearance.AppCompat.Caption"

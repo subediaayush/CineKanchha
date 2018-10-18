@@ -1,7 +1,6 @@
 package com.cinekancha.view;
 
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
 import android.support.annotation.NonNull;
 
 import com.cinekancha.entities.model.Video;
@@ -12,19 +11,37 @@ import java.util.List;
  * Created by aayushsubedi on 3/8/18.
  */
 
-public class CineFullMoviesViewModel extends AndroidViewModel {
+public class CineFullMoviesViewModel extends BasePaginationViewModel {
 
-    private List<Video> trendingList;
+    private List<Video> videoList;
+    private List<Video> appendVideoList;
 
     public CineFullMoviesViewModel(@NonNull Application application) {
         super(application);
     }
 
-    public List<Video> getTrendingList() {
-        return trendingList;
+    @Override
+    public void resetState() {
+        videoList = null;
+        appendVideoList = null;
     }
 
-    public void setTrendingList(List<Video> trendingList) {
-        this.trendingList = trendingList;
+    public List<Video> getVideoList() {
+        return videoList;
+    }
+
+    public void setVideoList(List<Video> videoList) {
+        if (this.videoList == null)
+            this.videoList = videoList;
+        else
+            this.videoList.addAll(videoList);
+    }
+
+    public List<Video> getAppendVideoList() {
+        return appendVideoList;
+    }
+
+    public void setAppendVideoList(List<Video> appendVideoList) {
+        this.appendVideoList = appendVideoList;
     }
 }

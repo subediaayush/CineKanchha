@@ -1,30 +1,45 @@
 package com.cinekancha.view;
 
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
 import android.support.annotation.NonNull;
 
-import com.cinekancha.entities.model.ActorPhoto;
-import com.cinekancha.entities.model.Reviews;
+import com.cinekancha.entities.model.ReviewData;
+
+import java.util.List;
 
 /**
  * Created by aayushsubedi on 3/8/18.
  */
 
-public class CineReviewViewModel extends AndroidViewModel {
-
-    private Reviews reviews;
+public class CineReviewViewModel extends BasePaginationViewModel {
+    private List<ReviewData> reviewDataList;
+    private List<ReviewData> appendReviewDataList;
 
     public CineReviewViewModel(@NonNull Application application) {
         super(application);
     }
 
-    public Reviews getReviews() {
-        return reviews;
+    @Override
+    public void resetState() {
+        reviewDataList = null;
+        appendReviewDataList = null;
     }
 
-    public void setReviews(Reviews actor) {
-        this.reviews = actor;
+    public List<ReviewData> getReviewDataList() {
+        return reviewDataList;
     }
 
+    public void setReviewDataList(List<ReviewData> reviewDataList) {
+        if (this.reviewDataList == null) {
+            this.reviewDataList = reviewDataList;
+        } else this.reviewDataList.addAll(reviewDataList);
+    }
+
+    public List<ReviewData> getAppendReviewDataList() {
+        return appendReviewDataList;
+    }
+
+    public void setAppendReviewDataList(List<ReviewData> appendReviewDataList) {
+        this.appendReviewDataList = appendReviewDataList;
+    }
 }

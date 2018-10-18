@@ -12,12 +12,19 @@ import java.util.List;
  * Created by aayushsubedi on 3/8/18.
  */
 
-public class CineTrendingViewModel extends AndroidViewModel {
+public class CineTrendingViewModel extends BasePaginationViewModel {
 
     private List<Video> trendingList;
+    private List<Video> appendTrendingList;
 
     public CineTrendingViewModel(@NonNull Application application) {
         super(application);
+    }
+
+    @Override
+    public void resetState() {
+        trendingList = null;
+        appendTrendingList = null;
     }
 
     public List<Video> getTrendingList() {
@@ -25,6 +32,18 @@ public class CineTrendingViewModel extends AndroidViewModel {
     }
 
     public void setTrendingList(List<Video> trendingList) {
-        this.trendingList = trendingList;
+        if (this.trendingList == null) {
+            this.trendingList = trendingList;
+        }
+        else
+            this.trendingList.addAll(trendingList);
+    }
+
+    public List<Video> getAppendTrendingList() {
+        return appendTrendingList;
+    }
+
+    public void setAppendTrendingList(List<Video> appendTrendingList) {
+        this.appendTrendingList = appendTrendingList;
     }
 }

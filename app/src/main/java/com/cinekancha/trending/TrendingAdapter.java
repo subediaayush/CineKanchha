@@ -5,11 +5,13 @@ import android.view.View;
 import com.cinekancha.R;
 import com.cinekancha.adapters.base.BaseRecyclerAdapter;
 import com.cinekancha.adapters.base.BaseViewHolder;
+import com.cinekancha.entities.model.Movie;
 import com.cinekancha.entities.model.Video;
 import com.cinekancha.listener.OnClickListener;
 import com.cinekancha.utils.Constants;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,12 +19,27 @@ import java.util.List;
  */
 
 public class TrendingAdapter extends BaseRecyclerAdapter<TrendingHolder> {
-    private List<Video> trendingList;
+    private List<Video> trendingList = new ArrayList<>();
     private OnClickListener listener;
 
     public TrendingAdapter(List<Video> trendingList, OnClickListener listener) {
         this.trendingList = trendingList;
         this.listener = listener;
+    }
+
+    public TrendingAdapter(OnClickListener listener) {
+        this.listener = listener;
+    }
+
+    public void setTrendingList(List<Video> videoList) {
+        this.trendingList.clear();
+        this.trendingList.addAll(videoList);
+        notifyDataSetChanged();
+    }
+
+    public void addTrendingList(List<Video> videoList) {
+        this.trendingList.addAll(videoList);
+        notifyDataSetChanged();
     }
 
     @Override

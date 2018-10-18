@@ -49,35 +49,35 @@ public interface ApiService {
     Observable<List<BoxOfficeItem>> getBoxOffice();
 
     @GET("api/news")
-    Observable<NewsGossip> getNewsGossip();
+    Observable<NewsGossip> getNewsGossip(@Query("page") int currentPage);
 
     @GET("api/troll")
-    Observable<Troll> getTroll();
+    Observable<Troll> getTroll(@Query("page") int currentPage);
 
     @GET("api/trending_videos")
-    Observable<TrendingData> getTrending();
+    Observable<TrendingData> getTrending(@Query("page") int currentPage);
 
     @GET("api/actorGallery")
-    Observable<ActorGallery> getActorList();
+    Observable<ActorGallery> getActorList(@Query("page") int currentPage);
 
     @GET("api/movie_reviews")
-    Observable<Reviews> getReviews();
+    Observable<Reviews> getReviews(@Query("page") int currentPage);
 
     @GET("api/actorGallery/{actorId}")
     Observable<ActorPhoto> getActorPhoto(
             @Path("actorId") int actorId);
 
     @GET("api/full_movies")
-    Observable<FullMovies> getFullMovies();
+    Observable<FullMovies> getFullMovies(@Query("page") int currentPage);
 
     @GET("api/poll")
-    Observable<Poll> getPoll();
+    Observable<Poll> getPoll(@Query("page") int currentPage);
 
     @GET("api/poll/upvote/{id}")
     Observable<Response<Void>> postPoll(@Path("id") long optionId);
 
     @GET("api/trivia")
-    Observable<Trivia> getTrivia();
+    Observable<Trivia> getTrivia(@Query("page") int currentPage);
 
     @GET("bins/19gt0m")
     Observable<HomeData> getHomeTestData();

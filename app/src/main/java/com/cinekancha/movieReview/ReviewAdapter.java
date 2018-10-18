@@ -1,6 +1,5 @@
 package com.cinekancha.movieReview;
 
-import android.graphics.drawable.Drawable;
 import android.text.Html;
 import android.view.View;
 
@@ -8,25 +7,19 @@ import com.cinekancha.R;
 import com.cinekancha.adapters.base.BaseRecyclerAdapter;
 import com.cinekancha.adapters.base.BaseViewHolder;
 import com.cinekancha.entities.model.ReviewData;
-import com.cinekancha.entities.model.Reviews;
-import com.cinekancha.entities.model.TriviaData;
-import com.cinekancha.home.TriviaHolder;
 import com.cinekancha.listener.OnClickListener;
 import com.cinekancha.utils.Constants;
-import com.cinekancha.utils.GradientGenartor;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import io.reactivex.annotations.NonNull;
 
 /**
  * Created by aayushsubedi on 3/19/18.
  */
 
 public class ReviewAdapter extends BaseRecyclerAdapter<ReviewHolder> {
-    private List<ReviewData> mData;
+    private List<ReviewData> mData = new ArrayList<>();
     private OnClickListener listener;
 
     public ReviewAdapter(OnClickListener listener) {
@@ -62,16 +55,15 @@ public class ReviewAdapter extends BaseRecyclerAdapter<ReviewHolder> {
         return mData == null ? 0 : mData.size();
     }
 
-    public void setTrivias(List<ReviewData> triviaData) {
-        this.mData = triviaData;
+    public void setReviewList(List<ReviewData> reviewList) {
+        this.mData.clear();
+        this.mData.addAll(reviewList);
         notifyDataSetChanged();
     }
 
-    public void addTrivias(@NonNull List<ReviewData> triviaData) {
-        if (this.mData == null) this.mData = new ArrayList<>();
-        int initial = this.mData.size();
-        this.mData.addAll(triviaData);
-        notifyItemRangeInserted(initial, triviaData.size());
+    public void addReviewList(List<ReviewData> reviewList) {
+        this.mData.addAll(reviewList);
+        notifyDataSetChanged();
     }
 
     public ReviewData getTrivia(int position) {

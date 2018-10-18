@@ -13,14 +13,12 @@ import com.cinekancha.utils.GradientGenartor;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.annotations.NonNull;
-
 /**
  * Created by aayushsubedi on 3/19/18.
  */
 
 public class TriviaAdapter extends BaseRecyclerAdapter<TriviaHolder> {
-    private List<TriviaData> mData;
+    private List<TriviaData> mData = new ArrayList<>();
 
     @Override
     public TriviaHolder onCreateView(int viewType, View view) {
@@ -38,8 +36,7 @@ public class TriviaAdapter extends BaseRecyclerAdapter<TriviaHolder> {
     protected void setViewOfTypeZero(BaseViewHolder baseHolder, int position) {
         TriviaHolder holder = (TriviaHolder) baseHolder;
         TriviaData triviaData = mData.get(position);
-        int random = GradientGenartor.getRandom();
-        Drawable drawable = GradientGenartor.generate(random);
+        Drawable drawable = GradientGenartor.generate(holder.randomColorNum);
         holder.itemView.setBackground(drawable);
         holder.trivia.setText(triviaData.getTrivia());
     }
@@ -49,19 +46,14 @@ public class TriviaAdapter extends BaseRecyclerAdapter<TriviaHolder> {
         return mData == null ? 0 : mData.size();
     }
 
-    public void setTrivias(List<TriviaData> triviaData) {
-        this.mData = triviaData;
+    public void setTriviaDataList(List<TriviaData> triviaDataList) {
+        this.mData.clear();
+        this.mData.addAll(triviaDataList);
         notifyDataSetChanged();
     }
 
-    public void addTrivias(@NonNull List<TriviaData> triviaData) {
-        if (this.mData == null) this.mData = new ArrayList<>();
-        int initial = this.mData.size();
-        this.mData.addAll(triviaData);
-        notifyItemRangeInserted(initial, triviaData.size());
-    }
-
-    public TriviaData getTrivia(int position) {
-        return mData.get(position % mData.size());
+    public void addTriviaDataList(List<TriviaData> triviaDataList) {
+        this.mData.addAll(triviaDataList);
+        notifyDataSetChanged();
     }
 }

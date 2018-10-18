@@ -5,6 +5,7 @@ import android.widget.TextView;
 
 import com.cinekancha.R;
 import com.cinekancha.adapters.base.BaseRecyclerAdapter;
+import com.cinekancha.utils.GradientGenartor;
 
 import butterknife.BindView;
 
@@ -19,11 +20,13 @@ public class TriviaHolder extends HomeItemHolder {
 
     @BindView(R.id.trivia)
     public TextView trivia;
+    @BindView(R.id.viewMore)
+    public TextView viewMore;
+
+    public int randomColorNum;
 
     public TriviaHolder(BaseRecyclerAdapter baseRecyclerAdapter, View view) {
         super(baseRecyclerAdapter, view);
-        itemView.setOnClickListener(view1 -> {
-
-        });
+        randomColorNum = GradientGenartor.getRandom();
     }
 }

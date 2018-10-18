@@ -97,13 +97,14 @@ public abstract class PaginationNestedOnScrollListener implements NestedScrollVi
                 }
 
                 if (!loading && (lastVisibleItemPosition + visibleThreshold) > totalItemCount
-                        && mRecyclerView.getAdapter().getItemCount() > visibleThreshold
-                        && mPaginationViewModel.getCurrentPage() < mPaginationViewModel.getLastPage()) {// This condition will useful when recyclerview has less than visibleThreshold items
+                        && mRecyclerView.getAdapter().getItemCount() > visibleThreshold) {// This condition will useful when recyclerview has less than visibleThreshold items
 //                    currentPage++;
-                    mPaginationViewModel.setCurrentPage(mPaginationViewModel.getCurrentPage() + 1);
-                    mPaginationViewModel.setToAppend(true);
-                    onLoadMore(mPaginationViewModel.getCurrentPage(), totalItemCount);
-                    loading = true;
+                    if (mPaginationViewModel.getCurrentPage() < mPaginationViewModel.getLastPage()) {
+                        mPaginationViewModel.setCurrentPage(mPaginationViewModel.getCurrentPage() + 1);
+                        mPaginationViewModel.setToAppend(true);
+                        onLoadMore(mPaginationViewModel.getCurrentPage(), totalItemCount);
+                        loading = true;
+                    }
                 }
             }
         }

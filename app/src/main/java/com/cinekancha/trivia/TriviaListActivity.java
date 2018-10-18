@@ -3,6 +3,7 @@ package com.cinekancha.trivia;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,13 +12,16 @@ import android.widget.Toast;
 
 import com.cinekancha.R;
 import com.cinekancha.activities.base.BaseNavigationActivity;
+import com.cinekancha.activities.base.PaginationNestedOnScrollListener;
 import com.cinekancha.adapters.base.RecyclerViewClickListener;
 import com.cinekancha.entities.model.Trivia;
 import com.cinekancha.entities.rest.GetDataRepository;
-import com.cinekancha.entities.rest.SetDataRepository;
 import com.cinekancha.entities.rest.RestAPI;
+import com.cinekancha.entities.rest.SetDataRepository;
 import com.cinekancha.utils.Connectivity;
 import com.cinekancha.view.CineTriviaViewModel;
+
+import java.net.MalformedURLException;
 
 import butterknife.BindView;
 
@@ -28,26 +32,46 @@ import butterknife.BindView;
 public class TriviaListActivity extends BaseNavigationActivity implements RecyclerViewClickListener, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.list_view)
     public RecyclerView mArticleList;
-
-    private CineTriviaViewModel mCineTriviaViewModel;
-    private TriviaAdapter mArticleAdapter;
-
     @BindView(R.id.homeSwipeRefreshLayout)
     protected SwipeRefreshLayout homeSwipeRefreshLayout;
+    @BindView(R.id.nestedScrollView)
+    NestedScrollView nestedScrollView;
+    private CineTriviaViewModel mCineTriviaViewModel;
+    private TriviaAdapter mArticleAdapter;
+    private PaginationNestedOnScrollListener paginationNestedOnScrollListener;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().setTitle(R.string.trivia);
         mCineTriviaViewModel = ViewModelProviders.of(this).get(CineTriviaViewModel.class);
+        init();
 
+        if (mCineTriviaViewModel.getTriviaDataList() == null) {
+            requestTrivia();
+        } else {
+            try {
+                renderTrivia();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void init() {
+        getSupportActionBar().setTitle(R.string.trivia);
+        homeSwipeRefreshLayout.setOnRefreshListener(this);
         mArticleAdapter = new TriviaAdapter();
-
         mArticleList.setLayoutManager(new LinearLayoutManager(this));
         mArticleList.setNestedScrollingEnabled(false);
         mArticleList.setAdapter(mArticleAdapter);
         mArticleAdapter.setOnClickListener(this);
-        homeSwipeRefreshLayout.setOnRefreshListener(this);
+        paginationNestedOnScrollListener = new PaginationNestedOnScrollListener(mArticleList, (LinearLayoutManager) mArticleList.getLayoutManager(), mCineTriviaViewModel) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                requestTrivia();
+            }
+        };
+        nestedScrollView.setOnScrollChangeListener(paginationNestedOnScrollListener);
     }
 
     @Override
@@ -59,16 +83,11 @@ public class TriviaListActivity extends BaseNavigationActivity implements Recycl
     protected void onResume() {
         super.onResume();
 
-        if (mCineTriviaViewModel.getTrivias() == null) {
-            requestTrivia(null, 50);
-        } else {
-            mArticleAdapter.setTrivias(mCineTriviaViewModel.getTrivias());
-        }
     }
 
-    private void requestTrivia(String cursor, int count) {
+    private void requestTrivia() {
         if (Connectivity.isConnected(this))
-            compositeDisposable.add(RestAPI.getInstance().getTrivia()
+            compositeDisposable.add(RestAPI.getInstance().getTrivia(mCineTriviaViewModel.getCurrentPage())
                     .doOnSubscribe(disposable -> {
                         homeSwipeRefreshLayout.setRefreshing(true);
                     })
@@ -83,12 +102,13 @@ public class TriviaListActivity extends BaseNavigationActivity implements Recycl
                     .subscribe(this::handleTriviaData, this::handleFetchError));
     }
 
-    private void handleTriviaData(Trivia trivia) {
+    private void handleTriviaData(Trivia trivia) throws MalformedURLException {
         if (trivia != null && trivia.getData() != null) {
-            mCineTriviaViewModel.setArticles(trivia.getData());
+            mCineTriviaViewModel.setTriviaDataList(trivia.getData());
+            mCineTriviaViewModel.setAppendTriviaDataList(trivia.getData());
+            mCineTriviaViewModel.setLastPage(trivia.getMeta().getLastPage());
             renderTrivia();
         } else Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
-
     }
 
     private void handleDatabase(Trivia trivia) {
@@ -105,11 +125,13 @@ public class TriviaListActivity extends BaseNavigationActivity implements Recycl
         Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }
 
-    private void renderTrivia() {
-        if (mCineTriviaViewModel.getTrivias() != null && mCineTriviaViewModel.getTrivias().size() > 0) {
-            mArticleAdapter.setTrivias(mCineTriviaViewModel.getTrivias());
+    private void renderTrivia() throws MalformedURLException {
+        if (mCineTriviaViewModel.isToAppend()) {
+            mArticleAdapter.addTriviaDataList(mCineTriviaViewModel.getAppendTriviaDataList());
+            mCineTriviaViewModel.setToAppend(false);
         } else {
-            requestTrivia(null, 50);
+            mArticleAdapter.setTriviaDataList(mCineTriviaViewModel.getTriviaDataList());
+            mCineTriviaViewModel.setToAppend(false);
         }
     }
 
@@ -119,6 +141,8 @@ public class TriviaListActivity extends BaseNavigationActivity implements Recycl
 
     @Override
     public void onRefresh() {
-        requestTrivia(null, 50);
+        mCineTriviaViewModel.resetState();
+        paginationNestedOnScrollListener.resetState();
+        requestTrivia();
     }
 }

@@ -1,11 +1,9 @@
 package com.cinekancha.view;
 
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
 import android.support.annotation.NonNull;
 
 import com.cinekancha.entities.model.Actor;
-import com.cinekancha.entities.model.ActorPhoto;
 
 import java.util.List;
 
@@ -13,12 +11,19 @@ import java.util.List;
  * Created by aayushsubedi on 3/8/18.
  */
 
-public class CineActorViewModel extends AndroidViewModel {
+public class CineActorViewModel extends BasePaginationViewModel {
 
     private List<Actor> actorList;
+    private List<Actor> appendActorList;
 
     public CineActorViewModel(@NonNull Application application) {
         super(application);
+    }
+
+    @Override
+    public void resetState() {
+        actorList = null;
+        appendActorList = null;
     }
 
     public List<Actor> getActorList() {
@@ -26,7 +31,16 @@ public class CineActorViewModel extends AndroidViewModel {
     }
 
     public void setActorList(List<Actor> actorList) {
-        this.actorList = actorList;
+        if (this.actorList == null)
+            this.actorList = actorList;
+        else this.actorList.addAll(actorList);
     }
 
+    public List<Actor> getAppendActorList() {
+        return appendActorList;
+    }
+
+    public void setAppendActorList(List<Actor> appendActorList) {
+        this.appendActorList = appendActorList;
+    }
 }

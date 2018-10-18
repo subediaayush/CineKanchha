@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import com.cinekancha.R;
 import com.cinekancha.activities.base.BaseNavigationActivity;
+import com.cinekancha.activities.base.PaginationNestedOnScrollListener;
 import com.cinekancha.entities.model.Video;
 import com.cinekancha.entities.model.FullMovies;
 import com.cinekancha.entities.rest.GetDataRepository;
@@ -34,7 +36,10 @@ public class FullMoviesActivity extends BaseNavigationActivity implements OnClic
     public RecyclerView recyclerView;
     @BindView(R.id.homeSwipeRefreshLayout)
     public SwipeRefreshLayout homeSwipeRefreshLayout;
+    @BindView(R.id.nestedScrollView)
+    NestedScrollView nestedScrollView;
 
+    private PaginationNestedOnScrollListener paginationNestedOnScrollListener;
     private CineFullMoviesViewModel cineFullMoviesViewModel;
 
     private TrendingAdapter adapter;
@@ -45,6 +50,15 @@ public class FullMoviesActivity extends BaseNavigationActivity implements OnClic
         super.onCreate(savedInstanceState);
         cineFullMoviesViewModel = ViewModelProviders.of(this).get(CineFullMoviesViewModel.class);
         init();
+        if (cineFullMoviesViewModel.getVideoList() == null) {
+            requestMovie();
+        } else {
+            try {
+                renderMovieData();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void initToolbar() {
@@ -54,10 +68,19 @@ public class FullMoviesActivity extends BaseNavigationActivity implements OnClic
 
     private void init() {
         getSupportActionBar().setTitle("Watch Full Movies");
+        homeSwipeRefreshLayout.setOnRefreshListener(this);
+        adapter = new TrendingAdapter(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setHasFixedSize(true);
-        homeSwipeRefreshLayout.setOnRefreshListener(this);
+        recyclerView.setAdapter(adapter);
+        paginationNestedOnScrollListener = new PaginationNestedOnScrollListener(recyclerView, (LinearLayoutManager) recyclerView.getLayoutManager(), cineFullMoviesViewModel) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                requestMovie();
+            }
+        };
+        nestedScrollView.setOnScrollChangeListener(paginationNestedOnScrollListener);
     }
 
 
@@ -69,27 +92,21 @@ public class FullMoviesActivity extends BaseNavigationActivity implements OnClic
     @Override
     protected void onResume() {
         super.onResume();
-        if (cineFullMoviesViewModel.getTrendingList() == null) {
-            requestMovie();
-        } else {
-            try {
-                renderMovieData();
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     private void renderMovieData() throws MalformedURLException {
-        if (cineFullMoviesViewModel.getTrendingList() != null && cineFullMoviesViewModel.getTrendingList().size() > 0) {
-            adapter = new TrendingAdapter(cineFullMoviesViewModel.getTrendingList(), this);
-            recyclerView.setAdapter(adapter);
-        } else requestMovie();
+        if (cineFullMoviesViewModel.isToAppend()) {
+            adapter.addTrendingList(cineFullMoviesViewModel.getAppendVideoList());
+            cineFullMoviesViewModel.setToAppend(false);
+        } else {
+            adapter.setTrendingList(cineFullMoviesViewModel.getVideoList());
+            cineFullMoviesViewModel.setToAppend(false);
+        }
     }
 
     private void requestMovie() {
         if (Connectivity.isConnected(this))
-            compositeDisposable.add((RestAPI.getInstance().getFullMovies())
+            compositeDisposable.add((RestAPI.getInstance().getFullMovies(cineFullMoviesViewModel.getCurrentPage()))
                     .doOnSubscribe(disposable -> {
                         homeSwipeRefreshLayout.setRefreshing(true);
                     })
@@ -120,14 +137,16 @@ public class FullMoviesActivity extends BaseNavigationActivity implements OnClic
 
     private void handleMovieData(FullMovies data) throws MalformedURLException {
         if (data != null && data.getTrendingList() != null) {
-            cineFullMoviesViewModel.setTrendingList(data.getTrendingList());
+            cineFullMoviesViewModel.setVideoList(data.getTrendingList());
+            cineFullMoviesViewModel.setAppendVideoList(data.getTrendingList());
+            cineFullMoviesViewModel.setLastPage(data.getMeta().getLastPage());
             renderMovieData();
         } else Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onClick(int id) {
-        Video movie = cineFullMoviesViewModel.getTrendingList().get(id);
+        Video movie = cineFullMoviesViewModel.getVideoList().get(id);
         try {
             startYoutube(movie.getLink());
         } catch (MalformedURLException e) {
@@ -143,6 +162,8 @@ public class FullMoviesActivity extends BaseNavigationActivity implements OnClic
 
     @Override
     public void onRefresh() {
+        cineFullMoviesViewModel.resetState();
+        paginationNestedOnScrollListener.resetState();
         requestMovie();
     }
 }

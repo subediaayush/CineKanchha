@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import com.cinekancha.R;
 import com.cinekancha.entities.model.Article;
+import com.cinekancha.entities.model.Movie;
 import com.cinekancha.listener.OnClickListener;
 import com.cinekancha.poll.PollProgressVH;
 import com.cinekancha.utils.Constants;
@@ -28,6 +29,21 @@ public class NewsGossipAdapter extends RecyclerView.Adapter<NewsGossipVH> {
     public NewsGossipAdapter(List<Article> mData, OnClickListener listener) {
         this.mData = mData;
         this.listener = listener;
+    }
+
+    public NewsGossipAdapter(OnClickListener listener) {
+        this.listener = listener;
+    }
+
+    public void setNewsGossipList(List<Article> articleList) {
+        this.mData.clear();
+        this.mData.addAll(articleList);
+        notifyDataSetChanged();
+    }
+
+    public void addNewsGossipList(List<Article> articleList) {
+        this.mData.addAll(articleList);
+        notifyDataSetChanged();
     }
 
     @Override

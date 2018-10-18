@@ -4,19 +4,18 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.Toast;
 
 import com.cinekancha.R;
 import com.cinekancha.activities.base.BaseNavigationActivity;
-import com.cinekancha.adapters.base.RecyclerViewClickListener;
+import com.cinekancha.activities.base.PaginationNestedOnScrollListener;
 import com.cinekancha.article.ArticleDetailActivity;
 import com.cinekancha.entities.model.FeaturedContent;
-import com.cinekancha.entities.model.HomeData;
 import com.cinekancha.entities.model.Links;
 import com.cinekancha.entities.model.NewsGossip;
 import com.cinekancha.entities.rest.GetDataRepository;
@@ -42,35 +41,20 @@ public class NewsGossipsActivity extends BaseNavigationActivity implements OnSli
 
     @BindView(R.id.recyclerViewNews)
     public RecyclerView recyclerViewNews;
+
+    @BindView(R.id.nestedScrollView)
+    NestedScrollView nestedScrollView;
     private CineNewsGossipsViewModel mCineNewsGossipsModel;
     private NewsGossipAdapter adapter;
     private String videoId = "";
+    private PaginationNestedOnScrollListener paginationNestedOnScrollListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mCineNewsGossipsModel = ViewModelProviders.of(this).get(CineNewsGossipsViewModel.class);
         init();
-    }
-
-    private void init() {
-        getSupportActionBar().setTitle(R.string.newsGossips);
-        recyclerViewNews.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        recyclerViewNews.setNestedScrollingEnabled(false);
-        recyclerViewNews.setHasFixedSize(true);
-
-        newsSwipeToRefresh.setOnRefreshListener(this);
-    }
-
-    @Override
-    protected int getLayoutId() {
-        return R.layout.activity_news_gossips;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (mCineNewsGossipsModel.getNewsGossip() == null || ListUtils.isEmpty(mCineNewsGossipsModel.getNewsGossip().getData())) {
+        if (mCineNewsGossipsModel.getNewsGossipList() == null) {
             requestNewsGossipList();
         } else {
             try {
@@ -81,19 +65,53 @@ public class NewsGossipsActivity extends BaseNavigationActivity implements OnSli
         }
     }
 
+    private void init() {
+        getSupportActionBar().setTitle(R.string.newsGossips);
+        newsSwipeToRefresh.setOnRefreshListener(this);
+        adapter = new NewsGossipAdapter(this);
+        recyclerViewNews.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        recyclerViewNews.setNestedScrollingEnabled(false);
+        recyclerViewNews.setHasFixedSize(true);
+        recyclerViewNews.setAdapter(adapter);
+        paginationNestedOnScrollListener = new PaginationNestedOnScrollListener(recyclerViewNews, (LinearLayoutManager) recyclerViewNews.getLayoutManager(), mCineNewsGossipsModel) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                requestNewsGossipList();
+            }
+        };
+        nestedScrollView.setOnScrollChangeListener(paginationNestedOnScrollListener);
+    }
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_news_gossips;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
     private void renderNewsGossip() throws MalformedURLException {
-        if (mCineNewsGossipsModel.getNewsGossip() != null && mCineNewsGossipsModel.getNewsGossip().getData() != null) {
+        if (mCineNewsGossipsModel.isToAppend()) {
+            adapter.addNewsGossipList(mCineNewsGossipsModel.getAppendNewsGossipList());
+            mCineNewsGossipsModel.setToAppend(false);
+        } else {
+            adapter.setNewsGossipList(mCineNewsGossipsModel.getNewsGossipList());
+            mCineNewsGossipsModel.setToAppend(false);
+        }
+        /*if (mCineNewsGossipsModel.getNewsGossip() != null && mCineNewsGossipsModel.getNewsGossip().getData() != null) {
             adapter = new NewsGossipAdapter(mCineNewsGossipsModel.getNewsGossip().getData(), this);
             recyclerViewNews.setAdapter(adapter);
         } else if (Connectivity.isConnected(this))
             requestNewsGossipList();
         else
-            Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();*/
     }
 
     private void requestNewsGossipList() {
         if (Connectivity.isConnected(this)) {
-            compositeDisposable.add(RestAPI.getInstance().getNewsGossip()
+            compositeDisposable.add(RestAPI.getInstance().getNewsGossip(mCineNewsGossipsModel.getCurrentPage())
                     .doOnSubscribe(disposable -> {
                         newsSwipeToRefresh.setRefreshing(true);
                     })
@@ -123,9 +141,15 @@ public class NewsGossipsActivity extends BaseNavigationActivity implements OnSli
 
     private void handleNewsGossipData(NewsGossip data) throws MalformedURLException {
         if (data != null && data.getData() != null) {
-            mCineNewsGossipsModel.setNewsGossip(data);
+            mCineNewsGossipsModel.setNewsGossipList(data.getData());
+            mCineNewsGossipsModel.setAppendNewsGossipList(data.getData());
+            mCineNewsGossipsModel.setLastPage(data.getMeta().getLastPage());
             renderNewsGossip();
         } else Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
+        /*if (data != null && data.getData() != null) {
+            mCineNewsGossipsModel.setNewsGossip(data);
+            renderNewsGossip();
+        } else Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();*/
     }
 
     private void handleDatabase(NewsGossip data) {
@@ -153,12 +177,14 @@ public class NewsGossipsActivity extends BaseNavigationActivity implements OnSli
 
     @Override
     public void onRefresh() {
+        mCineNewsGossipsModel.resetState();
+        paginationNestedOnScrollListener.resetState();
         requestNewsGossipList();
     }
 
 
     @Override
     public void onClick(int id) {
-        ArticleDetailActivity.startActivity(this, mCineNewsGossipsModel.getNewsGossip().getData().get(id));
+        ArticleDetailActivity.startActivity(this, mCineNewsGossipsModel.getNewsGossipList().get(id));
     }
 }

@@ -7,6 +7,7 @@ import android.view.View;
 import com.cinekancha.R;
 import com.cinekancha.adapters.base.BaseRecyclerAdapter;
 import com.cinekancha.adapters.base.BaseViewHolder;
+import com.cinekancha.entities.model.Movie;
 import com.cinekancha.entities.model.Troll;
 import com.cinekancha.entities.model.TrollData;
 import com.cinekancha.home.TrollHolder;
@@ -23,11 +24,22 @@ import io.reactivex.annotations.NonNull;
  */
 
 public class TrollAdapter extends BaseRecyclerAdapter<TrollHolder> {
-    private List<TrollData> mData;
+    private List<TrollData> mData = new ArrayList<>();
 
     @Override
     public TrollHolder onCreateView(int viewType, View view) {
         return new TrollHolder(this, view);
+    }
+
+    public void setTrollList(List<TrollData> trollDataList) {
+        this.mData.clear();
+        this.mData.addAll(trollDataList);
+        notifyDataSetChanged();
+    }
+
+    public void addTrollList(List<TrollData> trollDataList) {
+        this.mData.addAll(trollDataList);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -53,21 +65,5 @@ public class TrollAdapter extends BaseRecyclerAdapter<TrollHolder> {
     @Override
     public int getItemCount() {
         return mData == null ? 0 : mData.size();
-    }
-
-    public void setTrolls(List<TrollData> trolls) {
-        this.mData = trolls;
-        notifyDataSetChanged();
-    }
-
-    public void addTrolls(@NonNull List<TrollData> trolls) {
-        if (this.mData == null) this.mData = new ArrayList<>();
-        int initial = this.mData.size();
-        this.mData.addAll(trolls);
-        notifyItemRangeInserted(initial, trolls.size());
-    }
-
-    public TrollData getTroll(int position) {
-        return mData.get(position % mData.size());
     }
 }

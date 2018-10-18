@@ -1,8 +1,10 @@
 package com.cinekancha.poll;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.os.Bundle;
+import android.support.v4.widget.NestedScrollView;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -11,13 +13,13 @@ import android.widget.Toast;
 
 import com.cinekancha.R;
 import com.cinekancha.activities.base.BaseNavigationActivity;
-import com.cinekancha.entities.model.NewRelease;
+import com.cinekancha.activities.base.PaginationNestedOnScrollListener;
 import com.cinekancha.entities.model.Poll;
+import com.cinekancha.entities.model.PollData;
 import com.cinekancha.entities.model.PollDatabase;
 import com.cinekancha.entities.rest.GetDataRepository;
 import com.cinekancha.entities.rest.RestAPI;
 import com.cinekancha.entities.rest.SetDataRepository;
-import com.cinekancha.listener.OnClickListener;
 import com.cinekancha.listener.OnPollClickListener;
 import com.cinekancha.utils.Connectivity;
 import com.cinekancha.view.CinePollViewModel;
@@ -30,14 +32,16 @@ import butterknife.BindView;
 import retrofit2.Response;
 
 public class PollsActivity extends BaseNavigationActivity implements OnPollClickListener, SwipeRefreshLayout.OnRefreshListener {
-    @BindView(R.id.toolbar)
-    protected Toolbar toolbar;
-
     @BindView(R.id.pollRecyclerView)
     public RecyclerView recyclerView;
-
     @BindView(R.id.homeSwipeRefreshLayout)
     public SwipeRefreshLayout homeSwipeRefreshLayout;
+    @BindView(R.id.toolbar)
+    protected Toolbar toolbar;
+    @BindView(R.id.nestedScrollView)
+    NestedScrollView nestedScrollView;
+
+    private PaginationNestedOnScrollListener paginationNestedOnScrollListener;
 
     private CinePollViewModel cinePollViewModel;
 
@@ -51,14 +55,32 @@ public class PollsActivity extends BaseNavigationActivity implements OnPollClick
         super.onCreate(savedInstanceState);
         cinePollViewModel = ViewModelProviders.of(this).get(CinePollViewModel.class);
         init();
+        if (cinePollViewModel.getPollDataList() == null) {
+            requestMovie();
+        } else {
+            try {
+                renderMovieData();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void init() {
         getSupportActionBar().setTitle(R.string.poll);
+        homeSwipeRefreshLayout.setOnRefreshListener(this);
+        adapter = new PollAdapter(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setHasFixedSize(true);
-        homeSwipeRefreshLayout.setOnRefreshListener(this);
+        recyclerView.setAdapter(adapter);
+        paginationNestedOnScrollListener = new PaginationNestedOnScrollListener(recyclerView, (LinearLayoutManager) recyclerView.getLayoutManager(), cinePollViewModel) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                requestMovie();
+            }
+        };
+        nestedScrollView.setOnScrollChangeListener(paginationNestedOnScrollListener);
     }
 
 
@@ -70,36 +92,34 @@ public class PollsActivity extends BaseNavigationActivity implements OnPollClick
     @Override
     protected void onResume() {
         super.onResume();
-        if (cinePollViewModel.getPollData() == null) {
-            requestMovie();
+    }
+
+    private void renderMovieData() throws MalformedURLException {
+        if (cinePollViewModel.isToAppend()) {
+            adapter.addPollDataList(cinePollViewModel.getAppendPollDataList());
+            cinePollViewModel.setToAppend(false);
         } else {
-            renderMovieData();
+            adapter.setPollDataList(cinePollViewModel.getPollDataList());
+            cinePollViewModel.setToAppend(false);
         }
     }
 
-    private void renderMovieData() {
-        if (cinePollViewModel.getPollData().getData() != null && cinePollViewModel.getPollData().getData().size() > 0) {
-            checkPollData();
-            adapter = new PollAdapter(cinePollViewModel.getPollData().getData(), this);
-            recyclerView.setAdapter(adapter);
-        } else requestMovie();
-    }
-
-    private void checkPollData() {
+    private List<PollData> checkPollData(List<PollData> polls) {
         if (pollDatabaseList != null && pollDatabaseList.size() > 0) {
             for (PollDatabase item : pollDatabaseList) {
-                for (int i = 0; i < cinePollViewModel.getPollData().getData().size(); i++) {
-                    if (item.getPollId() == cinePollViewModel.getPollData().getData().get(i).getId()) {
-                        cinePollViewModel.getPollData().getData().get(i).setStatus("INACTIVE");
+                for (int i = 0; i < polls.size(); i++) {
+                    if (item.getPollId() == polls.get(i).getId()) {
+                        polls.get(i).setStatus("INACTIVE");
                     }
                 }
             }
         }
+        return polls;
     }
 
     private void requestMovie() {
         if (Connectivity.isConnected(this))
-            compositeDisposable.add(RestAPI.getInstance().getPoll()
+            compositeDisposable.add(RestAPI.getInstance().getPoll(cinePollViewModel.getCurrentPage())
                     .doOnSubscribe(disposable -> {
                         homeSwipeRefreshLayout.setRefreshing(true);
                     })
@@ -135,11 +155,14 @@ public class PollsActivity extends BaseNavigationActivity implements OnPollClick
                 })
                 .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
                 .subscribe(this::handlePollDatabase, this::handleMovieFetchError));
+
         if (data != null && data.getData() != null) {
-            cinePollViewModel.setPollData(data);
+            List<PollData> checkedPollData = checkPollData(data.getData());
+            cinePollViewModel.setPollDataList(checkedPollData);
+            cinePollViewModel.setAppendPollDataList(checkedPollData);
+            cinePollViewModel.setLastPage(data.getMeta().getLastPage());
             renderMovieData();
         } else Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
-
     }
 
     private void handlePollDatabase(List<PollDatabase> pollDatabases) {
@@ -165,7 +188,7 @@ public class PollsActivity extends BaseNavigationActivity implements OnPollClick
     }
 
     private void handlePostPoll(Response<Void> data) throws MalformedURLException {
-        Log.d("ResponseCode",String.valueOf(data));
+        Log.d("ResponseCode", String.valueOf(data));
         if (data.code() == 200) {
             PollDatabase pollDatabase = new PollDatabase();
             pollDatabase.setOptionId(optionId);
@@ -181,12 +204,13 @@ public class PollsActivity extends BaseNavigationActivity implements OnPollClick
     }
 
     private void notifyDataPoll(PollDatabase pollDatabase) {
-        requestMovie();
-
+       onRefresh();
     }
 
     @Override
     public void onRefresh() {
+        cinePollViewModel.resetState();
+        paginationNestedOnScrollListener.resetState();
         requestMovie();
     }
 }

@@ -120,38 +120,38 @@ public class RestAPI {
                 .retry(1);
     }
 
-    public Observable<NewsGossip> getNewsGossip() {
-        return getApiService().getNewsGossip()
+    public Observable<NewsGossip> getNewsGossip(int currentPage) {
+        return getApiService().getNewsGossip(currentPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .retry(1);
     }
 
 
-    public Observable<Troll> getTroll() {
-        return getApiService().getTroll()
+    public Observable<Troll> getTroll(int currentPage) {
+        return getApiService().getTroll(currentPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .retry(1);
     }
 
-    public Observable<TrendingData> getTrending() {
-        return getApiService().getTrending()
+    public Observable<TrendingData> getTrending(int currentPage) {
+        return getApiService().getTrending(currentPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .retry(1);
     }
 
-    public Observable<ActorGallery> getActorList() {
+    public Observable<ActorGallery> getActorList(int currentPage) {
 
-        return getApiService().getActorList()
+        return getApiService().getActorList(currentPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .retry(1);
     }
 
-    public Observable<Reviews> getReviews() {
-        return getApiService().getReviews()
+    public Observable<Reviews> getReviews(int currentPage) {
+        return getApiService().getReviews(currentPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .retry(1);
@@ -165,15 +165,15 @@ public class RestAPI {
                 .retry(1);
     }
 
-    public Observable<FullMovies> getFullMovies() {
-        return getApiService().getFullMovies()
+    public Observable<FullMovies> getFullMovies(int currentPage) {
+        return getApiService().getFullMovies(currentPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .retry(1);
     }
 
-    public Observable<Poll> getPoll() {
-        return getApiService().getPoll()
+    public Observable<Poll> getPoll(int currentPage) {
+        return getApiService().getPoll(currentPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .retry(1);
@@ -186,8 +186,8 @@ public class RestAPI {
                 .retry(1);
     }
 
-    public Observable<Trivia> getTrivia() {
-        return getApiService().getTrivia()
+    public Observable<Trivia> getTrivia(int currentPage) {
+        return getApiService().getTrivia(currentPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .retry(1);
