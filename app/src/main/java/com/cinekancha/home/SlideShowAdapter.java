@@ -85,7 +85,7 @@ public class SlideShowAdapter extends FragmentPagerAdapter {
             Log.d(TAG, "Remove old dispatch");
             mSlideChangeHandler.removeMessages(MESSAGE_SLIDE_CHANGE);
         }
-        boolean sent = mSlideChangeHandler.sendEmptyMessageDelayed(MESSAGE_SLIDE_CHANGE, 1000);
+        boolean sent = mSlideChangeHandler.sendEmptyMessageDelayed(MESSAGE_SLIDE_CHANGE, 3000);
         Log.d(TAG, "Slide " + (sent ? "" : " not ") + " resumed");
     }
 

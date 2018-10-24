@@ -54,7 +54,6 @@ public class SetDataRepository {
                                 realm1.delete(HomeData.class);
                                 realm1.delete(FeaturedContent.class);
                                 realm1.delete(TrollData.class);
-                                realm1.delete(Movie.class);
                                 realm1.delete(BoxOfficeItem.class);
                                 realm1.delete(Article.class);
                                 realm1.delete(Video.class);
@@ -92,7 +91,6 @@ public class SetDataRepository {
             return Single.create(e -> {
                 realm.executeTransactionAsync(realm1 -> {
                             realm1.delete(MovieData.class);
-                            realm1.delete(Movie.class);
                             realm1.delete(Meta.class);
                             realm1.copyToRealmOrUpdate(data);
                         }, () -> {
