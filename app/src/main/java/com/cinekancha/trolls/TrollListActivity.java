@@ -18,7 +18,6 @@ import com.cinekancha.entities.model.Troll;
 import com.cinekancha.entities.model.TrollData;
 import com.cinekancha.entities.rest.GetDataRepository;
 import com.cinekancha.entities.rest.RestAPI;
-import com.cinekancha.entities.rest.SetDataRepository;
 import com.cinekancha.utils.Connectivity;
 import com.cinekancha.view.CineTrollViewModel;
 import com.stfalcon.frescoimageviewer.ImageViewer;
@@ -106,22 +105,11 @@ public class TrollListActivity extends BaseNavigationActivity implements Recycle
                     })
                     .doFinally(() -> swipeRefreshLayout.setRefreshing(false))
                     .subscribe(this::handleDatabase, this::handleMovieFetchError));
-        else
-            compositeDisposable.add(GetDataRepository.getInstance().getTroll()
-                    .doOnSubscribe(disposable -> {
-                        swipeRefreshLayout.setRefreshing(true);
-                    })
-                    .doFinally(() -> swipeRefreshLayout.setRefreshing(false))
-                    .subscribe(this::handleTrollData, this::handleMovieFetchError));
+
     }
 
-    private void handleDatabase(Troll data) {
-        compositeDisposable.add(SetDataRepository.getInstance().setTroll(data).toObservable()
-                .doOnSubscribe(disposable -> {
-                })
-                .doFinally(() -> {
-                })
-                .subscribe(this::handleTrollData, this::handleMovieFetchError));
+    private void handleDatabase(Troll data) throws MalformedURLException {
+        handleTrollData(data);
     }
 
 

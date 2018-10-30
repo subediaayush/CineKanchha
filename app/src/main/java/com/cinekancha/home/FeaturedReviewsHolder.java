@@ -2,6 +2,7 @@ package com.cinekancha.home;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,6 +22,7 @@ import com.cinekancha.movieReview.ReviewListActivity;
 import com.cinekancha.trolls.TrollListActivity;
 import com.cinekancha.utils.GlobalUtils;
 
+import java.io.Serializable;
 import java.util.List;
 
 import butterknife.BindView;
@@ -66,7 +68,7 @@ public class FeaturedReviewsHolder extends HomeItemHolder {
                 reviewData.setName(movie.getName());
                 reviewData.setReview(movie.getReview());
                 Intent intent = new Intent(itemView.getContext(), ReviewDetailActivity.class);
-                intent.putExtra("review", reviewData);
+                intent.putExtra("review", (Parcelable) reviewData);
                 itemView.getContext().startActivity(intent);
             }
         });

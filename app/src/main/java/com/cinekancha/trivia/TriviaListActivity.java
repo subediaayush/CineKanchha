@@ -15,9 +15,7 @@ import com.cinekancha.activities.base.BaseNavigationActivity;
 import com.cinekancha.activities.base.PaginationNestedOnScrollListener;
 import com.cinekancha.adapters.base.RecyclerViewClickListener;
 import com.cinekancha.entities.model.Trivia;
-import com.cinekancha.entities.rest.GetDataRepository;
 import com.cinekancha.entities.rest.RestAPI;
-import com.cinekancha.entities.rest.SetDataRepository;
 import com.cinekancha.utils.Connectivity;
 import com.cinekancha.view.CineTriviaViewModel;
 
@@ -93,13 +91,7 @@ public class TriviaListActivity extends BaseNavigationActivity implements Recycl
                     })
                     .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
                     .subscribe(this::handleDatabase, this::handleFetchError));
-        else
-            compositeDisposable.add(GetDataRepository.getInstance().getTrivia()
-                    .doOnSubscribe(disposable -> {
-                        homeSwipeRefreshLayout.setRefreshing(true);
-                    })
-                    .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
-                    .subscribe(this::handleTriviaData, this::handleFetchError));
+
     }
 
     private void handleTriviaData(Trivia trivia) throws MalformedURLException {
@@ -111,13 +103,8 @@ public class TriviaListActivity extends BaseNavigationActivity implements Recycl
         } else Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }
 
-    private void handleDatabase(Trivia trivia) {
-        compositeDisposable.add(SetDataRepository.getInstance().setTriviaData(trivia).toObservable()
-                .doOnSubscribe(disposable -> {
-                })
-                .doFinally(() -> {
-                })
-                .subscribe(this::handleTriviaData, this::handleFetchError));
+    private void handleDatabase(Trivia trivia) throws MalformedURLException {
+        handleTriviaData(trivia);
     }
 
     private void handleFetchError(Throwable throwable) {

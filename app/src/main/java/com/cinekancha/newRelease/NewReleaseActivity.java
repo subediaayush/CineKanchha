@@ -14,11 +14,8 @@ import com.cinekancha.R;
 import com.cinekancha.activities.base.BaseNavigationActivity;
 import com.cinekancha.activities.base.PaginationNestedOnScrollListener;
 import com.cinekancha.entities.model.Movie;
-import com.cinekancha.entities.model.MovieData;
 import com.cinekancha.entities.model.NewRelease;
-import com.cinekancha.entities.rest.GetDataRepository;
 import com.cinekancha.entities.rest.RestAPI;
-import com.cinekancha.entities.rest.SetDataRepository;
 import com.cinekancha.listener.OnClickListener;
 import com.cinekancha.movieDetail.MoviePostDetailActivity;
 import com.cinekancha.movies.MoviesAdapter;
@@ -125,23 +122,11 @@ public class NewReleaseActivity extends BaseNavigationActivity implements OnClic
                     })
                     .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
                     .subscribe(this::handleDatabase, this::handleMovieFetchError));
-        else
-            compositeDisposable.add(GetDataRepository.getInstance().getNewReleaseData()
-                    .doOnSubscribe(disposable -> {
-                        homeSwipeRefreshLayout.setRefreshing(true);
-                    })
-                    .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
-                    .subscribe(this::handleMovieData, this::handleMovieFetchError));
 
     }
 
-    private void handleDatabase(NewRelease data) {
-        compositeDisposable.add(SetDataRepository.getInstance().setNewRelease(data).toObservable()
-                .doOnSubscribe(disposable -> {
-                })
-                .doFinally(() -> {
-                })
-                .subscribe(this::handleMovieData, this::handleMovieFetchError));
+    private void handleDatabase(NewRelease data) throws MalformedURLException {
+        handleMovieData(data);
     }
 
     private void handleMovieFetchError(Throwable throwable) {

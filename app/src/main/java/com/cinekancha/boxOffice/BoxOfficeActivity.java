@@ -11,11 +11,7 @@ import android.widget.Toast;
 import com.cinekancha.R;
 import com.cinekancha.activities.base.BaseNavigationActivity;
 import com.cinekancha.entities.model.BoxOfficeItem;
-import com.cinekancha.entities.model.Movie;
-import com.cinekancha.entities.model.UpcomingMovie;
-import com.cinekancha.entities.rest.GetDataRepository;
 import com.cinekancha.entities.rest.RestAPI;
-import com.cinekancha.entities.rest.SetDataRepository;
 import com.cinekancha.listener.OnClickListener;
 import com.cinekancha.movieDetail.MoviePostDetailActivity;
 import com.cinekancha.utils.Connectivity;
@@ -83,22 +79,11 @@ public class BoxOfficeActivity extends BaseNavigationActivity implements OnClick
                     })
                     .doFinally(() -> swipeRefreshLayout.setRefreshing(false))
                     .subscribe(this::handleDatabase, this::handleMovieFetchError));
-        else
-            compositeDisposable.add(GetDataRepository.getInstance().getBoxOffice()
-                    .doOnSubscribe(disposable -> {
-                        swipeRefreshLayout.setRefreshing(true);
-                    })
-                    .doFinally(() -> swipeRefreshLayout.setRefreshing(false))
-                    .subscribe(this::handleBoxOfficeData, this::handleMovieFetchError));
+
     }
 
     private void handleDatabase(List<BoxOfficeItem> boxOffice) {
-        compositeDisposable.add(SetDataRepository.getInstance().setBoxOffice(boxOffice)
-                .doOnSubscribe(disposable -> {
-                })
-                .doFinally(() -> {
-                })
-                .subscribe(this::handleBoxOfficeData, this::handleMovieFetchError));
+        handleBoxOfficeData(boxOffice);
     }
 
     private void handleMovieFetchError(Throwable throwable) {

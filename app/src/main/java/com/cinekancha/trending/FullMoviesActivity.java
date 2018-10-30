@@ -18,7 +18,6 @@ import com.cinekancha.entities.model.Video;
 import com.cinekancha.entities.model.FullMovies;
 import com.cinekancha.entities.rest.GetDataRepository;
 import com.cinekancha.entities.rest.RestAPI;
-import com.cinekancha.entities.rest.SetDataRepository;
 import com.cinekancha.listener.OnClickListener;
 import com.cinekancha.utils.Connectivity;
 import com.cinekancha.utils.GlobalUtils;
@@ -112,13 +111,7 @@ public class FullMoviesActivity extends BaseNavigationActivity implements OnClic
                     })
                     .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
                     .subscribe(this::handleDatabase, this::handleMovieFetchError));
-        else
-            compositeDisposable.add(GetDataRepository.getInstance().getFullMovies()
-                    .doOnSubscribe(disposable -> {
-                        homeSwipeRefreshLayout.setRefreshing(true);
-                    })
-                    .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
-                    .subscribe(this::handleMovieData, this::handleMovieFetchError));
+
     }
 
     private void handleMovieFetchError(Throwable throwable) {
@@ -126,13 +119,8 @@ public class FullMoviesActivity extends BaseNavigationActivity implements OnClic
         Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }
 
-    private void handleDatabase(FullMovies data) {
-        compositeDisposable.add(SetDataRepository.getInstance().setFullMovies(data).toObservable()
-                .doOnSubscribe(disposable -> {
-                })
-                .doFinally(() -> {
-                })
-                .subscribe(this::handleMovieData, this::handleMovieFetchError));
+    private void handleDatabase(FullMovies data) throws MalformedURLException {
+        handleMovieData(data);
     }
 
     private void handleMovieData(FullMovies data) throws MalformedURLException {

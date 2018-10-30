@@ -16,6 +16,7 @@ import com.cinekancha.entities.model.TrendingData;
 import com.cinekancha.entities.model.Trivia;
 import com.cinekancha.entities.model.Troll;
 import com.cinekancha.entities.model.UpcomingMovie;
+import com.google.gson.JsonElement;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -24,10 +25,12 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
+import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.Result;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -48,7 +51,6 @@ public class RestAPI {
         OkHttpClient client = new OkHttpClient.Builder()
                 .readTimeout(120, TimeUnit.SECONDS)
                 .connectTimeout(120, TimeUnit.SECONDS)
-                .cache(CacheControlInterceptor.getCache())
                 .addNetworkInterceptor(new CacheControlInterceptor())
                 .addInterceptor(loggingInterceptor)
                 .build();
@@ -113,7 +115,7 @@ public class RestAPI {
                 .retry(1);
     }
 
-    public Observable<HomeData> getHomeData() {
+    public Observable<Response<HomeData>> getHomeData() {
         return getApiService().getHomeData()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

@@ -15,9 +15,7 @@ import com.cinekancha.activities.base.BaseNavigationActivity;
 import com.cinekancha.activities.base.PaginationNestedOnScrollListener;
 import com.cinekancha.entities.model.Movie;
 import com.cinekancha.entities.model.MovieData;
-import com.cinekancha.entities.rest.GetDataRepository;
 import com.cinekancha.entities.rest.RestAPI;
-import com.cinekancha.entities.rest.SetDataRepository;
 import com.cinekancha.listener.OnClickListener;
 import com.cinekancha.movieDetail.MoviePostDetailActivity;
 import com.cinekancha.utils.Connectivity;
@@ -111,22 +109,23 @@ public class MovieActivity extends BaseNavigationActivity implements OnClickList
                         homeSwipeRefreshLayout.setRefreshing(false);
                     })
                     .subscribe(this::handleDatabase, this::handleMovieFetchError));
-        else
-            compositeDisposable.add(GetDataRepository.getInstance().getMovieData()
-                    .doOnSubscribe(disposable -> {
-                        homeSwipeRefreshLayout.setRefreshing(true);
-                    })
-                    .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
-                    .subscribe(this::handleMovieData, this::handleMovieFetchError));
+//        else
+//            compositeDisposable.add(GetDataRepository.getInstance().getMovieData()
+//                    .doOnSubscribe(disposable -> {
+//                        homeSwipeRefreshLayout.setRefreshing(true);
+//                    })
+//                    .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
+//                    .subscribe(this::handleMovieData, this::handleMovieFetchError));
     }
 
-    private void handleDatabase(MovieData data) {
-        compositeDisposable.add(SetDataRepository.getInstance().setMovie(data).toObservable()
-                .doOnSubscribe(disposable -> {
-                })
-                .doFinally(() -> {
-                })
-                .subscribe(this::handleMovieData, this::handleMovieFetchError));
+    private void handleDatabase(MovieData data) throws MalformedURLException {
+        handleMovieData(data);
+//        compositeDisposable.add(SetDataRepository.getInstance().setMovie(data).toObservable()
+//                .doOnSubscribe(disposable -> {
+//                })
+//                .doFinally(() -> {
+//                })
+//                .subscribe(this::handleMovieData, this::handleMovieFetchError));
     }
 
     private void handleMovieFetchError(Throwable throwable) {

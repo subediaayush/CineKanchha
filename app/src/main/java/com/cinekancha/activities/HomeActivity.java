@@ -20,17 +20,19 @@ import com.cinekancha.entities.model.HomeData;
 import com.cinekancha.entities.model.Links;
 import com.cinekancha.entities.model.PollDatabase;
 import com.cinekancha.entities.rest.GetDataRepository;
-import com.cinekancha.entities.rest.SetDataRepository;
 import com.cinekancha.entities.rest.RestAPI;
+import com.cinekancha.entities.rest.SetDataRepository;
 import com.cinekancha.home.HomeDataAdapter;
 import com.cinekancha.home.OnSlideClickListener;
 import com.cinekancha.home.SlideShowAdapter;
 import com.cinekancha.listener.OnPollClickListener;
 import com.cinekancha.utils.Connectivity;
+import com.cinekancha.utils.MyCache;
 import com.cinekancha.view.CineHomeViewModel;
 import com.google.gson.Gson;
 
-import java.net.MalformedURLException;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,6 +67,9 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
     private long optionId;
     private long pollId;
     private List<PollDatabase> pollDatabaseList = new ArrayList();
+    private MyCache myCache;
+    private File mDirectory;
+
 
     @Override
     protected int getLayoutId() {
@@ -75,6 +80,14 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setTitle("Home");
+
+        mDirectory = new File(getApplicationInfo().dataDir + "/Filmy Fuche/");
+        ;
+        try {
+            myCache = new MyCache(mDirectory);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         mCineHomeViewModel = ViewModelProviders.of(this).get(CineHomeViewModel.class);
 
@@ -126,12 +139,12 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
                     .doFinally(() -> mSwipeRefreshLayout.setRefreshing(false))
                     .subscribe(this::handleDatabase, this::handleHomeFetchError));
         } else {
-            compositeDisposable.add(GetDataRepository.getInstance().getHomeData()
-                    .doOnSubscribe(disposable -> {
-                        mSwipeRefreshLayout.setRefreshing(true);
-                    })
-                    .doFinally(() -> mSwipeRefreshLayout.setRefreshing(false))
-                    .subscribe(this::handleHomeData, this::handleHomeFetchError));
+//            compositeDisposable.add(GetDataRepository.getInstance().getHomeData()
+//                    .doOnSubscribe(disposable -> {
+//                        mSwipeRefreshLayout.setRefreshing(true);
+//                    })
+//                    .doFinally(() -> mSwipeRefreshLayout.setRefreshing(false))
+//                    .subscribe(this::handleHomeData, this::handleHomeFetchError));
         }
     }
 
@@ -140,13 +153,36 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
         Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }
 
-    private void handleDatabase(HomeData data) {
-        compositeDisposable.add(SetDataRepository.getInstance().setHomeData(data).toObservable()
-                .doOnSubscribe(disposable -> {
-                })
-                .doFinally(() -> {
-                })
-                .subscribe(this::handleHomeData, this::handleHomeFetchError));
+    private void handleDatabase(Response<HomeData> data) throws IOException {
+        myCache.put("home", new Gson().toJson(data.body()));
+        myCache.mDiskLruCache.close();
+        myCache = new MyCache(mDirectory);
+        String homeResponse = null;
+        try {
+            homeResponse = (String) new MyCache(mDirectory).get("home");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        Log.d("HomeResponse", String.valueOf(new MyCache(mDirectory).containsKey("home")));
+        handleHomeData(data.body());
+////        ReadWriteJsonFileUtils.createJsonFileData(this, "Home", new Gson().toJson(data.body()));
+//        compositeDisposable.add(SetDataRepository.getInstance() .setHomeData(data.body()).toObservable()
+//                .doOnSubscribe(disposable -> {
+//                })
+//                .doFinally(() -> {
+//                })
+//                .subscribe(this::handleHomeData, this::handleHomeFetchError));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try {
+            myCache.mDiskLruCache.delete();
+            myCache.mDiskLruCache.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void checkPollData() {
@@ -228,7 +264,7 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
                 .subscribe(this::handlePostPoll, this::handleHomeFetchError));
     }
 
-    private void handlePostPoll(Response<Void> data) throws MalformedURLException {
+    private void handlePostPoll(Response<Void> data) {
         Log.d("ResponseCode", String.valueOf(data));
         if (data.code() == 200) {
             PollDatabase pollDatabase = new PollDatabase();

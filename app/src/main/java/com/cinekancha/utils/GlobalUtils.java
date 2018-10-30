@@ -10,6 +10,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
+import com.cinekancha.BuildConfig;
+import com.jakewharton.disklrucache.DiskLruCache;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DecimalFormat;
@@ -84,6 +91,8 @@ public class GlobalUtils {
 
         transaction.commit();
     }
+
+
 
     public static boolean isNetworkAvailable(Context mContext) {
         boolean result = false;

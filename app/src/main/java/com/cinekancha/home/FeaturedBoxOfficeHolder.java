@@ -54,6 +54,7 @@ class FeaturedBoxOfficeHolder extends HomeItemHolder {
         decor.setDrawable(divider);
         boxOffice.addItemDecoration(decor);
         boxOffice.setAdapter(adapter);
+        boxOffice.setNestedScrollingEnabled(false);
     }
 
     public void setBoxOffice(List<BoxOfficeItem> items) {

@@ -18,14 +18,11 @@ import com.cinekancha.article.ArticleDetailActivity;
 import com.cinekancha.entities.model.FeaturedContent;
 import com.cinekancha.entities.model.Links;
 import com.cinekancha.entities.model.NewsGossip;
-import com.cinekancha.entities.rest.GetDataRepository;
 import com.cinekancha.entities.rest.RestAPI;
-import com.cinekancha.entities.rest.SetDataRepository;
 import com.cinekancha.home.OnSlideClickListener;
 import com.cinekancha.listener.OnClickListener;
 import com.cinekancha.utils.Connectivity;
 import com.cinekancha.utils.GlobalUtils;
-import com.cinekancha.utils.ListUtils;
 import com.cinekancha.view.CineNewsGossipsViewModel;
 
 import java.net.MalformedURLException;
@@ -57,11 +54,7 @@ public class NewsGossipsActivity extends BaseNavigationActivity implements OnSli
         if (mCineNewsGossipsModel.getNewsGossipList() == null) {
             requestNewsGossipList();
         } else {
-            try {
-                renderNewsGossip();
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
+            renderNewsGossip();
         }
     }
 
@@ -92,7 +85,7 @@ public class NewsGossipsActivity extends BaseNavigationActivity implements OnSli
         super.onResume();
     }
 
-    private void renderNewsGossip() throws MalformedURLException {
+    private void renderNewsGossip() {
         if (mCineNewsGossipsModel.isToAppend()) {
             adapter.addNewsGossipList(mCineNewsGossipsModel.getAppendNewsGossipList());
             mCineNewsGossipsModel.setToAppend(false);
@@ -117,13 +110,6 @@ public class NewsGossipsActivity extends BaseNavigationActivity implements OnSli
                     })
                     .doFinally(() -> newsSwipeToRefresh.setRefreshing(false))
                     .subscribe(this::handleDatabase, this::handleMovieFetchError));
-        } else {
-            compositeDisposable.add(GetDataRepository.getInstance().getNewsGossip()
-                    .doOnSubscribe(disposable -> {
-                        newsSwipeToRefresh.setRefreshing(true);
-                    })
-                    .doFinally(() -> newsSwipeToRefresh.setRefreshing(false))
-                    .subscribe(this::handleNewsGossipData, this::handleMovieFetchError));
         }
     }
 
@@ -139,7 +125,7 @@ public class NewsGossipsActivity extends BaseNavigationActivity implements OnSli
         Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }
 
-    private void handleNewsGossipData(NewsGossip data) throws MalformedURLException {
+    private void handleNewsGossipData(NewsGossip data)  {
         if (data != null && data.getData() != null) {
             mCineNewsGossipsModel.setNewsGossipList(data.getData());
             mCineNewsGossipsModel.setAppendNewsGossipList(data.getData());
@@ -152,13 +138,8 @@ public class NewsGossipsActivity extends BaseNavigationActivity implements OnSli
         } else Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();*/
     }
 
-    private void handleDatabase(NewsGossip data) {
-        compositeDisposable.add(SetDataRepository.getInstance().setNewsGossip(data).toObservable()
-                .doOnSubscribe(disposable -> {
-                })
-                .doFinally(() -> {
-                })
-                .subscribe(this::handleNewsGossipData, this::handleMovieFetchError));
+    private void handleDatabase(NewsGossip data)  {
+        handleNewsGossipData(data);
     }
 
     @Override

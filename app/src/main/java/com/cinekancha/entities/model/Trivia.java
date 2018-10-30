@@ -1,20 +1,19 @@
 package com.cinekancha.entities.model;
 
-import java.util.List;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import io.realm.RealmList;
-import io.realm.RealmObject;
+import java.io.Serializable;
+import java.util.List;
+
 import io.realm.annotations.PrimaryKey;
 
-public class Trivia extends RealmObject {
+public class Trivia implements Serializable {
     @PrimaryKey
     private int id = 0;
     @SerializedName("data")
     @Expose
-    private RealmList<TriviaData> data = null;
+    private List<TriviaData> data = null;
     @SerializedName("links")
     @Expose
     private PageLink links;
@@ -22,11 +21,11 @@ public class Trivia extends RealmObject {
     @Expose
     private Meta meta;
 
-    public RealmList<TriviaData> getData() {
+    public List<TriviaData> getData() {
         return data;
     }
 
-    public void setData(RealmList<TriviaData> data) {
+    public void setData(List<TriviaData> data) {
         this.data = data;
     }
 

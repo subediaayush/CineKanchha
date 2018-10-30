@@ -15,9 +15,7 @@ import com.cinekancha.activities.base.BaseNavigationActivity;
 import com.cinekancha.activities.base.PaginationNestedOnScrollListener;
 import com.cinekancha.entities.model.Actor;
 import com.cinekancha.entities.model.ActorGallery;
-import com.cinekancha.entities.rest.GetDataRepository;
 import com.cinekancha.entities.rest.RestAPI;
-import com.cinekancha.entities.rest.SetDataRepository;
 import com.cinekancha.listener.OnClickListener;
 import com.cinekancha.utils.Connectivity;
 import com.cinekancha.view.CineActorViewModel;
@@ -113,22 +111,11 @@ public class ActorListActivity extends BaseNavigationActivity implements OnClick
                     })
                     .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
                     .subscribe(this::handleDatabase, this::handleMovieFetchError));
-        else
-            compositeDisposable.add(GetDataRepository.getInstance().getActorGallery()
-                    .doOnSubscribe(disposable -> {
-                        homeSwipeRefreshLayout.setRefreshing(true);
-                    })
-                    .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
-                    .subscribe(this::handleMovieData, this::handleMovieFetchError));
+
     }
 
-    private void handleDatabase(ActorGallery data) {
-        compositeDisposable.add(SetDataRepository.getInstance().setActorList(data).toObservable()
-                .doOnSubscribe(disposable -> {
-                })
-                .doFinally(() -> {
-                })
-                .subscribe(this::handleMovieData, this::handleMovieFetchError));
+    private void handleDatabase(ActorGallery data) throws MalformedURLException {
+        handleMovieData(data);
     }
 
     private void handleMovieFetchError(Throwable throwable) {

@@ -15,11 +15,14 @@ import com.cinekancha.entities.model.TrendingData;
 import com.cinekancha.entities.model.Trivia;
 import com.cinekancha.entities.model.Troll;
 import com.cinekancha.entities.model.UpcomingMovie;
+import com.google.gson.JsonElement;
 
 import java.util.List;
 
 import io.reactivex.Observable;
+import okhttp3.ResponseBody;
 import retrofit2.Response;
+import retrofit2.adapter.rxjava2.Result;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -43,7 +46,7 @@ public interface ApiService {
     Observable<UpcomingMovie> getUpcomingMovie(@Query("page") int currentPage);
 
     @GET("api/home")
-    Observable<HomeData> getHomeData();
+    Observable<Response<HomeData>> getHomeData();
 
     @GET("api/boxOffice")
     Observable<List<BoxOfficeItem>> getBoxOffice();

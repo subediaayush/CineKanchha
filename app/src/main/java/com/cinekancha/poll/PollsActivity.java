@@ -4,7 +4,6 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -125,22 +124,23 @@ public class PollsActivity extends BaseNavigationActivity implements OnPollClick
                     })
                     .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
                     .subscribe(this::handleDatabase, this::handleMovieFetchError));
-        else
-            compositeDisposable.add(GetDataRepository.getInstance().getPollData()
-                    .doOnSubscribe(disposable -> {
-                        homeSwipeRefreshLayout.setRefreshing(true);
-                    })
-                    .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
-                    .subscribe(this::handleMovieData, this::handleMovieFetchError));
+        else{}
+//            compositeDisposable.add(GetDataRepository.getInstance().getPollData()
+//                    .doOnSubscribe(disposable -> {
+//                        homeSwipeRefreshLayout.setRefreshing(true);
+//                    })
+//                    .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
+//                    .subscribe(this::handleMovieData, this::handleMovieFetchError));
     }
 
-    private void handleDatabase(Poll data) {
-        compositeDisposable.add(SetDataRepository.getInstance().setPoll(data).toObservable()
-                .doOnSubscribe(disposable -> {
-                })
-                .doFinally(() -> {
-                })
-                .subscribe(this::handleMovieData, this::handleMovieFetchError));
+    private void handleDatabase(Poll data) throws MalformedURLException {
+        handleMovieData(data);
+//        compositeDisposable.add(SetDataRepository.getInstance().setPoll(data).toObservable()
+//                .doOnSubscribe(disposable -> {
+//                })
+//                .doFinally(() -> {
+//                })
+//                .subscribe(this::handleMovieData, this::handleMovieFetchError));
     }
 
     private void handleMovieFetchError(Throwable throwable) {

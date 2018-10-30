@@ -16,9 +16,7 @@ import com.cinekancha.activities.base.BaseNavigationActivity;
 import com.cinekancha.activities.base.PaginationNestedOnScrollListener;
 import com.cinekancha.entities.model.TrendingData;
 import com.cinekancha.entities.model.Video;
-import com.cinekancha.entities.rest.GetDataRepository;
 import com.cinekancha.entities.rest.RestAPI;
-import com.cinekancha.entities.rest.SetDataRepository;
 import com.cinekancha.listener.OnClickListener;
 import com.cinekancha.utils.Connectivity;
 import com.cinekancha.utils.GlobalUtils;
@@ -113,22 +111,11 @@ public class TrendingActivity extends BaseNavigationActivity implements OnClickL
                     })
                     .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
                     .subscribe(this::handleDatabase, this::handleMovieFetchError));
-        else
-            compositeDisposable.add(GetDataRepository.getInstance().getTrendingData()
-                    .doOnSubscribe(disposable -> {
-                        homeSwipeRefreshLayout.setRefreshing(true);
-                    })
-                    .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
-                    .subscribe(this::handleMovieData, this::handleMovieFetchError));
+
     }
 
-    private void handleDatabase(TrendingData data) {
-        compositeDisposable.add(SetDataRepository.getInstance().setTrending(data).toObservable()
-                .doOnSubscribe(disposable -> {
-                })
-                .doFinally(() -> {
-                })
-                .subscribe(this::handleMovieData, this::handleMovieFetchError));
+    private void handleDatabase(TrendingData data) throws MalformedURLException {
+        handleMovieData(data);
     }
 
     private void handleMovieFetchError(Throwable throwable) {

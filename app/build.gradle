@@ -113,6 +113,7 @@ dependencies {
     implementation 'com.facebook.fresco:fresco:1.2.0'
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'me.relex:circleindicator:1.2.2@aar'
+    implementation 'com.jakewharton:disklrucache:2.0.2'
 }
 
 apply plugin: 'com.google.gms.google-services'

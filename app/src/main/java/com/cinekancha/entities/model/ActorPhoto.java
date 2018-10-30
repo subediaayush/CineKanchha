@@ -1,16 +1,14 @@
 package com.cinekancha.entities.model;
 
-import java.util.List;
-
-import com.cinekancha.utils.Constants;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import io.realm.RealmList;
-import io.realm.RealmObject;
+import java.io.Serializable;
+import java.util.List;
+
 import io.realm.annotations.PrimaryKey;
 
-public class ActorPhoto extends RealmObject {
+public class ActorPhoto implements Serializable {
     @PrimaryKey
     @SerializedName("id")
     @Expose
@@ -23,7 +21,7 @@ public class ActorPhoto extends RealmObject {
     private String imageUrl;
     @SerializedName("photos")
     @Expose
-    private RealmList<Photos> photos = null;
+    private List<Photos> photos = null;
 
     public Integer getId() {
         return id;
@@ -49,7 +47,7 @@ public class ActorPhoto extends RealmObject {
         this.imageUrl = imageUrl;
     }
 
-    public RealmList<Photos> getPhotos() {
+    public List<Photos> getPhotos() {
        /* for (int i = 0; i < photos.size(); i++) {
             String photo = photos.get(i);
             photos.set(i, Constants.imageUrl + photo);
@@ -57,7 +55,7 @@ public class ActorPhoto extends RealmObject {
         return photos;
     }
 
-    public void setPhotos(RealmList<Photos> photos) {
+    public void setPhotos(List<Photos> photos) {
         this.photos = photos;
     }
 

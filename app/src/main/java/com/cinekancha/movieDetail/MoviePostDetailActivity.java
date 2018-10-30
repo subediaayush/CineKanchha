@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -27,9 +28,7 @@ import com.cinekancha.entities.model.Links;
 import com.cinekancha.entities.model.MovieDetail;
 import com.cinekancha.entities.model.Photo;
 import com.cinekancha.entities.model.ReviewData;
-import com.cinekancha.entities.rest.GetDataRepository;
 import com.cinekancha.entities.rest.RestAPI;
-import com.cinekancha.entities.rest.SetDataRepository;
 import com.cinekancha.home.OnSlideClickListener;
 import com.cinekancha.listener.OnClickListener;
 import com.cinekancha.movieReview.ReviewDetailActivity;
@@ -178,7 +177,7 @@ public class MoviePostDetailActivity extends BaseNavigationActivity implements O
                 reviewData.setName(data.getName());
                 reviewData.setReview(data.getReview());
                 Intent intent = new Intent(MoviePostDetailActivity.this, ReviewDetailActivity.class);
-                intent.putExtra("review", reviewData);
+                intent.putExtra("review", (Parcelable) reviewData);
                 startActivity(intent);
             }
         });
@@ -294,13 +293,6 @@ public class MoviePostDetailActivity extends BaseNavigationActivity implements O
                     })
                     .doFinally(() -> swipeRefreshLayout.setRefreshing(false))
                     .subscribe(this::handleDatabase, this::handleMovieFetchError));
-        else
-            compositeDisposable.add(GetDataRepository.getInstance().getMovieDetail(id)
-                    .doOnSubscribe(disposable -> {
-                        swipeRefreshLayout.setRefreshing(true);
-                    })
-                    .doFinally(() -> swipeRefreshLayout.setRefreshing(false))
-                    .subscribe(this::handleMovieData, this::handleMovieFetchError));
     }
 
     private void startYoutube(String url) throws MalformedURLException {
@@ -322,13 +314,8 @@ public class MoviePostDetailActivity extends BaseNavigationActivity implements O
         } else Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }
 
-    private void handleDatabase(MovieDetail data) {
-        compositeDisposable.add(SetDataRepository.getInstance().setMovieDetail(data)
-                .doOnSubscribe(disposable -> {
-                })
-                .doFinally(() -> {
-                })
-                .subscribe(this::handleMovieData, this::handleMovieFetchError));
+    private void handleDatabase(MovieDetail data) throws MalformedURLException {
+        handleMovieData(data);
     }
 
 

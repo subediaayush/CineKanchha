@@ -3,10 +3,10 @@ package com.cinekancha.movieReview;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
@@ -16,9 +16,7 @@ import com.cinekancha.activities.base.BaseNavigationActivity;
 import com.cinekancha.activities.base.PaginationNestedOnScrollListener;
 import com.cinekancha.entities.model.ReviewData;
 import com.cinekancha.entities.model.Reviews;
-import com.cinekancha.entities.rest.GetDataRepository;
 import com.cinekancha.entities.rest.RestAPI;
-import com.cinekancha.entities.rest.SetDataRepository;
 import com.cinekancha.listener.OnClickListener;
 import com.cinekancha.utils.Connectivity;
 import com.cinekancha.view.CineReviewViewModel;
@@ -93,13 +91,7 @@ public class ReviewListActivity extends BaseNavigationActivity implements SwipeR
                     })
                     .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
                     .subscribe(this::handleDatabase, this::handleFetchError));
-        else
-            compositeDisposable.add(GetDataRepository.getInstance().getReviews()
-                    .doOnSubscribe(disposable -> {
-                        homeSwipeRefreshLayout.setRefreshing(true);
-                    })
-                    .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
-                    .subscribe(this::handleTriviaData, this::handleFetchError));
+
     }
 
     private void handleTriviaData(Reviews reviews) throws MalformedURLException {
@@ -115,13 +107,8 @@ public class ReviewListActivity extends BaseNavigationActivity implements SwipeR
         } else Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();*/
     }
 
-    private void handleDatabase(Reviews reviews) {
-        compositeDisposable.add(SetDataRepository.getInstance().setReviewData(reviews).toObservable()
-                .doOnSubscribe(disposable -> {
-                })
-                .doFinally(() -> {
-                })
-                .subscribe(this::handleTriviaData, this::handleFetchError));
+    private void handleDatabase(Reviews reviews) throws MalformedURLException {
+        handleTriviaData(reviews);
     }
 
     private void handleFetchError(Throwable throwable) {
@@ -156,7 +143,7 @@ public class ReviewListActivity extends BaseNavigationActivity implements SwipeR
     public void onClick(int position) {
         ReviewData reviewData = cineReviewViewModel.getReviewDataList().get(position);
         Intent intent = new Intent(this, ReviewDetailActivity.class);
-        intent.putExtra("review", reviewData);
+        intent.putExtra("review", (Parcelable) reviewData);
         startActivity(intent);
     }
 }
