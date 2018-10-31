@@ -1,6 +1,9 @@
 package com.cinekancha.entities.rest;
 
+import android.content.Context;
+
 import com.cinekancha.BuildConfig;
+import com.cinekancha.MyApplication;
 import com.cinekancha.entities.model.ActorGallery;
 import com.cinekancha.entities.model.ActorPhoto;
 import com.cinekancha.entities.model.BoxOfficeItem;
@@ -18,12 +21,14 @@ import com.cinekancha.entities.model.Troll;
 import com.cinekancha.entities.model.UpcomingMovie;
 import com.google.gson.JsonElement;
 
+import java.io.File;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -39,6 +44,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class RestAPI {
+    
+    private static final String BIG_CACHE_PATH = "fifu-http";
+    private static final int MAX_DISK_CACHE_SIZE = 20 * 1024 * 1024;      // 20MB
+    
+    
     private static final String TAG = RestAPI.class.getSimpleName();
     private static RestAPI INSTANCE;
     private static ApiService service;
@@ -47,11 +57,15 @@ public class RestAPI {
     private RestAPI() {
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        
+        Context context = MyApplication.getInstance();
 
         OkHttpClient client = new OkHttpClient.Builder()
                 .readTimeout(120, TimeUnit.SECONDS)
                 .connectTimeout(120, TimeUnit.SECONDS)
-                .addNetworkInterceptor(new CacheControlInterceptor())
+                .cache(createCache(context))
+                .addNetworkInterceptor(new Interceptors.ResponseCacheInterceptor())
+                .addInterceptor(new Interceptors.OfflineResponseCacheInterceptor(context))
                 .addInterceptor(loggingInterceptor)
                 .build();
 
@@ -73,6 +87,12 @@ public class RestAPI {
 
     public static ApiService getApiService() {
         return getInstance().service;
+    }
+    
+    public Cache createCache(Context context) {
+        return new Cache(new File(
+                context.getApplicationContext().getCacheDir(),
+                BIG_CACHE_PATH), MAX_DISK_CACHE_SIZE);
     }
 
     public void cancel() {
