@@ -26,7 +26,6 @@ import com.cinekancha.home.HomeDataAdapter;
 import com.cinekancha.home.OnSlideClickListener;
 import com.cinekancha.home.SlideShowAdapter;
 import com.cinekancha.listener.OnPollClickListener;
-import com.cinekancha.utils.Connectivity;
 import com.cinekancha.utils.MyCache;
 import com.cinekancha.view.CineHomeViewModel;
 import com.google.gson.Gson;
@@ -131,21 +130,21 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
     }
 
     private void requestHomeData() {
-        if (Connectivity.isConnected(this)) {
+//        if (Connectivity.isConnected(this)) {
             compositeDisposable.add(RestAPI.getInstance().getHomeData()
                     .doOnSubscribe(disposable -> {
                         mSwipeRefreshLayout.setRefreshing(true);
                     })
                     .doFinally(() -> mSwipeRefreshLayout.setRefreshing(false))
                     .subscribe(this::handleDatabase, this::handleHomeFetchError));
-        } else {
+//        } else {
 //            compositeDisposable.add(GetDataRepository.getInstance().getHomeData()
 //                    .doOnSubscribe(disposable -> {
 //                        mSwipeRefreshLayout.setRefreshing(true);
 //                    })
 //                    .doFinally(() -> mSwipeRefreshLayout.setRefreshing(false))
 //                    .subscribe(this::handleHomeData, this::handleHomeFetchError));
-        }
+//        }
     }
 
     private void handleHomeFetchError(Throwable throwable) {

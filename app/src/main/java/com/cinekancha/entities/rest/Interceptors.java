@@ -21,6 +21,7 @@ import okio.Buffer;
 
 public class Interceptors {
 	
+	/*
 	/**
 	 * Interceptor to cache data and maintain it for a minute.
 	 * <p>
@@ -32,6 +33,7 @@ public class Interceptors {
 		public okhttp3.Response intercept(Chain chain) throws IOException {
 			okhttp3.Response originalResponse = chain.proceed(chain.request());
 			return originalResponse.newBuilder()
+					.removeHeader("Pragma")
 					.header("Cache-Control", "public, max-age=" + 60)
 					.build();
 		}
@@ -56,8 +58,9 @@ public class Interceptors {
 			if (!Connectivity.isConnected(mContext)) {
 				long maxStale = 60 * 60 * 24 * 28; // tolerate 4-weeks stale
 				request = request.newBuilder()
+						.removeHeader("Pragma")
 						.header("Cache-Control",
-								"public, only-if-cached, max-stale=" + maxStale)
+								"public, only-if-cached")
 						.build();
 			}
 			return chain.proceed(request);

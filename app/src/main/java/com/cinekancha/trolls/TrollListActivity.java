@@ -16,9 +16,7 @@ import com.cinekancha.activities.base.PaginationNestedOnScrollListener;
 import com.cinekancha.adapters.base.RecyclerViewClickListener;
 import com.cinekancha.entities.model.Troll;
 import com.cinekancha.entities.model.TrollData;
-import com.cinekancha.entities.rest.GetDataRepository;
 import com.cinekancha.entities.rest.RestAPI;
-import com.cinekancha.utils.Connectivity;
 import com.cinekancha.view.CineTrollViewModel;
 import com.stfalcon.frescoimageviewer.ImageViewer;
 
@@ -98,7 +96,6 @@ public class TrollListActivity extends BaseNavigationActivity implements Recycle
     }
 
     private void requestArticles() {
-        if (Connectivity.isConnected(this))
             compositeDisposable.add(RestAPI.getInstance().getTroll(mCineTrollViewModel.getCurrentPage())
                     .doOnSubscribe(disposable -> {
                         swipeRefreshLayout.setRefreshing(true);

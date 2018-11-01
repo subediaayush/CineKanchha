@@ -32,7 +32,6 @@ import com.cinekancha.entities.rest.RestAPI;
 import com.cinekancha.home.OnSlideClickListener;
 import com.cinekancha.listener.OnClickListener;
 import com.cinekancha.movieReview.ReviewDetailActivity;
-import com.cinekancha.utils.Connectivity;
 import com.cinekancha.utils.Constants;
 import com.cinekancha.utils.GlobalUtils;
 import com.cinekancha.view.CinePostMovieViewModel;
@@ -286,7 +285,6 @@ public class MoviePostDetailActivity extends BaseNavigationActivity implements O
     }
 
     private void requestMovie(int id) {
-        if (Connectivity.isConnected(this))
             compositeDisposable.add(RestAPI.getInstance().getMovieDetail(id)
                     .doOnSubscribe(disposable -> {
                         swipeRefreshLayout.setRefreshing(true);

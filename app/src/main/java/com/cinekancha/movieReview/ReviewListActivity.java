@@ -18,7 +18,6 @@ import com.cinekancha.entities.model.ReviewData;
 import com.cinekancha.entities.model.Reviews;
 import com.cinekancha.entities.rest.RestAPI;
 import com.cinekancha.listener.OnClickListener;
-import com.cinekancha.utils.Connectivity;
 import com.cinekancha.view.CineReviewViewModel;
 
 import java.net.MalformedURLException;
@@ -84,7 +83,6 @@ public class ReviewListActivity extends BaseNavigationActivity implements SwipeR
     }
 
     private void requestTrivia() {
-        if (Connectivity.isConnected(this))
             compositeDisposable.add(RestAPI.getInstance().getReviews(cineReviewViewModel.getCurrentPage())
                     .doOnSubscribe(disposable -> {
                         homeSwipeRefreshLayout.setRefreshing(true);

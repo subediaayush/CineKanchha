@@ -14,7 +14,6 @@ import com.cinekancha.entities.model.ActorPhoto;
 import com.cinekancha.entities.model.Photos;
 import com.cinekancha.entities.rest.RestAPI;
 import com.cinekancha.listener.OnClickListener;
-import com.cinekancha.utils.Connectivity;
 import com.cinekancha.utils.ItemOffsetDecoration;
 import com.cinekancha.view.CineActorPhotoViewModel;
 import com.stfalcon.frescoimageviewer.ImageViewer;
@@ -79,14 +78,12 @@ public class ActorDetailActivity extends BaseNavigationActivity implements OnCli
     }
 
     private void requestMovie() {
-        if (Connectivity.isConnected(this))
             compositeDisposable.add(RestAPI.getInstance().getActorPhoto(cineActorPhotoViewModel.getActorID())
                     .doOnSubscribe(disposable -> {
                         homeSwipeRefreshLayout.setRefreshing(true);
                     })
                     .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
                     .subscribe(this::handleDatabase, this::handleMovieFetchError));
-
     }
 
     private void handleDatabase(ActorPhoto data) {

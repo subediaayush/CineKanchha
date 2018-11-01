@@ -14,12 +14,10 @@ import android.widget.Toast;
 import com.cinekancha.R;
 import com.cinekancha.activities.base.BaseNavigationActivity;
 import com.cinekancha.activities.base.PaginationNestedOnScrollListener;
-import com.cinekancha.entities.model.Video;
 import com.cinekancha.entities.model.FullMovies;
-import com.cinekancha.entities.rest.GetDataRepository;
+import com.cinekancha.entities.model.Video;
 import com.cinekancha.entities.rest.RestAPI;
 import com.cinekancha.listener.OnClickListener;
-import com.cinekancha.utils.Connectivity;
 import com.cinekancha.utils.GlobalUtils;
 import com.cinekancha.view.CineFullMoviesViewModel;
 
@@ -104,14 +102,12 @@ public class FullMoviesActivity extends BaseNavigationActivity implements OnClic
     }
 
     private void requestMovie() {
-        if (Connectivity.isConnected(this))
             compositeDisposable.add((RestAPI.getInstance().getFullMovies(cineFullMoviesViewModel.getCurrentPage()))
                     .doOnSubscribe(disposable -> {
                         homeSwipeRefreshLayout.setRefreshing(true);
                     })
                     .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
                     .subscribe(this::handleDatabase, this::handleMovieFetchError));
-
     }
 
     private void handleMovieFetchError(Throwable throwable) {

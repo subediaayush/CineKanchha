@@ -14,7 +14,6 @@ import com.cinekancha.entities.model.BoxOfficeItem;
 import com.cinekancha.entities.rest.RestAPI;
 import com.cinekancha.listener.OnClickListener;
 import com.cinekancha.movieDetail.MoviePostDetailActivity;
-import com.cinekancha.utils.Connectivity;
 import com.cinekancha.view.CineBoxOfficeViewModel;
 
 import java.util.List;
@@ -72,14 +71,12 @@ public class BoxOfficeActivity extends BaseNavigationActivity implements OnClick
     }
 
     private void requestBoxOffice() {
-        if (Connectivity.isConnected(this))
             compositeDisposable.add(RestAPI.getInstance().getBOxOffice()
                     .doOnSubscribe(disposable -> {
                         swipeRefreshLayout.setRefreshing(true);
                     })
                     .doFinally(() -> swipeRefreshLayout.setRefreshing(false))
                     .subscribe(this::handleDatabase, this::handleMovieFetchError));
-
     }
 
     private void handleDatabase(List<BoxOfficeItem> boxOffice) {

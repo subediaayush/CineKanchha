@@ -21,7 +21,6 @@ import com.cinekancha.entities.model.NewsGossip;
 import com.cinekancha.entities.rest.RestAPI;
 import com.cinekancha.home.OnSlideClickListener;
 import com.cinekancha.listener.OnClickListener;
-import com.cinekancha.utils.Connectivity;
 import com.cinekancha.utils.GlobalUtils;
 import com.cinekancha.view.CineNewsGossipsViewModel;
 
@@ -103,14 +102,12 @@ public class NewsGossipsActivity extends BaseNavigationActivity implements OnSli
     }
 
     private void requestNewsGossipList() {
-        if (Connectivity.isConnected(this)) {
             compositeDisposable.add(RestAPI.getInstance().getNewsGossip(mCineNewsGossipsModel.getCurrentPage())
                     .doOnSubscribe(disposable -> {
                         newsSwipeToRefresh.setRefreshing(true);
                     })
                     .doFinally(() -> newsSwipeToRefresh.setRefreshing(false))
                     .subscribe(this::handleDatabase, this::handleMovieFetchError));
-        }
     }
 
     private void startYoutube(String url) throws MalformedURLException {

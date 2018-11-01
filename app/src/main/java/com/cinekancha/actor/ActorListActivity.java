@@ -17,7 +17,6 @@ import com.cinekancha.entities.model.Actor;
 import com.cinekancha.entities.model.ActorGallery;
 import com.cinekancha.entities.rest.RestAPI;
 import com.cinekancha.listener.OnClickListener;
-import com.cinekancha.utils.Connectivity;
 import com.cinekancha.view.CineActorViewModel;
 
 import java.net.MalformedURLException;
@@ -104,14 +103,12 @@ public class ActorListActivity extends BaseNavigationActivity implements OnClick
     }
 
     private void requestMovie() {
-        if (Connectivity.isConnected(this))
             compositeDisposable.add(RestAPI.getInstance().getActorList(cineActorViewModel.getCurrentPage())
                     .doOnSubscribe(disposable -> {
                         homeSwipeRefreshLayout.setRefreshing(true);
                     })
                     .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
                     .subscribe(this::handleDatabase, this::handleMovieFetchError));
-
     }
 
     private void handleDatabase(ActorGallery data) throws MalformedURLException {

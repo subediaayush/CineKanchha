@@ -19,7 +19,6 @@ import com.cinekancha.entities.rest.RestAPI;
 import com.cinekancha.listener.OnClickListener;
 import com.cinekancha.movieDetail.MoviePostDetailActivity;
 import com.cinekancha.movies.MoviesAdapter;
-import com.cinekancha.utils.Connectivity;
 import com.cinekancha.view.CineMovieViewModel;
 
 import java.net.MalformedURLException;
@@ -112,7 +111,6 @@ public class UpcomingMovieActivity extends BaseNavigationActivity implements OnC
     }
 
     private void requestMovie() {
-        if (Connectivity.isConnected(this))
             compositeDisposable.add(RestAPI.getInstance().getUpcomingMovie(cineMovieViewModel.getCurrentPage())
                     .doOnSubscribe(disposable -> {
                         homeSwipeRefreshLayout.setRefreshing(true);

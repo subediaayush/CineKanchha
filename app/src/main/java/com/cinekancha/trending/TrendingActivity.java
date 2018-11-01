@@ -18,7 +18,6 @@ import com.cinekancha.entities.model.TrendingData;
 import com.cinekancha.entities.model.Video;
 import com.cinekancha.entities.rest.RestAPI;
 import com.cinekancha.listener.OnClickListener;
-import com.cinekancha.utils.Connectivity;
 import com.cinekancha.utils.GlobalUtils;
 import com.cinekancha.view.CineTrendingViewModel;
 
@@ -104,7 +103,6 @@ public class TrendingActivity extends BaseNavigationActivity implements OnClickL
     }
 
     private void requestMovie() {
-        if (Connectivity.isConnected(this))
             compositeDisposable.add((RestAPI.getInstance().getTrending(cineTrendingViewModel.getCurrentPage()))
                     .doOnSubscribe(disposable -> {
                         homeSwipeRefreshLayout.setRefreshing(true);

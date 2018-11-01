@@ -20,7 +20,6 @@ import com.cinekancha.entities.rest.GetDataRepository;
 import com.cinekancha.entities.rest.RestAPI;
 import com.cinekancha.entities.rest.SetDataRepository;
 import com.cinekancha.listener.OnPollClickListener;
-import com.cinekancha.utils.Connectivity;
 import com.cinekancha.view.CinePollViewModel;
 
 import java.net.MalformedURLException;
@@ -117,14 +116,13 @@ public class PollsActivity extends BaseNavigationActivity implements OnPollClick
     }
 
     private void requestMovie() {
-        if (Connectivity.isConnected(this))
             compositeDisposable.add(RestAPI.getInstance().getPoll(cinePollViewModel.getCurrentPage())
                     .doOnSubscribe(disposable -> {
                         homeSwipeRefreshLayout.setRefreshing(true);
                     })
                     .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
                     .subscribe(this::handleDatabase, this::handleMovieFetchError));
-        else{}
+        
 //            compositeDisposable.add(GetDataRepository.getInstance().getPollData()
 //                    .doOnSubscribe(disposable -> {
 //                        homeSwipeRefreshLayout.setRefreshing(true);
