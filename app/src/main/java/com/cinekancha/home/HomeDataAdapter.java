@@ -236,7 +236,7 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
     protected void setViewOfEleven(BaseViewHolder baseHolder, int position) {
         TopStoryHolder holder = (TopStoryHolder) baseHolder;
         Article topStory = mData.getItem(position);
-        holder.txtTopStories.setText(topStory.getSummary());
+        holder.txtTopStories.setText(topStory.getTitle());
     }
 
     @Override

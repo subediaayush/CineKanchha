@@ -34,7 +34,7 @@ public class Interceptors {
 			okhttp3.Response originalResponse = chain.proceed(chain.request());
 			return originalResponse.newBuilder()
 					.removeHeader("Pragma")
-					.header("Cache-Control", "public, max-age=" + 60)
+					.header("Cache-Control", "public, max-age=" + 100)
 					.build();
 		}
 	}
@@ -60,7 +60,7 @@ public class Interceptors {
 				request = request.newBuilder()
 						.removeHeader("Pragma")
 						.header("Cache-Control",
-								"public, only-if-cached")
+								"public, only-if-cached, max-stale=" + maxStale)
 						.build();
 			}
 			return chain.proceed(request);

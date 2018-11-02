@@ -46,7 +46,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RestAPI {
     
     private static final String BIG_CACHE_PATH = "fifu-http";
-    private static final int MAX_DISK_CACHE_SIZE = 20 * 1024 * 1024;      // 20MB
+    private static final int MAX_DISK_CACHE_SIZE = 40 * 1024 * 1024;      // 20MB
     
     
     private static final String TAG = RestAPI.class.getSimpleName();
