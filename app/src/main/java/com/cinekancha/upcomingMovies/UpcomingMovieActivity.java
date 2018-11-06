@@ -19,7 +19,8 @@ import com.cinekancha.entities.rest.RestAPI;
 import com.cinekancha.listener.OnClickListener;
 import com.cinekancha.movieDetail.MoviePostDetailActivity;
 import com.cinekancha.movies.MoviesAdapter;
-import com.cinekancha.utils.GridSpacingItemDecoration;
+import com.cinekancha.utils.EqualSpacingItemDecoration;
+import com.cinekancha.utils.ItemOffsetDecoration;
 import com.cinekancha.view.CineMovieViewModel;
 
 import java.net.MalformedURLException;
@@ -70,9 +71,9 @@ public class UpcomingMovieActivity extends BaseNavigationActivity implements OnC
         getSupportActionBar().setTitle(R.string.upcomingMovies);
         homeSwipeRefreshLayout.setOnRefreshListener(this);
         adapter = new MoviesAdapter(this);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        recyclerView.addItemDecoration(new EqualSpacingItemDecoration(30, EqualSpacingItemDecoration.GRID));
         recyclerView.setNestedScrollingEnabled(false);
-        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, 50, true));
-
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
         paginationNestedOnScrollListener = new PaginationNestedOnScrollListener(recyclerView, (GridLayoutManager) recyclerView.getLayoutManager(), cineMovieViewModel) {
@@ -113,12 +114,12 @@ public class UpcomingMovieActivity extends BaseNavigationActivity implements OnC
     }
 
     private void requestMovie() {
-            compositeDisposable.add(RestAPI.getInstance().getUpcomingMovie(cineMovieViewModel.getCurrentPage())
-                    .doOnSubscribe(disposable -> {
-                        homeSwipeRefreshLayout.setRefreshing(true);
-                    })
-                    .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
-                    .subscribe(this::handleDatabase, this::handleMovieFetchError));
+        compositeDisposable.add(RestAPI.getInstance().getUpcomingMovie(cineMovieViewModel.getCurrentPage())
+                .doOnSubscribe(disposable -> {
+                    homeSwipeRefreshLayout.setRefreshing(true);
+                })
+                .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
+                .subscribe(this::handleDatabase, this::handleMovieFetchError));
 
     }
 
