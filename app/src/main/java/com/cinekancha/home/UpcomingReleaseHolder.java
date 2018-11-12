@@ -16,6 +16,7 @@ import com.cinekancha.entities.ThumbnailConverter;
 import com.cinekancha.entities.model.Movie;
 import com.cinekancha.listener.OnClickListener;
 import com.cinekancha.movieDetail.MoviePostDetailActivity;
+import com.cinekancha.utils.EqualSpacingItemDecoration;
 
 import java.util.List;
 
@@ -69,9 +70,7 @@ public class UpcomingReleaseHolder extends HomeItemHolder {
         Context context = view.getContext();
         upcomingMoviesList.setNestedScrollingEnabled(false);
         upcomingMoviesList.setLayoutManager(manager);
-        DividerItemDecoration decoration = new DividerItemDecoration(upcomingMoviesList.getContext(), DividerItemDecoration.HORIZONTAL);
-        decoration.setDrawable(ContextCompat.getDrawable(context, R.drawable.divider_transparent));
-        upcomingMoviesList.addItemDecoration(decoration);
+        upcomingMoviesList.addItemDecoration(new EqualSpacingItemDecoration(40, EqualSpacingItemDecoration.HORIZONTAL));
     }
 
     public void setMovies(List<Movie> movies) {

@@ -22,6 +22,7 @@ import com.cinekancha.listener.OnClickListener;
 import com.cinekancha.movieDetail.MoviePostDetailActivity;
 import com.cinekancha.newsGossips.NewsGossipsActivity;
 import com.cinekancha.utils.Constants;
+import com.cinekancha.utils.EqualSpacingItemDecoration;
 import com.cinekancha.utils.GlobalUtils;
 
 import java.util.List;
@@ -78,9 +79,7 @@ public class FeaturedNewsListHolder extends HomeItemHolder {
         Context context = view.getContext();
         upcomingMoviesList.setNestedScrollingEnabled(false);
         upcomingMoviesList.setLayoutManager(manager);
-        DividerItemDecoration decoration = new DividerItemDecoration(upcomingMoviesList.getContext(), DividerItemDecoration.HORIZONTAL);
-        decoration.setDrawable(ContextCompat.getDrawable(context, R.drawable.divider_transparent));
-        upcomingMoviesList.addItemDecoration(decoration);
+        upcomingMoviesList.addItemDecoration(new EqualSpacingItemDecoration(40, EqualSpacingItemDecoration.VERTICAL));
     }
 
     public void setNews(List<Article> movies) {

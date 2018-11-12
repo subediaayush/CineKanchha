@@ -27,4 +27,6 @@
     <string name="troll">Trolls</string>
     <string name="settings">Settings</string>
     <string name="contactUs">Contact Us</string>
+    <string name="PREF_TOKEN">Pref Token</string>
+
 </resources>

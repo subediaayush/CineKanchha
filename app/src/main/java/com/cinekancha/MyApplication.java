@@ -1,10 +1,15 @@
 package com.cinekancha;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.Intent;
+import android.support.multidex.MultiDex;
 import android.support.v7.app.AppCompatDelegate;
 
+import com.cinekancha.entities.service.MyFirebaseInstanceIDService;
 import com.cinekancha.utils.AnalyticsUtil;
 import com.cinekancha.utils.Logger;
+import com.cinekancha.utils.Prefs;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
@@ -32,9 +37,17 @@ public class MyApplication extends Application {
     }
 
     @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(base);
+    }
+
+    @Override
     public void onCreate() {
         if (instance == null)
             instance = this;
+
+        Prefs.initPrefs(this);
 
         Realm.init(this);
         RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
@@ -49,7 +62,10 @@ public class MyApplication extends Application {
         AnalyticsUtil.logAppOpenEvent(getAnalytics());
         Logger.setWriteLog(BuildConfig.DEBUG);
         super.onCreate();
-    
+
         Fresco.initialize(this);
+
+        Intent serviceIntent = new Intent(this, MyFirebaseInstanceIDService.class);
+        getApplicationContext().startService(serviceIntent);
     }
 }

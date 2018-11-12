@@ -20,7 +20,10 @@ import com.cinekancha.listener.OnClickListener;
 import com.cinekancha.movieReview.ReviewDetailActivity;
 import com.cinekancha.movieReview.ReviewListActivity;
 import com.cinekancha.trolls.TrollListActivity;
+import com.cinekancha.utils.EqualSpacingItemDecoration;
 import com.cinekancha.utils.GlobalUtils;
+import com.cinekancha.utils.ItemOffsetDecoration;
+import com.cinekancha.utils.ScreenUtils;
 
 import java.io.Serializable;
 import java.util.List;
@@ -83,10 +86,7 @@ public class FeaturedReviewsHolder extends HomeItemHolder {
         Context context = view.getContext();
         upcomingMoviesList.setNestedScrollingEnabled(false);
         upcomingMoviesList.setLayoutManager(manager);
-        DividerItemDecoration decoration = new DividerItemDecoration(upcomingMoviesList.getContext(), DividerItemDecoration.HORIZONTAL);
-        decoration.setDrawable(ContextCompat.getDrawable(context, R.drawable.divider_transparent));
-        upcomingMoviesList.addItemDecoration(decoration);
-
+        upcomingMoviesList.addItemDecoration(new EqualSpacingItemDecoration(40, EqualSpacingItemDecoration.HORIZONTAL));
         title.setText("Movie Reviews");
     }
 

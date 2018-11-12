@@ -16,6 +16,7 @@ import com.cinekancha.entities.ThumbWrapper;
 import com.cinekancha.entities.ThumbnailConverter;
 import com.cinekancha.entities.model.Video;
 import com.cinekancha.trending.FullMoviesActivity;
+import com.cinekancha.utils.EqualSpacingItemDecoration;
 import com.cinekancha.utils.GlobalUtils;
 
 import java.net.MalformedURLException;
@@ -66,10 +67,7 @@ public class FullVideosHolder extends HomeItemHolder {
         Context context = view.getContext();
         upcomingMoviesList.setNestedScrollingEnabled(false);
         upcomingMoviesList.setLayoutManager(manager);
-        DividerItemDecoration decoration = new DividerItemDecoration(upcomingMoviesList.getContext(), DividerItemDecoration.HORIZONTAL);
-        decoration.setDrawable(ContextCompat.getDrawable(context, R.drawable.divider_transparent));
-        upcomingMoviesList.addItemDecoration(decoration);
-
+        upcomingMoviesList.addItemDecoration(new EqualSpacingItemDecoration(40, EqualSpacingItemDecoration.HORIZONTAL));
         title.setText("Watch Movies");
     }
 

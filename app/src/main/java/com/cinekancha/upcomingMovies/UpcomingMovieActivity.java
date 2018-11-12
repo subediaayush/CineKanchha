@@ -19,6 +19,7 @@ import com.cinekancha.entities.rest.RestAPI;
 import com.cinekancha.listener.OnClickListener;
 import com.cinekancha.movieDetail.MoviePostDetailActivity;
 import com.cinekancha.movies.MoviesAdapter;
+import com.cinekancha.utils.CharacterItemDecoration;
 import com.cinekancha.utils.EqualSpacingItemDecoration;
 import com.cinekancha.utils.ItemOffsetDecoration;
 import com.cinekancha.view.CineMovieViewModel;
@@ -72,7 +73,7 @@ public class UpcomingMovieActivity extends BaseNavigationActivity implements OnC
         homeSwipeRefreshLayout.setOnRefreshListener(this);
         adapter = new MoviesAdapter(this);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-        recyclerView.addItemDecoration(new EqualSpacingItemDecoration(30, EqualSpacingItemDecoration.GRID));
+        recyclerView.addItemDecoration(new CharacterItemDecoration(40));
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);

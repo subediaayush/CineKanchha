@@ -12,6 +12,7 @@ import com.cinekancha.R;
 import com.cinekancha.boxOffice.BoxOfficeActivity;
 import com.cinekancha.entities.model.BoxOfficeItem;
 import com.cinekancha.utils.GlobalUtils;
+import com.cinekancha.utils.ItemOffsetDecoration;
 
 import java.util.List;
 
@@ -49,10 +50,8 @@ class FeaturedBoxOfficeHolder extends HomeItemHolder {
         });
 
         adapter = new FeatureBoxOfficeAdapter();
-        Drawable divider = ContextCompat.getDrawable(view.getContext(), R.drawable.list_divider);
-        DividerItemDecoration decor = new DividerItemDecoration(view.getContext(), DividerItemDecoration.VERTICAL);
-        decor.setDrawable(divider);
-        boxOffice.addItemDecoration(decor);
+        ItemOffsetDecoration itemDecoration = new ItemOffsetDecoration(view.getContext(), R.dimen.item_offset);
+        boxOffice.addItemDecoration(itemDecoration);
         boxOffice.setAdapter(adapter);
         boxOffice.setNestedScrollingEnabled(false);
     }

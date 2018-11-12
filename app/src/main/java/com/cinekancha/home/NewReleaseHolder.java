@@ -15,6 +15,7 @@ import com.cinekancha.entities.ThumbnailConverter;
 import com.cinekancha.entities.model.Movie;
 import com.cinekancha.listener.OnClickListener;
 import com.cinekancha.movieDetail.MoviePostDetailActivity;
+import com.cinekancha.utils.EqualSpacingItemDecoration;
 
 import java.util.List;
 
@@ -63,6 +64,8 @@ public class NewReleaseHolder extends HomeItemHolder {
         };
         newMoviesList.setNestedScrollingEnabled(false);
         newMoviesList.setLayoutManager(manager);
+        newMoviesList.addItemDecoration(new EqualSpacingItemDecoration(40, EqualSpacingItemDecoration.HORIZONTAL));
+
     }
 
     public void setMovies(List<Movie> movies) {
