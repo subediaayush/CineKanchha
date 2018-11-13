@@ -1,7 +1,14 @@
 package com.cinekancha.activities;
 
+import android.annotation.TargetApi;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.ComponentName;
+import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -22,18 +29,27 @@ import com.cinekancha.entities.model.PollDatabase;
 import com.cinekancha.entities.rest.GetDataRepository;
 import com.cinekancha.entities.rest.RestAPI;
 import com.cinekancha.entities.rest.SetDataRepository;
+import com.cinekancha.entities.service.TestService;
 import com.cinekancha.home.HomeDataAdapter;
 import com.cinekancha.home.OnSlideClickListener;
 import com.cinekancha.home.SlideShowAdapter;
 import com.cinekancha.listener.OnPollClickListener;
 import com.cinekancha.utils.MyCache;
 import com.cinekancha.view.CineHomeViewModel;
+import com.firebase.jobdispatcher.Constraint;
+import com.firebase.jobdispatcher.FirebaseJobDispatcher;
+import com.firebase.jobdispatcher.GooglePlayDriver;
+import com.firebase.jobdispatcher.Job;
+import com.firebase.jobdispatcher.Lifetime;
+import com.firebase.jobdispatcher.RetryStrategy;
+import com.firebase.jobdispatcher.Trigger;
 import com.google.gson.Gson;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import me.relex.circleindicator.CircleIndicator;
@@ -79,7 +95,8 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setTitle("Home");
-
+        cancelJob(this);
+        scheduleJob(this);
         mDirectory = new File(getApplicationInfo().dataDir + "/Filmy Fuche/");
         ;
         try {
@@ -121,6 +138,48 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
         getSupportActionBar().setTitle(R.string.home);
     }
 
+    public static void scheduleJob(Context context) {
+        //creating new firebase job dispatcher
+        FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(context));
+        //creating new job and adding it with dispatcher
+        Job job = createJob(dispatcher);
+        dispatcher.mustSchedule(job);
+    }
+
+    public static Job createJob(FirebaseJobDispatcher dispatcher) {
+        final int periodicity = (int) TimeUnit.HOURS.toSeconds(1); // Every 1 hour periodicity expressed as seconds
+        final int toleranceInterval = (int) TimeUnit.MINUTES.toSeconds(15); // a small(ish) window of time when triggering is OK
+        Job job = dispatcher.newJobBuilder()
+                .setLifetime(Lifetime.FOREVER)
+                .setService(TestService.class)
+                .setTag("UniqueTagForYourJob")
+                .setReplaceCurrent(true)
+                .setRecurring(true)
+                .setTrigger(Trigger.executionWindow(30, 60))
+                .setRetryStrategy(RetryStrategy.DEFAULT_LINEAR)
+                .setConstraints(Constraint.ON_ANY_NETWORK, Constraint.DEVICE_CHARGING)
+                .build();
+        return job;
+    }
+
+    public static Job updateJob(FirebaseJobDispatcher dispatcher) {
+        Job newJob = dispatcher.newJobBuilder()
+                .setReplaceCurrent(true)
+                .setService(TestService.class)
+                .setTag("UniqueTagForYourJob")
+                .setTrigger(Trigger.executionWindow(30, 60))
+                .build();
+        return newJob;
+    }
+
+    public void cancelJob(Context context) {
+
+        FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(context));
+        dispatcher.cancelAll();
+        dispatcher.cancel("UniqueTagForYourJob");
+
+    }
+
     private void renderHomeData() {
         checkPollData();
         HomeData data = mCineHomeViewModel.getHomeData();
@@ -131,12 +190,12 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
 
     private void requestHomeData() {
 //        if (Connectivity.isConnected(this)) {
-            compositeDisposable.add(RestAPI.getInstance().getHomeData()
-                    .doOnSubscribe(disposable -> {
-                        mSwipeRefreshLayout.setRefreshing(true);
-                    })
-                    .doFinally(() -> mSwipeRefreshLayout.setRefreshing(false))
-                    .subscribe(this::handleDatabase, this::handleHomeFetchError));
+        compositeDisposable.add(RestAPI.getInstance().getHomeData()
+                .doOnSubscribe(disposable -> {
+                    mSwipeRefreshLayout.setRefreshing(true);
+                })
+                .doFinally(() -> mSwipeRefreshLayout.setRefreshing(false))
+                .subscribe(this::handleDatabase, this::handleHomeFetchError));
 //        } else {
 //            compositeDisposable.add(GetDataRepository.getInstance().getHomeData()
 //                    .doOnSubscribe(disposable -> {
