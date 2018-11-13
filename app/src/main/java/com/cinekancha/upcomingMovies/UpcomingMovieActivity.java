@@ -73,7 +73,10 @@ public class UpcomingMovieActivity extends BaseNavigationActivity implements OnC
         homeSwipeRefreshLayout.setOnRefreshListener(this);
         adapter = new MoviesAdapter(this);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-        recyclerView.addItemDecoration(new CharacterItemDecoration(40));
+        int spanCount = 2; // 3 columns
+        int spacing = 50; // 50px
+        boolean includeEdge = true;
+        recyclerView.addItemDecoration(new CharacterItemDecoration(spanCount, spacing, includeEdge));
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
