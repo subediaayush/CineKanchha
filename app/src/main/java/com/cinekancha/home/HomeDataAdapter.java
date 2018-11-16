@@ -21,6 +21,7 @@ import com.cinekancha.entities.model.TriviaData;
 import com.cinekancha.entities.model.TrollData;
 import com.cinekancha.listener.OnClickListener;
 import com.cinekancha.listener.OnPollClickListener;
+import com.cinekancha.movies.MovieActivity;
 import com.cinekancha.newRelease.NewReleaseActivity;
 import com.cinekancha.newsGossips.NewsGossipsActivity;
 import com.cinekancha.poll.PollItemAdapter;
@@ -38,6 +39,7 @@ import com.stfalcon.frescoimageviewer.ImageViewer;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.cinekancha.home.HomeDataWrapper.ALL_MOVIES;
 import static com.cinekancha.home.HomeDataWrapper.FEATURED_ARTICLE;
 import static com.cinekancha.home.HomeDataWrapper.FEATURED_ARTICLE_HIGHLIGHTED;
 import static com.cinekancha.home.HomeDataWrapper.FEATURED_BOX_OFFICE;
@@ -79,6 +81,9 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
             }
             case UPCOMING_MOVIES: {
                 return new UpcomingReleaseHolder(this, view);
+            }
+            case ALL_MOVIES: {
+                return new AllMoviesHolder(this, view);
             }
             case FEATURED_ARTICLE_HIGHLIGHTED: {
                 return new FeaturedNewsHolder(this, view);
@@ -159,6 +164,7 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
                 R.layout.layout_featured_thumbnails,    // 13
                 R.layout.layout_featured_thumbnails,    // 14
                 R.layout.layout_featured_top_story,    // 15
+                R.layout.layout_featured_thumbnails,    // 16
 
         };
     }
@@ -174,6 +180,17 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
         } else if (viewType == FEATURED_TRENDING_VIDEOS) {
             TrendingVideosHolder holder = (TrendingVideosHolder) baseHolder;
             holder.setVideos(mData.getItem(position));
+        } else if (viewType == ALL_MOVIES) {
+            AllMoviesHolder holder = (AllMoviesHolder) baseHolder;
+            holder.setMovies(mData.getItem(position));
+            holder.title.setText(getContext().getResources().getText(R.string.allMovies));
+            holder.txtViewAll.setVisibility(View.VISIBLE);
+            holder.txtViewAll.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    GlobalUtils.navigateActivity(holder.itemView.getContext(), false, MovieActivity.class);
+                }
+            });
         }
     }
 

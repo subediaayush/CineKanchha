@@ -61,11 +61,6 @@ public class FullMoviesActivity extends BaseNavigationActivity implements OnClic
         }
     }
 
-    private void initToolbar() {
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.movies);
-    }
-
     private void init() {
         getSupportActionBar().setTitle("Watch Full Movies");
         homeSwipeRefreshLayout.setOnRefreshListener(this);

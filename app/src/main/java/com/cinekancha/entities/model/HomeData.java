@@ -25,6 +25,9 @@ public class HomeData extends RealmObject {
     @SerializedName("movies")
     @Expose
     private RealmList<Movie> movies = null;
+    @SerializedName("upcoming_movies")
+    @Expose
+    private RealmList<Movie> upComingMovies = null;
     @SerializedName("box_office_list")
     @Expose
     private RealmList<BoxOfficeItem> boxOfficeList = null;
@@ -166,5 +169,13 @@ public class HomeData extends RealmObject {
 
     public void setTrendingVideo(RealmList<Video> trendingVideo) {
         this.trendingVideo = trendingVideo;
+    }
+
+    public RealmList<Movie> getUpComingMovies() {
+        return upComingMovies;
+    }
+
+    public void setUpComingMovies(RealmList<Movie> upComingMovies) {
+        this.upComingMovies = upComingMovies;
     }
 }

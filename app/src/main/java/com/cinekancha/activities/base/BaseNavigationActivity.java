@@ -100,11 +100,6 @@ public abstract class BaseNavigationActivity extends BaseActivity implements Nav
         return this instanceof HomeActivity;
     }
 
-    private void initToolbar(String title) {
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.movies);
-    }
-
     @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {

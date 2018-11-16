@@ -46,11 +46,6 @@ public class ActorDetailActivity extends BaseNavigationActivity implements OnCli
         init();
     }
 
-    private void initToolbar() {
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.movies);
-    }
-
     private void init() {
         getSupportActionBar().setTitle(R.string.photoGallery);
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));

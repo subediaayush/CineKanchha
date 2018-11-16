@@ -17,3 +17,5 @@
 -dontwarn okio.**
 -dontwarn javax.annotation.**
 -dontwarn com.android.volley.toolbox.**
+-dontwarn com.facebook.infer.annotation.ReturnsOwnership
+-dontwarn com.facebook.infer.annotation.Functional

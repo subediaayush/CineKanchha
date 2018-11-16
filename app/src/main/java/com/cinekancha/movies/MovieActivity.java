@@ -59,7 +59,7 @@ public class MovieActivity extends BaseNavigationActivity implements OnClickList
     }
 
     private void init() {
-        getSupportActionBar().setTitle(R.string.movies);
+        getSupportActionBar().setTitle(R.string.allMovies);
         homeSwipeRefreshLayout.setOnRefreshListener(this);
         adapter = new MoviesAdapter(this);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));

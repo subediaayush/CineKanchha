@@ -33,6 +33,7 @@ public class HomeDataWrapper {
     public static final int FEATURED_TRENDING_VIDEOS = 13;
     public static final int FEATURED_FULL_VIDEOS = 14;
     public static final int FEATURED_TOP_STORIES = 15;
+    public static final int ALL_MOVIES = 16;
     public static final int HEADERS = 0;
 
     List<Object> items = new ArrayList<>();
@@ -49,7 +50,8 @@ public class HomeDataWrapper {
             wrapper.add(data.getTopStory(), FEATURED_TOP_STORIES);
         }
 
-        wrapper.add(data.getMovies(), UPCOMING_MOVIES);
+        wrapper.add(data.getMovies(), ALL_MOVIES);
+        wrapper.add(data.getUpComingMovies(), UPCOMING_MOVIES);
 
         List<BoxOfficeItem> boxOfficeItems = data.getBoxOfficeList();
         if (!ListUtils.isEmpty(boxOfficeItems)) {

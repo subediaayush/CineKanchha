@@ -58,11 +58,6 @@ public class ActorListActivity extends BaseNavigationActivity implements OnClick
         }
     }
 
-    private void initToolbar() {
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.movies);
-    }
-
     private void init() {
         getSupportActionBar().setTitle(R.string.photoGallery);
         homeSwipeRefreshLayout.setOnRefreshListener(this);

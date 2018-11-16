@@ -61,11 +61,6 @@ public class TrendingActivity extends BaseNavigationActivity implements OnClickL
         }
     }
 
-    private void initToolbar() {
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.movies);
-    }
-
     private void init() {
         getSupportActionBar().setTitle("Trending Videos");
 

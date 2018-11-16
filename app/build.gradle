@@ -31,17 +31,38 @@ android {
             proguardFile 'proguard/proguard-gson.pro'
             proguardFile 'proguard/proguard-square-okhttp3.pro'
             proguardFile 'proguard/proguard-square-okio.pro'
+            proguardFile 'proguard/proguard-facebook-fresco.pro'
 //            proguardFiles fileTree('proguard').asList().toArray()
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+
         debug {
             applicationIdSuffix ".debug"
         }
 
+        staging {
+            minifyEnabled true
+            shrinkResources true
+            zipAlignEnabled true
+            debuggable true
+            proguardFile 'proguard/proguard-square-picasso.pro'
+            proguardFile 'proguard/proguard-butterknife-7.pro'
+            proguardFile 'proguard/proguard-square-retrofit2.pro'
+            proguardFile 'proguard/proguard-square-otto.pro'
+            proguardFile 'proguard/proguard-gson.pro'
+            proguardFile 'proguard/proguard-square-okhttp3.pro'
+            proguardFile 'proguard/proguard-square-okio.pro'
+            proguardFile 'proguard/proguard-facebook-fresco.pro'
+//            proguardFiles fileTree('proguard').asList().toArray()
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+        }
+
         android.applicationVariants.all { variant ->
             variant.outputs.all {
-                outputFileName = "Cine Kancha-${variant.name}-v${variant.versionName}-c${variant.versionCode}.apk"
+                outputFileName = "Filmy Fuche-${variant.name}-v${variant.versionName}-c${variant.versionCode}.apk"
             }
         }
     }

@@ -65,11 +65,6 @@ public class UpcomingMovieActivity extends BaseNavigationActivity implements OnC
         }
     }
 
-    private void initToolbar() {
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.movies);
-    }
-
     private void init() {
         getSupportActionBar().setTitle(R.string.upcomingMovies);
         homeSwipeRefreshLayout.setOnRefreshListener(this);
