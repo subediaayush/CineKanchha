@@ -23,8 +23,6 @@ public class TrendingHolder extends HomeItemHolder {
     public TextView txtSubTitle;
     @BindView(R.id.imgTrending)
     public ImageView imgTrending;
-    @BindView(R.id.imgLogo)
-    public ImageView imgLogo;
     @BindView(R.id.imgMore)
     public ImageView imgMore;
 

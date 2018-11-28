@@ -223,7 +223,7 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
         TriviaData triviaData = mData.getItem(position);
         holder.trivia.setText(triviaData.getTrivia());
         holder.viewMore.setVisibility(View.VISIBLE);
-        holder.viewMore.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 GlobalUtils.navigateActivity(holder.itemView.getContext(), false, TriviaListActivity.class);

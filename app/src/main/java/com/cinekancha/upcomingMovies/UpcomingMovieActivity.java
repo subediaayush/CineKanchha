@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
@@ -20,8 +20,7 @@ import com.cinekancha.listener.OnClickListener;
 import com.cinekancha.movieDetail.MoviePostDetailActivity;
 import com.cinekancha.movies.MoviesAdapter;
 import com.cinekancha.utils.CharacterItemDecoration;
-import com.cinekancha.utils.EqualSpacingItemDecoration;
-import com.cinekancha.utils.ItemOffsetDecoration;
+import com.cinekancha.utils.ScreenUtils;
 import com.cinekancha.view.CineMovieViewModel;
 
 import java.net.MalformedURLException;
@@ -72,15 +71,14 @@ public class UpcomingMovieActivity extends BaseNavigationActivity implements OnC
         getSupportActionBar().setTitle(R.string.upcomingMovies);
         homeSwipeRefreshLayout.setOnRefreshListener(this);
         adapter = new MoviesAdapter(this);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         int spanCount = 2; // 3 columns
-        int spacing = 50; // 50px
+	    int spacing = ScreenUtils.dpToPx(this, 16); // 50px
         boolean includeEdge = true;
         recyclerView.addItemDecoration(new CharacterItemDecoration(spanCount, spacing, includeEdge));
         recyclerView.setNestedScrollingEnabled(false);
-        recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
-        paginationNestedOnScrollListener = new PaginationNestedOnScrollListener(recyclerView, (GridLayoutManager) recyclerView.getLayoutManager(), cineMovieViewModel) {
+        paginationNestedOnScrollListener = new PaginationNestedOnScrollListener(recyclerView, (StaggeredGridLayoutManager) recyclerView.getLayoutManager(), cineMovieViewModel) {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
                 requestMovie();

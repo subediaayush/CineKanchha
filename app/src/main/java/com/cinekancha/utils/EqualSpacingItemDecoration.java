@@ -1,5 +1,6 @@
 package com.cinekancha.utils;
 
+import android.content.Context;
 import android.graphics.Rect;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -8,11 +9,18 @@ import android.view.View;
 public class EqualSpacingItemDecoration extends RecyclerView.ItemDecoration {
     private final int spacing;
     private int displayMode;
+    
+    private int spacingPx = -1;
 
     public static final int HORIZONTAL = 0;
     public static final int VERTICAL = 1;
     public static final int GRID = 2;
-
+    
+    private boolean left;
+    private boolean top;
+    private boolean right;
+    private boolean bottom;
+    
     public EqualSpacingItemDecoration(int spacing) {
         this(spacing, -1);
     }
@@ -21,16 +29,23 @@ public class EqualSpacingItemDecoration extends RecyclerView.ItemDecoration {
         this.spacing = spacing;
         this.displayMode = displayMode;
     }
+    
+    public void overrideEdges(boolean left, boolean top, boolean right, boolean bottom) {
+        this.left = left;
+        this.top = top;
+        this.right = right;
+        this.bottom = bottom;
+    }
 
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
         int position = parent.getChildViewHolder(view).getAdapterPosition();
         int itemCount = state.getItemCount();
         RecyclerView.LayoutManager layoutManager = parent.getLayoutManager();
-        setSpacingForDirection(outRect, layoutManager, position, itemCount);
+        setSpacingForDirection(parent.getContext(), outRect, layoutManager, position, itemCount);
     }
 
-    private void setSpacingForDirection(Rect outRect,
+    private void setSpacingForDirection(Context context, Rect outRect,
                                         RecyclerView.LayoutManager layoutManager,
                                         int position,
                                         int itemCount) {
@@ -39,19 +54,23 @@ public class EqualSpacingItemDecoration extends RecyclerView.ItemDecoration {
         if (displayMode == -1) {
             displayMode = resolveDisplayMode(layoutManager);
         }
+        
+        if (spacingPx == -1) {
+            spacingPx = ScreenUtils.dpToPx(context, spacing);
+        }
 
         switch (displayMode) {
             case HORIZONTAL:
-                outRect.left = spacing;
-                outRect.right = position == itemCount - 1 ? spacing : 0;
-                outRect.top = spacing;
-                outRect.bottom = spacing;
+                outRect.left = spacingPx;
+                outRect.right = position == itemCount - 1 || right ? spacingPx : 0;
+                outRect.top = top ? spacingPx : 0;
+                outRect.bottom = spacingPx;
                 break;
             case VERTICAL:
-                outRect.left = spacing;
-                outRect.right = spacing;
-                outRect.top = spacing;
-                outRect.bottom = position == itemCount - 1 ? spacing : 0;
+                outRect.left = spacingPx;
+                outRect.right = spacingPx;
+                outRect.top = top || position != 0 ? spacingPx : 0;
+                outRect.bottom = position == itemCount - 1 || bottom ? spacingPx :0;
                 break;
             case GRID:
                 if (layoutManager instanceof GridLayoutManager) {
@@ -61,10 +80,10 @@ public class EqualSpacingItemDecoration extends RecyclerView.ItemDecoration {
                     if (itemCount % 2 == 1) {
                         rows = rows + 1;
                     }
-                    outRect.left = spacing;
-                    outRect.right = position % cols == cols - 1 ? spacing : 0;
-                    outRect.top = spacing;
-                    outRect.bottom = position / cols == rows - 1 ? spacing : 0;
+                    outRect.left = spacingPx;
+                    outRect.right = position % cols == cols - 1 ? spacingPx : 0;
+                    outRect.top = spacingPx;
+                    outRect.bottom = position / cols == rows - 1 ? spacingPx : 0;
                 }
                 break;
         }

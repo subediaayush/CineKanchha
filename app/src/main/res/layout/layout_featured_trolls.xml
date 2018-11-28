@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="16dp">
+        >
 
         <TextView
             android:id="@+id/label"
@@ -20,15 +20,23 @@
             android:layout_weight="1"
             android:text="Filmy Fuchhe Trolls"
             android:textAllCaps="true"
+            android:padding="16dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
         <TextView
+            style="@style/BorderlessButton"
             android:id="@+id/txtViewAll"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="View All>"
+            android:layout_height="match_parent"
+            android:text="View All"
             android:textColor="@color/colorPrimary"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:textAllCaps="true"
+            tools:visibility="visible"
+            android:gravity="center"
+            android:paddingRight="16dp"
+            android:paddingEnd="16dp"
+            />
 
     </LinearLayout>
 

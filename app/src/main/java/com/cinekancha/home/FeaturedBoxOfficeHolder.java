@@ -1,8 +1,5 @@
 package com.cinekancha.home;
 
-import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -12,7 +9,6 @@ import com.cinekancha.R;
 import com.cinekancha.boxOffice.BoxOfficeActivity;
 import com.cinekancha.entities.model.BoxOfficeItem;
 import com.cinekancha.utils.GlobalUtils;
-import com.cinekancha.utils.ItemOffsetDecoration;
 
 import java.util.List;
 
@@ -50,8 +46,6 @@ class FeaturedBoxOfficeHolder extends HomeItemHolder {
         });
 
         adapter = new FeatureBoxOfficeAdapter();
-        ItemOffsetDecoration itemDecoration = new ItemOffsetDecoration(view.getContext(), R.dimen.item_offset);
-        boxOffice.addItemDecoration(itemDecoration);
         boxOffice.setAdapter(adapter);
         boxOffice.setNestedScrollingEnabled(false);
     }

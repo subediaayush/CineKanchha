@@ -59,7 +59,10 @@ public class MoviesAdapter extends BaseRecyclerAdapter<MovieHolder> {
         Movie movie = movieList.get(position);
         holder.txtMovie.setText(movie.getName());
         holder.txtDate.setText(movie.getReleaseDate());
-        Picasso.with(holder.itemView.getContext()).load(Constants.imageUrl + movie.getFeaturedImage()).placeholder(R.drawable.placeholder_movie).into(holder.imgMovie);
+        Picasso.with(holder.itemView.getContext())
+                .load(Constants.imageUrl + movie.getFeaturedImage())
+                .placeholder(R.drawable.placeholder_movie)
+                .into(holder.imgMovie);
     }
 
     @Override

@@ -1,31 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center_horizontal"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:foreground="?android:attr/selectableItemBackground"
+    >
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/thumbnail"
-        android:layout_width="213dp"
+        android:layout_width="0dp"
         android:layout_height="160dp"
         android:background="#7777"
         android:scaleType="centerCrop"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintDimensionRatio="h,9:16"
         tools:src="@tools:sample/backgrounds/scenic" />
 
     <TextView
         android:id="@+id/title"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+        app:layout_constraintTop_toBottomOf="@id/thumbnail"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:lines="2"
         tools:text="@tools:sample/lorem/random" />
 
     <TextView
         android:id="@+id/subtitle"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:lines="1"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone"
         tools:text="@tools:sample/lorem" />
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>

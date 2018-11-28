@@ -13,26 +13,31 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="16dp">
+        android:gravity="center_vertical"
+        >
 
         <TextView
             android:id="@+id/label"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:paddingBottom="8dp"
             android:textAllCaps="true"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:padding="16dp"
             tools:text="New Releases" />
 
         <TextView
+            style="@style/BorderlessButton"
             android:id="@+id/txtViewAll"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingBottom="8dp"
-            android:text="View All>"
+            android:layout_height="match_parent"
+            android:text="View All"
             android:textColor="@color/colorPrimary"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:textAllCaps="true"
+            tools:visibility="visible"
+            android:gravity="center"
+            android:padding="16dp"/>
 
     </LinearLayout>
 

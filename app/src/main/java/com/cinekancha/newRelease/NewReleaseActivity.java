@@ -20,6 +20,7 @@ import com.cinekancha.listener.OnClickListener;
 import com.cinekancha.movieDetail.MoviePostDetailActivity;
 import com.cinekancha.movies.MoviesAdapter;
 import com.cinekancha.utils.CharacterItemDecoration;
+import com.cinekancha.utils.ScreenUtils;
 import com.cinekancha.view.CineMovieViewModel;
 
 import java.net.MalformedURLException;
@@ -73,7 +74,7 @@ public class NewReleaseActivity extends BaseNavigationActivity implements OnClic
         adapter = new MoviesAdapter(this);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         int spanCount = 2; // 3 columns
-        int spacing = 50; // 50px
+        int spacing = ScreenUtils.dpToPx(this, 16); // 50px
         boolean includeEdge = true;
         recyclerView.addItemDecoration(new CharacterItemDecoration(spanCount, spacing, includeEdge));
         recyclerView.setNestedScrollingEnabled(false);

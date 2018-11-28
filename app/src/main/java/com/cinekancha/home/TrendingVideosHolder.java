@@ -3,8 +3,6 @@ package com.cinekancha.home;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -69,7 +67,7 @@ public class TrendingVideosHolder extends HomeItemHolder {
         Context context = view.getContext();
         upcomingMoviesList.setNestedScrollingEnabled(false);
         upcomingMoviesList.setLayoutManager(manager);
-        upcomingMoviesList.addItemDecoration(new EqualSpacingItemDecoration(40, EqualSpacingItemDecoration.HORIZONTAL));
+        upcomingMoviesList.addItemDecoration(new EqualSpacingItemDecoration(16, EqualSpacingItemDecoration.HORIZONTAL));
         title.setText("Trending Videos");
     }
 
