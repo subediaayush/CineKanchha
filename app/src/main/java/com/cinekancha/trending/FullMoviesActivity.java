@@ -48,19 +48,10 @@ public class FullMoviesActivity extends BaseNavigationActivity implements OnClic
         cineFullMoviesViewModel = ViewModelProviders.of(this).get(CineFullMoviesViewModel.class);
         init();
         if (cineFullMoviesViewModel.getVideoList() == null) {
-            requestMovie();
+            requestFullMovie();
         } else {
-            try {
-                renderMovieData();
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
+            renderFullMovie();
         }
-    }
-
-    private void initToolbar() {
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.movies);
     }
 
     private void init() {
@@ -74,7 +65,7 @@ public class FullMoviesActivity extends BaseNavigationActivity implements OnClic
         paginationNestedOnScrollListener = new PaginationNestedOnScrollListener(recyclerView, (LinearLayoutManager) recyclerView.getLayoutManager(), cineFullMoviesViewModel) {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
-                requestMovie();
+                requestFullMovie();
             }
         };
         nestedScrollView.setOnScrollChangeListener(paginationNestedOnScrollListener);
@@ -91,7 +82,7 @@ public class FullMoviesActivity extends BaseNavigationActivity implements OnClic
         super.onResume();
     }
 
-    private void renderMovieData() throws MalformedURLException {
+    private void renderFullMovie() {
         if (cineFullMoviesViewModel.isToAppend()) {
             adapter.addTrendingList(cineFullMoviesViewModel.getAppendVideoList());
             cineFullMoviesViewModel.setToAppend(false);
@@ -101,30 +92,26 @@ public class FullMoviesActivity extends BaseNavigationActivity implements OnClic
         }
     }
 
-    private void requestMovie() {
-            compositeDisposable.add((RestAPI.getInstance().getFullMovies(cineFullMoviesViewModel.getCurrentPage()))
-                    .doOnSubscribe(disposable -> {
-                        homeSwipeRefreshLayout.setRefreshing(true);
-                    })
-                    .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
-                    .subscribe(this::handleDatabase, this::handleMovieFetchError));
+    private void requestFullMovie() {
+        compositeDisposable.add((RestAPI.getInstance().getFullMovies(cineFullMoviesViewModel.getCurrentPage()))
+                .doOnSubscribe(disposable -> {
+                    homeSwipeRefreshLayout.setRefreshing(true);
+                })
+                .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
+                .subscribe(this::handleFullMovieData, this::handleFullMovieFetchError));
     }
 
-    private void handleMovieFetchError(Throwable throwable) {
+    private void handleFullMovieFetchError(Throwable throwable) {
         throwable.printStackTrace();
         Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }
 
-    private void handleDatabase(FullMovies data) throws MalformedURLException {
-        handleMovieData(data);
-    }
-
-    private void handleMovieData(FullMovies data) throws MalformedURLException {
+    private void handleFullMovieData(FullMovies data) {
         if (data != null && data.getTrendingList() != null) {
             cineFullMoviesViewModel.setVideoList(data.getTrendingList());
             cineFullMoviesViewModel.setAppendVideoList(data.getTrendingList());
             cineFullMoviesViewModel.setLastPage(data.getMeta().getLastPage());
-            renderMovieData();
+            renderFullMovie();
         } else Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }
 
@@ -148,6 +135,6 @@ public class FullMoviesActivity extends BaseNavigationActivity implements OnClic
     public void onRefresh() {
         cineFullMoviesViewModel.resetState();
         paginationNestedOnScrollListener.resetState();
-        requestMovie();
+        requestFullMovie();
     }
 }

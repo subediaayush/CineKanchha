@@ -51,11 +51,7 @@ public class TrollListActivity extends BaseNavigationActivity implements Recycle
         if (mCineTrollViewModel.getTrollDataList() == null) {
             requestArticles();
         } else {
-            try {
-                renderData();
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
+            renderData();
         }
     }
 
@@ -85,7 +81,7 @@ public class TrollListActivity extends BaseNavigationActivity implements Recycle
         super.onResume();
     }
 
-    private void renderData() throws MalformedURLException {
+    private void renderData() {
         if (mCineTrollViewModel.isToAppend()) {
             mTrollAdapter.addTrollList(mCineTrollViewModel.getAppendTrollDataList());
             mCineTrollViewModel.setToAppend(false);

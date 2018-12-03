@@ -54,13 +54,9 @@ public class PollsActivity extends BaseNavigationActivity implements OnPollClick
         cinePollViewModel = ViewModelProviders.of(this).get(CinePollViewModel.class);
         init();
         if (cinePollViewModel.getPollDataList() == null) {
-            requestMovie();
+            requestPoll();
         } else {
-            try {
-                renderMovieData();
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
+            renderPollData();
         }
     }
 
@@ -75,7 +71,7 @@ public class PollsActivity extends BaseNavigationActivity implements OnPollClick
         paginationNestedOnScrollListener = new PaginationNestedOnScrollListener(recyclerView, (LinearLayoutManager) recyclerView.getLayoutManager(), cinePollViewModel) {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
-                requestMovie();
+                requestPoll();
             }
         };
         nestedScrollView.setOnScrollChangeListener(paginationNestedOnScrollListener);
@@ -92,7 +88,7 @@ public class PollsActivity extends BaseNavigationActivity implements OnPollClick
         super.onResume();
     }
 
-    private void renderMovieData() throws MalformedURLException {
+    private void renderPollData() {
         if (cinePollViewModel.isToAppend()) {
             adapter.addPollDataList(cinePollViewModel.getAppendPollDataList());
             cinePollViewModel.setToAppend(false);
@@ -115,51 +111,35 @@ public class PollsActivity extends BaseNavigationActivity implements OnPollClick
         return polls;
     }
 
-    private void requestMovie() {
-            compositeDisposable.add(RestAPI.getInstance().getPoll(cinePollViewModel.getCurrentPage())
-                    .doOnSubscribe(disposable -> {
-                        homeSwipeRefreshLayout.setRefreshing(true);
-                    })
-                    .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
-                    .subscribe(this::handleDatabase, this::handleMovieFetchError));
-        
-//            compositeDisposable.add(GetDataRepository.getInstance().getPollData()
-//                    .doOnSubscribe(disposable -> {
-//                        homeSwipeRefreshLayout.setRefreshing(true);
-//                    })
-//                    .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
-//                    .subscribe(this::handleMovieData, this::handleMovieFetchError));
+    private void requestPoll() {
+        compositeDisposable.add(RestAPI.getInstance().getPoll(cinePollViewModel.getCurrentPage())
+                .doOnSubscribe(disposable -> {
+                    homeSwipeRefreshLayout.setRefreshing(true);
+                })
+                .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
+                .subscribe(this::handlePollData, this::handlePollFetchError));
+
     }
 
-    private void handleDatabase(Poll data) throws MalformedURLException {
-        handleMovieData(data);
-//        compositeDisposable.add(SetDataRepository.getInstance().setPoll(data).toObservable()
-//                .doOnSubscribe(disposable -> {
-//                })
-//                .doFinally(() -> {
-//                })
-//                .subscribe(this::handleMovieData, this::handleMovieFetchError));
-    }
-
-    private void handleMovieFetchError(Throwable throwable) {
+    private void handlePollFetchError(Throwable throwable) {
         throwable.printStackTrace();
         Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }
 
-    private void handleMovieData(Poll data) throws MalformedURLException {
+    private void handlePollData(Poll data) throws MalformedURLException {
         compositeDisposable.add(GetDataRepository.getInstance().getPollDatabase()
                 .doOnSubscribe(disposable -> {
                     homeSwipeRefreshLayout.setRefreshing(true);
                 })
                 .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
-                .subscribe(this::handlePollDatabase, this::handleMovieFetchError));
+                .subscribe(this::handlePollDatabase, this::handlePollFetchError));
 
         if (data != null && data.getData() != null) {
             List<PollData> checkedPollData = checkPollData(data.getData());
             cinePollViewModel.setPollDataList(checkedPollData);
             cinePollViewModel.setAppendPollDataList(checkedPollData);
             cinePollViewModel.setLastPage(data.getMeta().getLastPage());
-            renderMovieData();
+            renderPollData();
         } else Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }
 
@@ -182,7 +162,7 @@ public class PollsActivity extends BaseNavigationActivity implements OnPollClick
                 })
                 .doFinally(() -> {
                 })
-                .subscribe(this::handlePostPoll, this::handleMovieFetchError));
+                .subscribe(this::handlePostPoll, this::handlePollFetchError));
     }
 
     private void handlePostPoll(Response<Void> data) throws MalformedURLException {
@@ -196,19 +176,19 @@ public class PollsActivity extends BaseNavigationActivity implements OnPollClick
                     })
                     .doFinally(() -> {
                     })
-                    .subscribe(this::notifyDataPoll, this::handleMovieFetchError));
+                    .subscribe(this::notifyDataPoll, this::handlePollFetchError));
         }
 
     }
 
     private void notifyDataPoll(PollDatabase pollDatabase) {
-       onRefresh();
+        onRefresh();
     }
 
     @Override
     public void onRefresh() {
         cinePollViewModel.resetState();
         paginationNestedOnScrollListener.resetState();
-        requestMovie();
+        requestPoll();
     }
 }

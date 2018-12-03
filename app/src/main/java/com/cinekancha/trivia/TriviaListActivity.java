@@ -46,11 +46,7 @@ public class TriviaListActivity extends BaseNavigationActivity implements Recycl
         if (mCineTriviaViewModel.getTriviaDataList() == null) {
             requestTrivia();
         } else {
-            try {
-                renderTrivia();
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
+            renderTrivia();
         }
     }
 
@@ -83,16 +79,15 @@ public class TriviaListActivity extends BaseNavigationActivity implements Recycl
     }
 
     private void requestTrivia() {
-            compositeDisposable.add(RestAPI.getInstance().getTrivia(mCineTriviaViewModel.getCurrentPage())
-                    .doOnSubscribe(disposable -> {
-                        homeSwipeRefreshLayout.setRefreshing(true);
-                    })
-                    .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
-                    .subscribe(this::handleDatabase, this::handleFetchError));
-
+        compositeDisposable.add(RestAPI.getInstance().getTrivia(mCineTriviaViewModel.getCurrentPage())
+                .doOnSubscribe(disposable -> {
+                    homeSwipeRefreshLayout.setRefreshing(true);
+                })
+                .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
+                .subscribe(this::handleTriviaData, this::handleFetchError));
     }
 
-    private void handleTriviaData(Trivia trivia) throws MalformedURLException {
+    private void handleTriviaData(Trivia trivia) {
         if (trivia != null && trivia.getData() != null) {
             mCineTriviaViewModel.setTriviaDataList(trivia.getData());
             mCineTriviaViewModel.setAppendTriviaDataList(trivia.getData());
@@ -101,16 +96,12 @@ public class TriviaListActivity extends BaseNavigationActivity implements Recycl
         } else Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }
 
-    private void handleDatabase(Trivia trivia) throws MalformedURLException {
-        handleTriviaData(trivia);
-    }
-
     private void handleFetchError(Throwable throwable) {
         throwable.printStackTrace();
         Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }
 
-    private void renderTrivia() throws MalformedURLException {
+    private void renderTrivia() {
         if (mCineTriviaViewModel.isToAppend()) {
             mArticleAdapter.addTriviaDataList(mCineTriviaViewModel.getAppendTriviaDataList());
             mCineTriviaViewModel.setToAppend(false);

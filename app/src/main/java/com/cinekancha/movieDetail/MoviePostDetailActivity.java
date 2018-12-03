@@ -285,12 +285,12 @@ public class MoviePostDetailActivity extends BaseNavigationActivity implements O
     }
 
     private void requestMovie(int id) {
-            compositeDisposable.add(RestAPI.getInstance().getMovieDetail(id)
-                    .doOnSubscribe(disposable -> {
-                        swipeRefreshLayout.setRefreshing(true);
-                    })
-                    .doFinally(() -> swipeRefreshLayout.setRefreshing(false))
-                    .subscribe(this::handleDatabase, this::handleMovieFetchError));
+        compositeDisposable.add(RestAPI.getInstance().getMovieDetail(id)
+                .doOnSubscribe(disposable -> {
+                    swipeRefreshLayout.setRefreshing(true);
+                })
+                .doFinally(() -> swipeRefreshLayout.setRefreshing(false))
+                .subscribe(this::handleMovieData, this::handleMovieFetchError));
     }
 
     private void startYoutube(String url) throws MalformedURLException {
@@ -311,11 +311,6 @@ public class MoviePostDetailActivity extends BaseNavigationActivity implements O
             renderMovieData();
         } else Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }
-
-    private void handleDatabase(MovieDetail data) throws MalformedURLException {
-        handleMovieData(data);
-    }
-
 
     @Override
     public void onSlideClicked(FeaturedContent item) {

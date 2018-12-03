@@ -1,14 +1,8 @@
 package com.cinekancha.activities;
 
-import android.annotation.TargetApi;
-import android.app.job.JobInfo;
-import android.app.job.JobScheduler;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.ComponentName;
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -34,7 +28,6 @@ import com.cinekancha.home.HomeDataAdapter;
 import com.cinekancha.home.OnSlideClickListener;
 import com.cinekancha.home.SlideShowAdapter;
 import com.cinekancha.listener.OnPollClickListener;
-import com.cinekancha.utils.MyCache;
 import com.cinekancha.view.CineHomeViewModel;
 import com.firebase.jobdispatcher.Constraint;
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
@@ -45,7 +38,6 @@ import com.firebase.jobdispatcher.RetryStrategy;
 import com.firebase.jobdispatcher.Trigger;
 import com.google.gson.Gson;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -82,8 +74,6 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
     private long optionId;
     private long pollId;
     private List<PollDatabase> pollDatabaseList = new ArrayList();
-    private MyCache myCache;
-    private File mDirectory;
 
 
     @Override
@@ -95,15 +85,8 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setTitle("Home");
-        cancelJob(this);
-        scheduleJob(this);
-        mDirectory = new File(getApplicationInfo().dataDir + "/Filmy Fuche/");
-        ;
-        try {
-            myCache = new MyCache(mDirectory);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        cancelJob(this);
+//        scheduleJob(this);
 
         mCineHomeViewModel = ViewModelProviders.of(this).get(CineHomeViewModel.class);
 
@@ -133,15 +116,8 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
         mSlideAdapter.registerDataSetObserver(mIndicator.getDataSetObserver());
     }
 
-    private void initToolbar() {
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.home);
-    }
-
     public static void scheduleJob(Context context) {
-        //creating new firebase job dispatcher
         FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(context));
-        //creating new job and adding it with dispatcher
         Job job = createJob(dispatcher);
         dispatcher.mustSchedule(job);
     }
@@ -189,21 +165,12 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
     }
 
     private void requestHomeData() {
-//        if (Connectivity.isConnected(this)) {
         compositeDisposable.add(RestAPI.getInstance().getHomeData()
                 .doOnSubscribe(disposable -> {
                     mSwipeRefreshLayout.setRefreshing(true);
                 })
                 .doFinally(() -> mSwipeRefreshLayout.setRefreshing(false))
-                .subscribe(this::handleDatabase, this::handleHomeFetchError));
-//        } else {
-//            compositeDisposable.add(GetDataRepository.getInstance().getHomeData()
-//                    .doOnSubscribe(disposable -> {
-//                        mSwipeRefreshLayout.setRefreshing(true);
-//                    })
-//                    .doFinally(() -> mSwipeRefreshLayout.setRefreshing(false))
-//                    .subscribe(this::handleHomeData, this::handleHomeFetchError));
-//        }
+                .subscribe(this::handleHomeData, this::handleHomeFetchError));
     }
 
     private void handleHomeFetchError(Throwable throwable) {
@@ -211,36 +178,10 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
         Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }
 
-    private void handleDatabase(Response<HomeData> data) throws IOException {
-        myCache.put("home", new Gson().toJson(data.body()));
-        myCache.mDiskLruCache.close();
-        myCache = new MyCache(mDirectory);
-        String homeResponse = null;
-        try {
-            homeResponse = (String) new MyCache(mDirectory).get("home");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        Log.d("HomeResponse", String.valueOf(new MyCache(mDirectory).containsKey("home")));
-        handleHomeData(data.body());
-////        ReadWriteJsonFileUtils.createJsonFileData(this, "Home", new Gson().toJson(data.body()));
-//        compositeDisposable.add(SetDataRepository.getInstance() .setHomeData(data.body()).toObservable()
-//                .doOnSubscribe(disposable -> {
-//                })
-//                .doFinally(() -> {
-//                })
-//                .subscribe(this::handleHomeData, this::handleHomeFetchError));
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        try {
-            myCache.mDiskLruCache.delete();
-            myCache.mDiskLruCache.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
     }
 
     private void checkPollData() {
@@ -253,7 +194,7 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
         }
     }
 
-    private void handleHomeData(HomeData data) {
+    private void handleHomeData(Response<HomeData> data) {
         compositeDisposable.add(GetDataRepository.getInstance().getPollDatabase()
                 .doOnSubscribe(disposable -> {
                     mSwipeRefreshLayout.setRefreshing(true);
@@ -261,7 +202,7 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
                 .doFinally(() -> mSwipeRefreshLayout.setRefreshing(false))
                 .subscribe(this::handlePollDatabase, this::handleHomeFetchError));
         if (data != null) {
-            mCineHomeViewModel.setHomeData(data);
+            mCineHomeViewModel.setHomeData(data.body());
             renderHomeData();
         } else Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }

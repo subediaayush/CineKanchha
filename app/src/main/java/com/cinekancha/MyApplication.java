@@ -12,6 +12,7 @@ import com.cinekancha.utils.Logger;
 import com.cinekancha.utils.Prefs;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -46,6 +47,7 @@ public class MyApplication extends Application {
     public void onCreate() {
         if (instance == null)
             instance = this;
+        FirebaseMessaging.getInstance().subscribeToTopic("cinekhancha");
 
         Prefs.initPrefs(this);
 

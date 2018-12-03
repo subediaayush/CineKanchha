@@ -48,11 +48,7 @@ public class MovieActivity extends BaseNavigationActivity implements OnClickList
         if (cineMovieViewModel.getMovieList() == null || cineMovieViewModel.getLastPage() == 0) {
             requestMovie();
         } else {
-            try {
-                renderMovieData();
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
+            renderMovieData();
         }
     }
 
@@ -89,7 +85,7 @@ public class MovieActivity extends BaseNavigationActivity implements OnClickList
 
     }
 
-    private void renderMovieData() throws MalformedURLException {
+    private void renderMovieData() {
         if (cineMovieViewModel.isToAppend()) {
             adapter.addMovieList(cineMovieViewModel.getAppendMovieList());
             cineMovieViewModel.setToAppend(false);
@@ -97,38 +93,17 @@ public class MovieActivity extends BaseNavigationActivity implements OnClickList
             adapter.setMovieList(cineMovieViewModel.getMovieList());
             cineMovieViewModel.setToAppend(false);
         }
-
-        /*if (cineMovieViewModel.getMovieList() != null && cineMovieViewModel.getMovieList().size() > 0) {
-            adapter.setMovieList(cineMovieViewModel.getMovieList());
-        } else requestMovie();*/
     }
 
     private void requestMovie() {
-            compositeDisposable.add(RestAPI.getInstance().getMovie(cineMovieViewModel.getCurrentPage())
-                    .doOnSubscribe(disposable -> {
-                        homeSwipeRefreshLayout.setRefreshing(true);
-                    })
-                    .doFinally(() -> {
-                        homeSwipeRefreshLayout.setRefreshing(false);
-                    })
-                    .subscribe(this::handleDatabase, this::handleMovieFetchError));
-//        else
-//            compositeDisposable.add(GetDataRepository.getInstance().getMovieData()
-//                    .doOnSubscribe(disposable -> {
-//                        homeSwipeRefreshLayout.setRefreshing(true);
-//                    })
-//                    .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
-//                    .subscribe(this::handleMovieData, this::handleMovieFetchError));
-    }
-
-    private void handleDatabase(MovieData data) throws MalformedURLException {
-        handleMovieData(data);
-//        compositeDisposable.add(SetDataRepository.getInstance().setMovie(data).toObservable()
-//                .doOnSubscribe(disposable -> {
-//                })
-//                .doFinally(() -> {
-//                })
-//                .subscribe(this::handleMovieData, this::handleMovieFetchError));
+        compositeDisposable.add(RestAPI.getInstance().getMovie(cineMovieViewModel.getCurrentPage())
+                .doOnSubscribe(disposable -> {
+                    homeSwipeRefreshLayout.setRefreshing(true);
+                })
+                .doFinally(() -> {
+                    homeSwipeRefreshLayout.setRefreshing(false);
+                })
+                .subscribe(this::handleMovieData, this::handleMovieFetchError));
     }
 
     private void handleMovieFetchError(Throwable throwable) {
@@ -136,7 +111,7 @@ public class MovieActivity extends BaseNavigationActivity implements OnClickList
         Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }
 
-    private void handleMovieData(MovieData data) throws MalformedURLException {
+    private void handleMovieData(MovieData data) {
         if (data != null && data.getData() != null) {
             cineMovieViewModel.setMovieList(data.getData());
             cineMovieViewModel.setAppendMovieList(data.getData());

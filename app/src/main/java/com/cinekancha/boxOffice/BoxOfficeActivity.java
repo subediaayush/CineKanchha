@@ -71,16 +71,12 @@ public class BoxOfficeActivity extends BaseNavigationActivity implements OnClick
     }
 
     private void requestBoxOffice() {
-            compositeDisposable.add(RestAPI.getInstance().getBOxOffice()
-                    .doOnSubscribe(disposable -> {
-                        swipeRefreshLayout.setRefreshing(true);
-                    })
-                    .doFinally(() -> swipeRefreshLayout.setRefreshing(false))
-                    .subscribe(this::handleDatabase, this::handleMovieFetchError));
-    }
-
-    private void handleDatabase(List<BoxOfficeItem> boxOffice) {
-        handleBoxOfficeData(boxOffice);
+        compositeDisposable.add(RestAPI.getInstance().getBOxOffice()
+                .doOnSubscribe(disposable -> {
+                    swipeRefreshLayout.setRefreshing(true);
+                })
+                .doFinally(() -> swipeRefreshLayout.setRefreshing(false))
+                .subscribe(this::handleBoxOfficeData, this::handleMovieFetchError));
     }
 
     private void handleMovieFetchError(Throwable throwable) {

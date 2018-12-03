@@ -20,11 +20,7 @@ import com.cinekancha.listener.OnClickListener;
 import com.cinekancha.movieDetail.MoviePostDetailActivity;
 import com.cinekancha.movies.MoviesAdapter;
 import com.cinekancha.utils.CharacterItemDecoration;
-import com.cinekancha.utils.EqualSpacingItemDecoration;
-import com.cinekancha.utils.ItemOffsetDecoration;
 import com.cinekancha.view.CineMovieViewModel;
-
-import java.net.MalformedURLException;
 
 import butterknife.BindView;
 
@@ -53,19 +49,10 @@ public class UpcomingMovieActivity extends BaseNavigationActivity implements OnC
         cineMovieViewModel = ViewModelProviders.of(this).get(CineMovieViewModel.class);
         init();
         if (cineMovieViewModel.getMovieList() == null) {
-            requestMovie();
+            requestUpcoming();
         } else {
-            try {
-                renderMovieData();
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
+            renderUpcomingData();
         }
-    }
-
-    private void initToolbar() {
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.movies);
     }
 
     private void init() {
@@ -83,7 +70,7 @@ public class UpcomingMovieActivity extends BaseNavigationActivity implements OnC
         paginationNestedOnScrollListener = new PaginationNestedOnScrollListener(recyclerView, (GridLayoutManager) recyclerView.getLayoutManager(), cineMovieViewModel) {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
-                requestMovie();
+                requestUpcoming();
             }
         };
         nestedScrollView.setOnScrollChangeListener(paginationNestedOnScrollListener);
@@ -100,7 +87,7 @@ public class UpcomingMovieActivity extends BaseNavigationActivity implements OnC
         super.onResume();
     }
 
-    private void renderMovieData() throws MalformedURLException {
+    private void renderUpcomingData() {
         if (cineMovieViewModel.isToAppend()) {
             adapter.addMovieList(cineMovieViewModel.getAppendMovieList());
             cineMovieViewModel.setToAppend(false);
@@ -108,45 +95,30 @@ public class UpcomingMovieActivity extends BaseNavigationActivity implements OnC
             adapter.setMovieList(cineMovieViewModel.getMovieList());
             cineMovieViewModel.setToAppend(false);
         }
-        /*if (cineMovieViewModel.getMovieList() != null && cineMovieViewModel.getMovieList().size() > 0) {
-            adapter = new MoviesAdapter(cineMovieViewModel.getMovieList(), this);
-            recyclerView.setAdapter(adapter);
-        } else if (Connectivity.isConnected(this))
-            requestMovie();
-        else
-            Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();*/
     }
 
-    private void requestMovie() {
+    private void requestUpcoming() {
         compositeDisposable.add(RestAPI.getInstance().getUpcomingMovie(cineMovieViewModel.getCurrentPage())
                 .doOnSubscribe(disposable -> {
                     homeSwipeRefreshLayout.setRefreshing(true);
                 })
                 .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
-                .subscribe(this::handleDatabase, this::handleMovieFetchError));
+                .subscribe(this::handleUpcomingMovie, this::handleUpcomingFetchError));
 
     }
 
-    private void handleDatabase(UpcomingMovie data) throws MalformedURLException {
-        handleMovieData(data);
-    }
-
-    private void handleMovieFetchError(Throwable throwable) {
+    private void handleUpcomingFetchError(Throwable throwable) {
         throwable.printStackTrace();
         Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }
 
-    private void handleMovieData(UpcomingMovie data) throws MalformedURLException {
+    private void handleUpcomingMovie(UpcomingMovie data) {
         if (data != null && data.getData() != null) {
             cineMovieViewModel.setMovieList(data.getData());
             cineMovieViewModel.setAppendMovieList(data.getData());
             cineMovieViewModel.setLastPage(data.getMeta().getLastPage());
-            renderMovieData();
+            renderUpcomingData();
         } else Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
-        /*if (data != null && data.getData() != null) {
-            cineMovieViewModel.setMovieList(data.getData());
-            renderMovieData();
-        } else Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();*/
     }
 
     @Override
@@ -161,6 +133,6 @@ public class UpcomingMovieActivity extends BaseNavigationActivity implements OnC
     public void onRefresh() {
         cineMovieViewModel.resetState();
         paginationNestedOnScrollListener.resetState();
-        requestMovie();
+        requestUpcoming();
     }
 }

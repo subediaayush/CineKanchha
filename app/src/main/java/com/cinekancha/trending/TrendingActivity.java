@@ -50,17 +50,8 @@ public class TrendingActivity extends BaseNavigationActivity implements OnClickL
         if (cineTrendingViewModel.getTrendingList() == null) {
             requestMovie();
         } else {
-            try {
-                renderMovieData();
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
+            renderTrendingData();
         }
-    }
-
-    private void initToolbar() {
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.movies);
     }
 
     private void init() {
@@ -92,7 +83,7 @@ public class TrendingActivity extends BaseNavigationActivity implements OnClickL
         super.onResume();
     }
 
-    private void renderMovieData() throws MalformedURLException {
+    private void renderTrendingData(){
         if (cineTrendingViewModel.isToAppend()) {
             adapter.addTrendingList(cineTrendingViewModel.getAppendTrendingList());
             cineTrendingViewModel.setToAppend(false);
@@ -108,25 +99,21 @@ public class TrendingActivity extends BaseNavigationActivity implements OnClickL
                         homeSwipeRefreshLayout.setRefreshing(true);
                     })
                     .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
-                    .subscribe(this::handleDatabase, this::handleMovieFetchError));
+                    .subscribe(this::handleTrendingData, this::handleTrendingError));
 
     }
 
-    private void handleDatabase(TrendingData data) throws MalformedURLException {
-        handleMovieData(data);
-    }
-
-    private void handleMovieFetchError(Throwable throwable) {
+    private void handleTrendingError(Throwable throwable) {
         throwable.printStackTrace();
         Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }
 
-    private void handleMovieData(TrendingData data) throws MalformedURLException {
+    private void handleTrendingData(TrendingData data) throws MalformedURLException {
         if (data != null && data.getTrendingList() != null) {
             cineTrendingViewModel.setTrendingList(data.getTrendingList());
             cineTrendingViewModel.setAppendTrendingList(data.getTrendingList());
             cineTrendingViewModel.setLastPage(data.getMeta().getLastPage());
-            renderMovieData();
+            renderTrendingData();
         } else Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }
 

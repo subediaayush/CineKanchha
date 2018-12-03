@@ -92,22 +92,15 @@ public class NewsGossipsActivity extends BaseNavigationActivity implements OnSli
             adapter.setNewsGossipList(mCineNewsGossipsModel.getNewsGossipList());
             mCineNewsGossipsModel.setToAppend(false);
         }
-        /*if (mCineNewsGossipsModel.getNewsGossip() != null && mCineNewsGossipsModel.getNewsGossip().getData() != null) {
-            adapter = new NewsGossipAdapter(mCineNewsGossipsModel.getNewsGossip().getData(), this);
-            recyclerViewNews.setAdapter(adapter);
-        } else if (Connectivity.isConnected(this))
-            requestNewsGossipList();
-        else
-            Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();*/
     }
 
     private void requestNewsGossipList() {
-            compositeDisposable.add(RestAPI.getInstance().getNewsGossip(mCineNewsGossipsModel.getCurrentPage())
-                    .doOnSubscribe(disposable -> {
-                        newsSwipeToRefresh.setRefreshing(true);
-                    })
-                    .doFinally(() -> newsSwipeToRefresh.setRefreshing(false))
-                    .subscribe(this::handleDatabase, this::handleMovieFetchError));
+        compositeDisposable.add(RestAPI.getInstance().getNewsGossip(mCineNewsGossipsModel.getCurrentPage())
+                .doOnSubscribe(disposable -> {
+                    newsSwipeToRefresh.setRefreshing(true);
+                })
+                .doFinally(() -> newsSwipeToRefresh.setRefreshing(false))
+                .subscribe(this::handleNewsGossipData, this::handleMovieFetchError));
     }
 
     private void startYoutube(String url) throws MalformedURLException {
@@ -122,21 +115,13 @@ public class NewsGossipsActivity extends BaseNavigationActivity implements OnSli
         Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }
 
-    private void handleNewsGossipData(NewsGossip data)  {
+    private void handleNewsGossipData(NewsGossip data) {
         if (data != null && data.getData() != null) {
             mCineNewsGossipsModel.setNewsGossipList(data.getData());
             mCineNewsGossipsModel.setAppendNewsGossipList(data.getData());
             mCineNewsGossipsModel.setLastPage(data.getMeta().getLastPage());
             renderNewsGossip();
         } else Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
-        /*if (data != null && data.getData() != null) {
-            mCineNewsGossipsModel.setNewsGossip(data);
-            renderNewsGossip();
-        } else Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();*/
-    }
-
-    private void handleDatabase(NewsGossip data)  {
-        handleNewsGossipData(data);
     }
 
     @Override

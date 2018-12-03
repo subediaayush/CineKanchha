@@ -54,17 +54,8 @@ public class NewReleaseActivity extends BaseNavigationActivity implements OnClic
         if (cineMovieViewModel.getMovieList() == null) {
             requestMovie();
         } else {
-            try {
-                renderMovieData();
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
+            renderMovieData();
         }
-    }
-
-    private void initToolbar() {
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.newReleases);
     }
 
     private void init() {
@@ -99,7 +90,7 @@ public class NewReleaseActivity extends BaseNavigationActivity implements OnClic
         super.onResume();
     }
 
-    private void renderMovieData() throws MalformedURLException {
+    private void renderMovieData() {
         if (cineMovieViewModel.isToAppend()) {
             adapter.addMovieList(cineMovieViewModel.getAppendMovieList());
             cineMovieViewModel.setToAppend(false);
@@ -107,29 +98,16 @@ public class NewReleaseActivity extends BaseNavigationActivity implements OnClic
             adapter.setMovieList(cineMovieViewModel.getMovieList());
             cineMovieViewModel.setToAppend(false);
         }
-
-        /*this.movieList = cineMovieViewModel.getMovieList();
-        if (movieList != null && movieList.size() > 0) {
-            adapter = new MoviesAdapter(movieList, this);
-            recyclerView.setAdapter(adapter);
-        } else if (Connectivity.isConnected(this))
-            requestMovie();
-        else
-            Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();*/
     }
 
     private void requestMovie() {
-            compositeDisposable.add(RestAPI.getInstance().getNewRelease(cineMovieViewModel.getCurrentPage())
-                    .doOnSubscribe(disposable -> {
-                        homeSwipeRefreshLayout.setRefreshing(true);
-                    })
-                    .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
-                    .subscribe(this::handleDatabase, this::handleMovieFetchError));
+        compositeDisposable.add(RestAPI.getInstance().getNewRelease(cineMovieViewModel.getCurrentPage())
+                .doOnSubscribe(disposable -> {
+                    homeSwipeRefreshLayout.setRefreshing(true);
+                })
+                .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
+                .subscribe(this::handleMovieData, this::handleMovieFetchError));
 
-    }
-
-    private void handleDatabase(NewRelease data) throws MalformedURLException {
-        handleMovieData(data);
     }
 
     private void handleMovieFetchError(Throwable throwable) {
