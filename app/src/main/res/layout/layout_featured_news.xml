@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center_horizontal"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:padding="10dp">
+    android:background="?android:attr/selectableItemBackground"
+    >
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/thumbnail"
         android:layout_width="91dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintDimensionRatio="h,16:9"
+        tools:src="@tools:sample/backgrounds/scenic"
         android:adjustViewBounds="true" />
 
     <TextView
@@ -22,7 +30,10 @@
         android:textColor="@android:color/black"
         android:textSize="14sp"
         android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/thumbnail"
         tools:text="asudaskudyausdyuiasdyiu" />
 
 
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>

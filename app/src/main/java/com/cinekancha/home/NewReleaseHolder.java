@@ -3,17 +3,14 @@ package com.cinekancha.home;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.cinekancha.R;
 import com.cinekancha.adapters.base.BaseRecyclerAdapter;
-import com.cinekancha.article.ArticleDetailActivity;
 import com.cinekancha.entities.ThumbWrapper;
 import com.cinekancha.entities.ThumbnailConverter;
 import com.cinekancha.entities.model.Movie;
-import com.cinekancha.listener.OnClickListener;
 import com.cinekancha.movieDetail.MoviePostDetailActivity;
 import com.cinekancha.utils.EqualSpacingItemDecoration;
 
@@ -64,7 +61,7 @@ public class NewReleaseHolder extends HomeItemHolder {
         };
         newMoviesList.setNestedScrollingEnabled(false);
         newMoviesList.setLayoutManager(manager);
-        newMoviesList.addItemDecoration(new EqualSpacingItemDecoration(40, EqualSpacingItemDecoration.HORIZONTAL));
+        newMoviesList.addItemDecoration(new EqualSpacingItemDecoration(16, EqualSpacingItemDecoration.HORIZONTAL));
 
     }
 

@@ -3,7 +3,7 @@
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
-	android:layout_height="200dp"
+	android:layout_height="wrap_content"
 	android:clickable="true"
 	android:focusable="true"
 	android:foreground="?android:attr/selectableItemBackground"
@@ -12,11 +12,15 @@
 
 	<ImageView
 		android:id="@+id/image"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
+		android:layout_width="0dp"
+		android:layout_height="0dp"
 		android:foreground="@drawable/readable_shadow"
 		android:scaleType="centerCrop"
 		tools:src="@tools:sample/backgrounds/scenic"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintDimensionRatio="h,4:3"
 		/>
 
 	<TextView

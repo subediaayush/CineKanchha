@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.support.annotation.DimenRes;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
@@ -22,7 +23,23 @@ public class ItemOffsetDecoration extends RecyclerView.ItemDecoration {
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
                                RecyclerView.State state) {
-        super.getItemOffsets(outRect, view, parent, state);
-        outRect.set(mItemOffset, mItemOffset, mItemOffset, mItemOffset);
+        int position = parent.getChildViewHolder(view).getAdapterPosition();
+        int itemCount = state.getItemCount();
+        
+        int cols = 1;
+        int rows = itemCount;
+    
+        if (parent.getLayoutManager() instanceof GridLayoutManager) {
+            GridLayoutManager gridLayoutManager = (GridLayoutManager) parent.getLayoutManager();
+            cols = gridLayoutManager.getSpanCount();
+            rows = itemCount / cols;
+            if (itemCount % 2 == 1) {
+                rows = rows + 1;
+            }
+        }
+        outRect.left = mItemOffset;
+        outRect.right = position % cols == cols - 1 ? mItemOffset : 0;
+        outRect.top = mItemOffset;
+        outRect.bottom = position / cols == rows - 1 ? mItemOffset : 0;
     }
 }

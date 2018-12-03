@@ -18,6 +18,8 @@ import com.cinekancha.entities.model.ReviewData;
 import com.cinekancha.entities.model.Reviews;
 import com.cinekancha.entities.rest.RestAPI;
 import com.cinekancha.listener.OnClickListener;
+import com.cinekancha.utils.CharacterItemDecoration;
+import com.cinekancha.utils.ScreenUtils;
 import com.cinekancha.view.CineReviewViewModel;
 
 import java.net.MalformedURLException;
@@ -63,6 +65,10 @@ public class ReviewListActivity extends BaseNavigationActivity implements SwipeR
         mArticleList.setLayoutManager(new LinearLayoutManager(this));
         mArticleList.setAdapter(mArticleAdapter);
         mArticleList.setNestedScrollingEnabled(false);
+        int spanCount = 2; // 3 columns
+        int spacing = ScreenUtils.dpToPx(this, 16); // 50px
+        boolean includeEdge = true;
+        mArticleList.addItemDecoration(new CharacterItemDecoration(spanCount, spacing, includeEdge));
         paginationNestedOnScrollListener = new PaginationNestedOnScrollListener(mArticleList, (LinearLayoutManager) mArticleList.getLayoutManager(), cineReviewViewModel) {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {

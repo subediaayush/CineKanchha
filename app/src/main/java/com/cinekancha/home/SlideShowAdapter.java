@@ -1,7 +1,6 @@
 package com.cinekancha.home;
 
 import android.annotation.SuppressLint;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -85,7 +84,7 @@ public class SlideShowAdapter extends FragmentPagerAdapter {
             Log.d(TAG, "Remove old dispatch");
             mSlideChangeHandler.removeMessages(MESSAGE_SLIDE_CHANGE);
         }
-        boolean sent = mSlideChangeHandler.sendEmptyMessageDelayed(MESSAGE_SLIDE_CHANGE, 3000);
+        boolean sent = mSlideChangeHandler.sendEmptyMessageDelayed(MESSAGE_SLIDE_CHANGE, 8000);
         Log.d(TAG, "Slide " + (sent ? "" : " not ") + " resumed");
     }
 
@@ -122,10 +121,7 @@ public class SlideShowAdapter extends FragmentPagerAdapter {
 
         private FeaturedContent mFeaturedItem;
         private OnSlideClickListener mListener;
-        private int[] colors = new int[]{
-                Color.BLUE, Color.RED, Color.YELLOW, Color.GRAY, Color.GREEN
-        };
-
+    
         public static SlideFragment newInstance(FeaturedContent item, OnSlideClickListener listener) {
             SlideFragment fragment = new SlideFragment();
             fragment.setFeaturedItem(item);
@@ -148,8 +144,6 @@ public class SlideShowAdapter extends FragmentPagerAdapter {
                 String newString = mFeaturedItem.getImageUrl().replace("\\", "");
                 Picasso.with(getContext()).load(Constants.imageUrl + newString).into(mImage);
             }
-
-            mImage.setBackgroundColor(getRandomColor());
 
             mTitle.setText(mFeaturedItem.getTitle());
             if (TextUtils.isEmpty(mFeaturedItem.getSubtitle())) {
@@ -174,11 +168,7 @@ public class SlideShowAdapter extends FragmentPagerAdapter {
         protected int getLayoutId() {
             return R.layout.fragment_featured_slide;
         }
-
-        private int getRandomColor() {
-            return colors[(int) (Math.random() * colors.length) % colors.length];
-        }
-
+        
         public void setListener(OnSlideClickListener listener) {
             this.mListener = listener;
         }

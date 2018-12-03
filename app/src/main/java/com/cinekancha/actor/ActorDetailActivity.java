@@ -14,7 +14,8 @@ import com.cinekancha.entities.model.ActorPhoto;
 import com.cinekancha.entities.model.Photos;
 import com.cinekancha.entities.rest.RestAPI;
 import com.cinekancha.listener.OnClickListener;
-import com.cinekancha.utils.ItemOffsetDecoration;
+import com.cinekancha.utils.CharacterItemDecoration;
+import com.cinekancha.utils.ScreenUtils;
 import com.cinekancha.view.CineActorPhotoViewModel;
 import com.stfalcon.frescoimageviewer.ImageViewer;
 
@@ -48,7 +49,10 @@ public class ActorDetailActivity extends BaseNavigationActivity implements OnCli
     private void init() {
         getSupportActionBar().setTitle(R.string.photoGallery);
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-        recyclerView.addItemDecoration(new ItemOffsetDecoration(this, R.dimen.item_offset));
+        int spanCount = 2; // 3 columns
+        int spacing = ScreenUtils.dpToPx(this, 16); // 50px
+        boolean includeEdge = true;
+        recyclerView.addItemDecoration(new CharacterItemDecoration(spanCount, spacing, includeEdge));
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setHasFixedSize(true);
         homeSwipeRefreshLayout.setOnRefreshListener(this);
