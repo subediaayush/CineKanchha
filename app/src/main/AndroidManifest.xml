@@ -80,11 +80,6 @@
                 android:name="com.google.firebase.messaging.default_notification_icon"
                 android:resource="@drawable/ic_launcher_round" />
         </service>
-        <service android:name=".entities.service.MyFirebaseInstanceIDService">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
-            </intent-filter>
-        </service>
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
@@ -101,7 +96,11 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".activities.DeeplinkActivity"></activity>
+        <activity android:name=".activities.DeeplinkActivity">
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW"/>
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

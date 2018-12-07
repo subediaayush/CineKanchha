@@ -1,6 +1,6 @@
 package com.cinekancha.entities;
 
-import android.support.annotation.DrawableRes;
+import androidx.annotation.DrawableRes;
 
 public class ThumbWrapper {
     private String imageUrl;

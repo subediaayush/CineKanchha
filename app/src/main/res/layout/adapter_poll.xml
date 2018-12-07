@@ -88,7 +88,7 @@
             android:layout_height="wrap_content"
             android:padding="8dp" />
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/answerRecycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

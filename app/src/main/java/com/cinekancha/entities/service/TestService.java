@@ -5,7 +5,7 @@ import com.firebase.jobdispatcher.JobService;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
+import androidx.annotation.RequiresApi;
 import android.util.Log;
 
 import com.cinekancha.activities.HomeActivity;

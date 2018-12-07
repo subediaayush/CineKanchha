@@ -14,21 +14,20 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.media.RingtoneManager;
 import android.os.Build;
 import android.provider.Settings;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 
 import com.cinekancha.R;
-import com.cinekancha.utils.Constants;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
+
+import androidx.annotation.RequiresApi;
+import androidx.core.app.NotificationCompat;
 
 
 public class NotificationUtils {
@@ -46,6 +45,9 @@ public class NotificationUtils {
     }
 
     public void showNotificationMessage(final String title, final String message, final String timeStamp, Intent intent, String imageUrl) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            initChannel(mContext);
+        }
         // Check for empty push message
         Bitmap imageUri = null;
         if (TextUtils.isEmpty(message))
@@ -60,7 +62,7 @@ public class NotificationUtils {
         NotificationCompat.Builder mBuilder;
         NotificationManager notificationManager;
 
-        mBuilder = new NotificationCompat.Builder(mContext);
+        mBuilder = new NotificationCompat.Builder(mContext, mContext.getString(R.string.notification_channel_id));
         mBuilder.setSmallIcon(R.mipmap.ic_launcher);
         mBuilder.setContentTitle(title)
                 .setContentText(message)
@@ -70,7 +72,7 @@ public class NotificationUtils {
 
         notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             int importance = NotificationManager.IMPORTANCE_HIGH;
             NotificationChannel notificationChannel = new NotificationChannel(String.valueOf(Config.NOTIFICATION_ID), "NOTIFICATION_CHANNEL_NAME", importance);
             notificationChannel.enableLights(true);
@@ -84,7 +86,24 @@ public class NotificationUtils {
         assert notificationManager != null;
         notificationManager.notify(0 /* Request Code */, mBuilder.build());
     }
-
+    
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void initChannel(Context context) {
+        String id = context.getString(R.string.notification_channel_id);
+        String name = context.getString(R.string.notification_channel_name);
+        String desc = context.getString(R.string.notification_channel_desc);
+        
+        int importance = NotificationManager.IMPORTANCE_DEFAULT;
+        
+        NotificationChannel channel = new NotificationChannel(id, name, importance);
+        channel.setDescription(desc);
+    
+        NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+        if (notificationManager != null) {
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+    
     public static Bitmap getBitmapFromURL(String src) {
         try {
             URL url = new URL(src);

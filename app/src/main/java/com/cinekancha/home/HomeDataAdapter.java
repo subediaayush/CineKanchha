@@ -327,6 +327,8 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
 
 
     public void setHomeData(HomeData data) {
+        if (data == null) return;
+        
         this.mData = HomeDataWrapper.wrap(data);
         Log.i(TAG, "Total items in home: " + mData.getItemCount());
         notifyDataSetChanged();

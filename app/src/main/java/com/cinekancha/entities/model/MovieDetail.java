@@ -6,7 +6,8 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.List;
 
-import io.realm.annotations.PrimaryKey;
+import androidx.room.PrimaryKey;
+
 
 public class MovieDetail implements Serializable {
     @PrimaryKey

@@ -28,5 +28,8 @@
     <string name="settings">Settings</string>
     <string name="contactUs">Contact Us</string>
     <string name="PREF_TOKEN">Pref Token</string>
+    <string name="notification_channel_id">notification-channel</string>
+    <string name="notification_channel_name">Notifcations</string>
+    <string name="notification_channel_desc">Display notifications for FilmyFuchhe</string>
 
 </resources>

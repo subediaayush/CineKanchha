@@ -1,14 +1,8 @@
 package com.cinekancha.movieReview;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
-import android.support.v4.widget.NestedScrollView;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
 import com.cinekancha.R;
@@ -24,6 +18,12 @@ import com.cinekancha.view.CineReviewViewModel;
 
 import java.net.MalformedURLException;
 
+import androidx.annotation.Nullable;
+import androidx.core.widget.NestedScrollView;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 
 /**
@@ -65,7 +65,7 @@ public class ReviewListActivity extends BaseNavigationActivity implements SwipeR
         mArticleList.setLayoutManager(new LinearLayoutManager(this));
         mArticleList.setAdapter(mArticleAdapter);
         mArticleList.setNestedScrollingEnabled(false);
-        int spanCount = 2; // 3 columns
+        int spanCount = 1; // 3 columns
         int spacing = ScreenUtils.dpToPx(this, 16); // 50px
         boolean includeEdge = true;
         mArticleList.addItemDecoration(new CharacterItemDecoration(spanCount, spacing, includeEdge));

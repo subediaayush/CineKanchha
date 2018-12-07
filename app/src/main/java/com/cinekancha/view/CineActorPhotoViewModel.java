@@ -1,13 +1,10 @@
 package com.cinekancha.view;
 
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
-import android.support.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.annotation.NonNull;
 
-import com.cinekancha.entities.model.Actor;
 import com.cinekancha.entities.model.ActorPhoto;
-
-import java.util.List;
 
 /**
  * Created by aayushsubedi on 3/8/18.

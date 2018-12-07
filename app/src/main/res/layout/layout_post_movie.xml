@@ -16,17 +16,17 @@
         android:orientation="vertical"
         android:paddingBottom="10dp">
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            ><android.support.v4.view.ViewPager
+            ><androidx.viewpager.widget.ViewPager
             android:id="@+id/viewPagerYoutube"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintDimensionRatio="h,16:9"
             />
-        </android.support.constraint.ConstraintLayout>
-        <me.relex.circleindicator.CircleIndicator
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <com.cinekancha.view.CircleIndicator
             android:id="@+id/indicator"
             android:layout_width="match_parent"
             android:layout_height="32dp" />
@@ -123,7 +123,7 @@
         </RelativeLayout>
     </RelativeLayout>
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycleViewRating"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -210,13 +210,13 @@
 
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recylerViewPhotos"
         android:layout_width="match_parent"
         android:layout_height="180dp"
         android:visibility="gone" />
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recylerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

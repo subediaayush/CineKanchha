@@ -1,15 +1,13 @@
 package com.cinekancha.newsGossips;
 
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.cinekancha.R;
 import com.cinekancha.entities.model.Article;
-import com.cinekancha.entities.model.Movie;
 import com.cinekancha.listener.OnClickListener;
-import com.cinekancha.poll.PollProgressVH;
 import com.cinekancha.utils.Constants;
 import com.squareup.picasso.Picasso;
 

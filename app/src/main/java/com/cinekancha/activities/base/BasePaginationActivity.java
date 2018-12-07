@@ -1,10 +1,9 @@
 package com.cinekancha.activities.base;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.widget.NestedScrollView;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
+import androidx.annotation.Nullable;
+import androidx.core.widget.NestedScrollView;
+import androidx.recyclerview.widget.GridLayoutManager;
 
 public abstract class BasePaginationActivity extends BaseNavigationActivity {
     private int visibleItemCount;

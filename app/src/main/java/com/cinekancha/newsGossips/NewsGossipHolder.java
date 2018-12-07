@@ -1,15 +1,11 @@
 package com.cinekancha.newsGossips;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cinekancha.R;
-import com.cinekancha.adapters.base.BaseRecyclerAdapter;
-import com.cinekancha.home.HomeItemHolder;
-
-import butterknife.BindView;
 
 /**
  * Created by aayushsubedi on 3/8/18.

@@ -3,12 +3,12 @@ package com.cinekancha.entities.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
- import io.realm.annotations.PrimaryKey;
+import androidx.room.PrimaryKey;
+
 
 /**
  * Created by aayushsubedi on 3/8/18.

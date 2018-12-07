@@ -1,24 +1,20 @@
 package com.cinekancha.entities.service;
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
-import android.os.Build;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 
-
-import com.cinekancha.R;
 import com.cinekancha.activities.HomeActivity;
+import com.cinekancha.utils.Constants;
+import com.cinekancha.utils.GlobalUtils;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 
 /**
@@ -128,4 +124,32 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         notificationUtils.showNotificationMessage(title, message, timeStamp, intent, imageUrl);
     }
-}
+    
+    @Override
+    public void onNewToken(String token) {
+        // Saving reg id to shared preferences
+        storeRegIdInPref(token);
+    
+    
+        Log.d("RefreshToken", token);
+    
+    
+        // sending reg id to your server
+        sendRegistrationToServer(token);
+    
+        // Notify UI that registration has completed, so the progress indicator can be hidden.
+        Intent registrationComplete = new Intent(Config.REGISTRATION_COMPLETE);
+        registrationComplete.putExtra("token", token);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
+    }
+    
+    private void sendRegistrationToServer(final String token) {
+        // sending gcm token to server
+        Log.e(TAG, "sendRegistrationToServer: " + token);
+    }
+    
+    private void storeRegIdInPref(String token) {
+        GlobalUtils.savePref(Constants.FCM_TOKEN, token, getApplicationContext());
+        
+        Log.d("FCMToken", token);
+    }}

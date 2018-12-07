@@ -1,7 +1,7 @@
 package com.cinekancha.view;
 
 import android.app.Application;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.cinekancha.entities.model.PollData;
 
