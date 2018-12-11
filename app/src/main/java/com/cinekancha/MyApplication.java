@@ -1,15 +1,20 @@
 package com.cinekancha;
 
 import android.app.Application;
-import android.support.v7.app.AppCompatDelegate;
+import android.content.Context;
 
+import com.cinekancha.entities.model.PollDatabase;
 import com.cinekancha.utils.AnalyticsUtil;
 import com.cinekancha.utils.Logger;
+import com.cinekancha.utils.Prefs;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.messaging.FirebaseMessaging;
 
-import io.realm.Realm;
-import io.realm.RealmConfiguration;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.multidex.MultiDex;
+
+
 
 /**
  * Created by paoneking on 2/20/18.
@@ -32,15 +37,21 @@ public class MyApplication extends Application {
     }
 
     @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(base);
+    }
+
+    @Override
     public void onCreate() {
         if (instance == null)
             instance = this;
+        FirebaseMessaging.getInstance().subscribeToTopic("cinekhancha");
 
-        Realm.init(this);
-        RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
-                .deleteRealmIfMigrationNeeded()
-                .build();
-        Realm.setDefaultConfiguration(realmConfiguration);
+        Prefs.initPrefs(this);
+    
+        PollDatabase.init(this);
+
         // Obtain the FirebaseAnalytics instance.
         if (mFirebaseAnalytics == null)
             mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
@@ -49,7 +60,7 @@ public class MyApplication extends Application {
         AnalyticsUtil.logAppOpenEvent(getAnalytics());
         Logger.setWriteLog(BuildConfig.DEBUG);
         super.onCreate();
-    
+
         Fresco.initialize(this);
     }
 }

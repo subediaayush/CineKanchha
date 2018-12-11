@@ -1,14 +1,14 @@
 package com.cinekancha.trending;
 
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.widget.NestedScrollView;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import androidx.core.widget.NestedScrollView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.widget.Toast;
 
 import com.cinekancha.R;
@@ -16,11 +16,8 @@ import com.cinekancha.activities.base.BaseNavigationActivity;
 import com.cinekancha.activities.base.PaginationNestedOnScrollListener;
 import com.cinekancha.entities.model.TrendingData;
 import com.cinekancha.entities.model.Video;
-import com.cinekancha.entities.rest.GetDataRepository;
 import com.cinekancha.entities.rest.RestAPI;
-import com.cinekancha.entities.rest.SetDataRepository;
 import com.cinekancha.listener.OnClickListener;
-import com.cinekancha.utils.Connectivity;
 import com.cinekancha.utils.GlobalUtils;
 import com.cinekancha.view.CineTrendingViewModel;
 
@@ -53,11 +50,7 @@ public class TrendingActivity extends BaseNavigationActivity implements OnClickL
         if (cineTrendingViewModel.getTrendingList() == null) {
             requestMovie();
         } else {
-            try {
-                renderMovieData();
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
+            renderTrendingData();
         }
     }
 
@@ -90,7 +83,7 @@ public class TrendingActivity extends BaseNavigationActivity implements OnClickL
         super.onResume();
     }
 
-    private void renderMovieData() throws MalformedURLException {
+    private void renderTrendingData(){
         if (cineTrendingViewModel.isToAppend()) {
             adapter.addTrendingList(cineTrendingViewModel.getAppendTrendingList());
             cineTrendingViewModel.setToAppend(false);
@@ -101,42 +94,26 @@ public class TrendingActivity extends BaseNavigationActivity implements OnClickL
     }
 
     private void requestMovie() {
-        if (Connectivity.isConnected(this))
             compositeDisposable.add((RestAPI.getInstance().getTrending(cineTrendingViewModel.getCurrentPage()))
                     .doOnSubscribe(disposable -> {
                         homeSwipeRefreshLayout.setRefreshing(true);
                     })
                     .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
-                    .subscribe(this::handleDatabase, this::handleMovieFetchError));
-        else
-            compositeDisposable.add(GetDataRepository.getInstance().getTrendingData()
-                    .doOnSubscribe(disposable -> {
-                        homeSwipeRefreshLayout.setRefreshing(true);
-                    })
-                    .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
-                    .subscribe(this::handleMovieData, this::handleMovieFetchError));
+                    .subscribe(this::handleTrendingData, this::handleTrendingError));
+
     }
 
-    private void handleDatabase(TrendingData data) {
-        compositeDisposable.add(SetDataRepository.getInstance().setTrending(data).toObservable()
-                .doOnSubscribe(disposable -> {
-                })
-                .doFinally(() -> {
-                })
-                .subscribe(this::handleMovieData, this::handleMovieFetchError));
-    }
-
-    private void handleMovieFetchError(Throwable throwable) {
+    private void handleTrendingError(Throwable throwable) {
         throwable.printStackTrace();
         Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }
 
-    private void handleMovieData(TrendingData data) throws MalformedURLException {
+    private void handleTrendingData(TrendingData data) throws MalformedURLException {
         if (data != null && data.getTrendingList() != null) {
             cineTrendingViewModel.setTrendingList(data.getTrendingList());
             cineTrendingViewModel.setAppendTrendingList(data.getTrendingList());
             cineTrendingViewModel.setLastPage(data.getMeta().getLastPage());
-            renderMovieData();
+            renderTrendingData();
         } else Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }
 

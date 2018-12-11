@@ -1,20 +1,20 @@
 package com.cinekancha.entities.model;
 
-import java.util.List;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import io.realm.RealmList;
-import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
+import java.io.Serializable;
+import java.util.List;
 
-public class ActorGallery extends RealmObject {
+import androidx.room.PrimaryKey;
+
+
+public class ActorGallery implements Serializable {
     @PrimaryKey
     private int id = 0;
     @SerializedName("data")
     @Expose
-    private RealmList<Actor> data = null;
+    private List<Actor> data = null;
     @SerializedName("links")
     @Expose
     private PageLink links;
@@ -30,11 +30,11 @@ public class ActorGallery extends RealmObject {
         this.id = id;
     }
 
-    public RealmList<Actor> getData() {
+    public List<Actor> getData() {
         return data;
     }
 
-    public void setData(RealmList<Actor> data) {
+    public void setData(List<Actor> data) {
         this.data = data;
     }
 

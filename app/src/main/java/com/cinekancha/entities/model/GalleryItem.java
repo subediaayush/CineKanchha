@@ -2,9 +2,9 @@ package com.cinekancha.entities.model;
 
 import com.google.gson.annotations.SerializedName;
 
-import io.realm.RealmObject;
+import java.io.Serializable;
 
-public class GalleryItem extends RealmObject {
+public class GalleryItem implements Serializable {
 
     @SerializedName("id")
     private long id;

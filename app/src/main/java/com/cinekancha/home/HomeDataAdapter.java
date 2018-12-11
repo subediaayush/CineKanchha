@@ -240,7 +240,7 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
         TriviaData triviaData = mData.getItem(position);
         holder.trivia.setText(triviaData.getTrivia());
         holder.viewMore.setVisibility(View.VISIBLE);
-        holder.viewMore.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 GlobalUtils.navigateActivity(holder.itemView.getContext(), false, TriviaListActivity.class);
@@ -253,7 +253,7 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
     protected void setViewOfEleven(BaseViewHolder baseHolder, int position) {
         TopStoryHolder holder = (TopStoryHolder) baseHolder;
         Article topStory = mData.getItem(position);
-        holder.txtTopStories.setText(topStory.getSummary());
+        holder.txtTopStories.setText(topStory.getTitle());
     }
 
     @Override
@@ -344,6 +344,8 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
 
 
     public void setHomeData(HomeData data) {
+        if (data == null) return;
+        
         this.mData = HomeDataWrapper.wrap(data);
         Log.i(TAG, "Total items in home: " + mData.getItemCount());
         notifyDataSetChanged();

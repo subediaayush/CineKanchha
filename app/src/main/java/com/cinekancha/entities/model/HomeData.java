@@ -3,43 +3,42 @@ package com.cinekancha.entities.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
-import io.realm.RealmList;
-import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
+import androidx.room.PrimaryKey;
+
 
 /**
  * Created by aayushsubedi on 3/8/18.
  */
 
 
-public class HomeData extends RealmObject {
+public class HomeData implements Serializable {
     @PrimaryKey
     private int id;
     @SerializedName("featuredContents")
     @Expose
-    private RealmList<FeaturedContent> featuredContents = null;
+    private List<FeaturedContent> featuredContents = null;
     @SerializedName("new_releases")
     @Expose
-    private RealmList<Movie> newReleases = null;
+    private List<Movie> newReleases = null;
     @SerializedName("movies")
     @Expose
-    private RealmList<Movie> movies = null;
-    @SerializedName("upcoming_movies")
-    @Expose
-    private RealmList<Movie> upComingMovies = null;
+    private List<Movie> movies = null;
     @SerializedName("box_office_list")
     @Expose
-    private RealmList<BoxOfficeItem> boxOfficeList = null;
+    private List<BoxOfficeItem> boxOfficeList = null;
     @SerializedName("hot_news")
     @Expose
-    private RealmList<Article> hotNews = null;
+    private List<Article> hotNews = null;
     @SerializedName("full_movies")
     @Expose
-    private RealmList<Video> fullMovies = null;
+    private List<Video> fullMovies = null;
     @SerializedName("trending_videos")
     @Expose
-    private RealmList<Video> trendingVideo = null;
+    private List<Video> trendingVideo = null;
     @SerializedName("poll")
     @Expose
     private PollData poll;
@@ -49,17 +48,20 @@ public class HomeData extends RealmObject {
     @SerializedName("troll")
     @Expose
     private TrollData troll;
+    @SerializedName("upcoming_movies")
+    @Expose
+    private List<Movie> upComingMovies = null;
     @SerializedName("top_story")
     @Expose
     private Article topStory;
     @SerializedName("photo_gallery")
     @Expose
-    private RealmList<GalleryItem> photoGallery = new RealmList<>();
+    private List<GalleryItem> photoGallery = new ArrayList<>();
     @Expose
     @SerializedName("movie_reviews")
-    private RealmList<Movie> featuredReviews = new RealmList<>();
+    private List<Movie> featuredReviews = new ArrayList<>();
 
-    public RealmList<FeaturedContent> getFeaturedContents() {
+    public List<FeaturedContent> getFeaturedContents() {
         return featuredContents;
     }
 
@@ -71,47 +73,47 @@ public class HomeData extends RealmObject {
         this.id = id;
     }
 
-    public void setFeaturedContents(RealmList<FeaturedContent> featuredContents) {
+    public void setFeaturedContents(List<FeaturedContent> featuredContents) {
         this.featuredContents = featuredContents;
     }
 
-    public RealmList<Movie> getNewReleases() {
+    public List<Movie> getNewReleases() {
         return newReleases;
     }
 
-    public void setNewReleases(RealmList<Movie> newReleases) {
+    public void setNewReleases(List<Movie> newReleases) {
         this.newReleases = newReleases;
     }
 
-    public RealmList<Movie> getMovies() {
+    public List<Movie> getMovies() {
         return movies;
     }
 
-    public void setMovies(RealmList<Movie> movies) {
+    public void setMovies(List<Movie> movies) {
         this.movies = movies;
     }
 
-    public RealmList<BoxOfficeItem> getBoxOfficeList() {
+    public List<BoxOfficeItem> getBoxOfficeList() {
         return boxOfficeList;
     }
 
-    public void setBoxOfficeList(RealmList<BoxOfficeItem> boxOfficeRealmList) {
-        this.boxOfficeList = boxOfficeRealmList;
+    public void setBoxOfficeList(List<BoxOfficeItem> boxOfficeList) {
+        this.boxOfficeList = boxOfficeList;
     }
 
-    public RealmList<Article> getHotNews() {
+    public List<Article> getHotNews() {
         return hotNews;
     }
 
-    public void setHotNews(RealmList<Article> hotNews) {
+    public void setHotNews(List<Article> hotNews) {
         this.hotNews = hotNews;
     }
 
-    public RealmList<Video> getFullMovies() {
+    public List<Video> getFullMovies() {
         return fullMovies;
     }
 
-    public void setFullMovies(RealmList<Video> fullMovies) {
+    public void setFullMovies(List<Video> fullMovies) {
         this.fullMovies = fullMovies;
     }
 
@@ -147,35 +149,36 @@ public class HomeData extends RealmObject {
         this.topStory = topStory;
     }
 
-    public RealmList<GalleryItem> getPhotoGallery() {
+    public List<GalleryItem> getPhotoGallery() {
         return photoGallery;
     }
 
-    public void setPhotoGallery(RealmList<GalleryItem> photoGallery) {
+    public void setPhotoGallery(List<GalleryItem> photoGallery) {
         this.photoGallery = photoGallery;
     }
 
-    public RealmList<Movie> getFeaturedReviews() {
+    public List<Movie> getFeaturedReviews() {
         return featuredReviews;
     }
 
-    public void setFeaturedReviews(RealmList<Movie> featuredReviews) {
+    public void setFeaturedReviews(List<Movie> featuredReviews) {
         this.featuredReviews = featuredReviews;
     }
 
-    public RealmList<Video> getTrendingVideo() {
+    public List<Video> getTrendingVideo() {
         return trendingVideo;
     }
 
-    public void setTrendingVideo(RealmList<Video> trendingVideo) {
+    public void setTrendingVideo(List<Video> trendingVideo) {
         this.trendingVideo = trendingVideo;
     }
-
-    public RealmList<Movie> getUpComingMovies() {
+    
+    public List<Movie> getUpComingMovies() {
         return upComingMovies;
     }
-
-    public void setUpComingMovies(RealmList<Movie> upComingMovies) {
+    
+    public void setUpComingMovies(List<Movie> upComingMovies) {
         this.upComingMovies = upComingMovies;
     }
+    
 }

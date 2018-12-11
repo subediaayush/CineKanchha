@@ -1,10 +1,7 @@
 package com.cinekancha.home;
 
-import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
@@ -49,11 +46,8 @@ class FeaturedBoxOfficeHolder extends HomeItemHolder {
         });
 
         adapter = new FeatureBoxOfficeAdapter();
-        Drawable divider = ContextCompat.getDrawable(view.getContext(), R.drawable.list_divider);
-        DividerItemDecoration decor = new DividerItemDecoration(view.getContext(), DividerItemDecoration.VERTICAL);
-        decor.setDrawable(divider);
-        boxOffice.addItemDecoration(decor);
         boxOffice.setAdapter(adapter);
+        boxOffice.setNestedScrollingEnabled(false);
     }
 
     public void setBoxOffice(List<BoxOfficeItem> items) {

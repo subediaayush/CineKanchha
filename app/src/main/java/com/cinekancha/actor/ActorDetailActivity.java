@@ -1,26 +1,21 @@
 package com.cinekancha.actor;
 
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProviders;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.support.v7.widget.Toolbar;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+import androidx.appcompat.widget.Toolbar;
 import android.widget.Toast;
 
 import com.cinekancha.R;
 import com.cinekancha.activities.base.BaseNavigationActivity;
-import com.cinekancha.entities.model.ActorGallery;
 import com.cinekancha.entities.model.ActorPhoto;
-import com.cinekancha.entities.model.Photo;
 import com.cinekancha.entities.model.Photos;
-import com.cinekancha.entities.rest.GetDataRepository;
 import com.cinekancha.entities.rest.RestAPI;
-import com.cinekancha.entities.rest.SetDataRepository;
 import com.cinekancha.listener.OnClickListener;
-import com.cinekancha.utils.Connectivity;
-import com.cinekancha.utils.Constants;
-import com.cinekancha.utils.ItemOffsetDecoration;
+import com.cinekancha.utils.CharacterItemDecoration;
+import com.cinekancha.utils.ScreenUtils;
 import com.cinekancha.view.CineActorPhotoViewModel;
 import com.stfalcon.frescoimageviewer.ImageViewer;
 
@@ -49,7 +44,10 @@ public class ActorDetailActivity extends BaseNavigationActivity implements OnCli
     private void init() {
         getSupportActionBar().setTitle(R.string.photoGallery);
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-        recyclerView.addItemDecoration(new ItemOffsetDecoration(this, R.dimen.item_offset));
+        int spanCount = 2; // 3 columns
+        int spacing = ScreenUtils.dpToPx(this, 16); // 50px
+        boolean includeEdge = true;
+        recyclerView.addItemDecoration(new CharacterItemDecoration(spanCount, spacing, includeEdge));
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setHasFixedSize(true);
         homeSwipeRefreshLayout.setOnRefreshListener(this);
@@ -79,29 +77,16 @@ public class ActorDetailActivity extends BaseNavigationActivity implements OnCli
     }
 
     private void requestMovie() {
-        if (Connectivity.isConnected(this))
             compositeDisposable.add(RestAPI.getInstance().getActorPhoto(cineActorPhotoViewModel.getActorID())
                     .doOnSubscribe(disposable -> {
                         homeSwipeRefreshLayout.setRefreshing(true);
                     })
                     .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
                     .subscribe(this::handleDatabase, this::handleMovieFetchError));
-        else
-            compositeDisposable.add(GetDataRepository.getInstance().getActorPhoto()
-                    .doOnSubscribe(disposable -> {
-                        homeSwipeRefreshLayout.setRefreshing(true);
-                    })
-                    .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
-                    .subscribe(this::handleMovieData, this::handleMovieFetchError));
     }
 
     private void handleDatabase(ActorPhoto data) {
-        compositeDisposable.add(SetDataRepository.getInstance().setActorPhoto(data)
-                .doOnSubscribe(disposable -> {
-                })
-                .doFinally(() -> {
-                })
-                .subscribe(this::handleMovieData, this::handleMovieFetchError));
+        handleMovieData(data);
     }
 
     private void handleMovieFetchError(Throwable throwable) {

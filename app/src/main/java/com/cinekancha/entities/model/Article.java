@@ -5,14 +5,15 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
-import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
+import java.io.Serializable;
+
+import androidx.room.PrimaryKey;
 
 /**
  * Created by aayushsubedi on 3/8/18.
  */
 
-public class Article extends RealmObject implements Parcelable {
+public class Article implements Serializable, Parcelable {
     @PrimaryKey
     @SerializedName("id")
     private int id;

@@ -1,14 +1,14 @@
 package com.cinekancha.newsGossips;
 
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.widget.NestedScrollView;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import androidx.core.widget.NestedScrollView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.widget.Toast;
 
 import com.cinekancha.R;
@@ -18,14 +18,10 @@ import com.cinekancha.article.ArticleDetailActivity;
 import com.cinekancha.entities.model.FeaturedContent;
 import com.cinekancha.entities.model.Links;
 import com.cinekancha.entities.model.NewsGossip;
-import com.cinekancha.entities.rest.GetDataRepository;
 import com.cinekancha.entities.rest.RestAPI;
-import com.cinekancha.entities.rest.SetDataRepository;
 import com.cinekancha.home.OnSlideClickListener;
 import com.cinekancha.listener.OnClickListener;
-import com.cinekancha.utils.Connectivity;
 import com.cinekancha.utils.GlobalUtils;
-import com.cinekancha.utils.ListUtils;
 import com.cinekancha.view.CineNewsGossipsViewModel;
 
 import java.net.MalformedURLException;
@@ -57,11 +53,7 @@ public class NewsGossipsActivity extends BaseNavigationActivity implements OnSli
         if (mCineNewsGossipsModel.getNewsGossipList() == null) {
             requestNewsGossipList();
         } else {
-            try {
-                renderNewsGossip();
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
+            renderNewsGossip();
         }
     }
 
@@ -92,7 +84,7 @@ public class NewsGossipsActivity extends BaseNavigationActivity implements OnSli
         super.onResume();
     }
 
-    private void renderNewsGossip() throws MalformedURLException {
+    private void renderNewsGossip() {
         if (mCineNewsGossipsModel.isToAppend()) {
             adapter.addNewsGossipList(mCineNewsGossipsModel.getAppendNewsGossipList());
             mCineNewsGossipsModel.setToAppend(false);
@@ -100,31 +92,15 @@ public class NewsGossipsActivity extends BaseNavigationActivity implements OnSli
             adapter.setNewsGossipList(mCineNewsGossipsModel.getNewsGossipList());
             mCineNewsGossipsModel.setToAppend(false);
         }
-        /*if (mCineNewsGossipsModel.getNewsGossip() != null && mCineNewsGossipsModel.getNewsGossip().getData() != null) {
-            adapter = new NewsGossipAdapter(mCineNewsGossipsModel.getNewsGossip().getData(), this);
-            recyclerViewNews.setAdapter(adapter);
-        } else if (Connectivity.isConnected(this))
-            requestNewsGossipList();
-        else
-            Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();*/
     }
 
     private void requestNewsGossipList() {
-        if (Connectivity.isConnected(this)) {
-            compositeDisposable.add(RestAPI.getInstance().getNewsGossip(mCineNewsGossipsModel.getCurrentPage())
-                    .doOnSubscribe(disposable -> {
-                        newsSwipeToRefresh.setRefreshing(true);
-                    })
-                    .doFinally(() -> newsSwipeToRefresh.setRefreshing(false))
-                    .subscribe(this::handleDatabase, this::handleMovieFetchError));
-        } else {
-            compositeDisposable.add(GetDataRepository.getInstance().getNewsGossip()
-                    .doOnSubscribe(disposable -> {
-                        newsSwipeToRefresh.setRefreshing(true);
-                    })
-                    .doFinally(() -> newsSwipeToRefresh.setRefreshing(false))
-                    .subscribe(this::handleNewsGossipData, this::handleMovieFetchError));
-        }
+        compositeDisposable.add(RestAPI.getInstance().getNewsGossip(mCineNewsGossipsModel.getCurrentPage())
+                .doOnSubscribe(disposable -> {
+                    newsSwipeToRefresh.setRefreshing(true);
+                })
+                .doFinally(() -> newsSwipeToRefresh.setRefreshing(false))
+                .subscribe(this::handleNewsGossipData, this::handleMovieFetchError));
     }
 
     private void startYoutube(String url) throws MalformedURLException {
@@ -139,26 +115,13 @@ public class NewsGossipsActivity extends BaseNavigationActivity implements OnSli
         Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
     }
 
-    private void handleNewsGossipData(NewsGossip data) throws MalformedURLException {
+    private void handleNewsGossipData(NewsGossip data) {
         if (data != null && data.getData() != null) {
             mCineNewsGossipsModel.setNewsGossipList(data.getData());
             mCineNewsGossipsModel.setAppendNewsGossipList(data.getData());
             mCineNewsGossipsModel.setLastPage(data.getMeta().getLastPage());
             renderNewsGossip();
         } else Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();
-        /*if (data != null && data.getData() != null) {
-            mCineNewsGossipsModel.setNewsGossip(data);
-            renderNewsGossip();
-        } else Toast.makeText(this, "Could not load data", Toast.LENGTH_SHORT).show();*/
-    }
-
-    private void handleDatabase(NewsGossip data) {
-        compositeDisposable.add(SetDataRepository.getInstance().setNewsGossip(data).toObservable()
-                .doOnSubscribe(disposable -> {
-                })
-                .doFinally(() -> {
-                })
-                .subscribe(this::handleNewsGossipData, this::handleMovieFetchError));
     }
 
     @Override

@@ -3,13 +3,13 @@ package com.cinekancha.entities.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
-import io.realm.RealmList;
-import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
+import androidx.room.PrimaryKey;
 
-public class PollData extends RealmObject {
+
+public class PollData implements Serializable {
     @PrimaryKey
     @SerializedName("id")
     @Expose
@@ -22,7 +22,7 @@ public class PollData extends RealmObject {
     private String status;
     @SerializedName("options")
     @Expose
-    private RealmList<Option> options = null;
+    private List<Option> options = null;
     @SerializedName("total_votes")
     @Expose
     private Integer totalVotes;
@@ -51,11 +51,11 @@ public class PollData extends RealmObject {
         this.status = status;
     }
 
-    public RealmList<Option> getOptions() {
+    public List<Option> getOptions() {
         return options;
     }
 
-    public void setOptions(RealmList<Option> options) {
+    public void setOptions(List<Option> options) {
         this.options = options;
     }
 

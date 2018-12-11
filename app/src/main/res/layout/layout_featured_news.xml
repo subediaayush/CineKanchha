@@ -1,29 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center_horizontal"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:padding="10dp">
+    android:background="?android:attr/selectableItemBackground"
+    >
 
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/thumbnail"
-        android:layout_width="120dp"
-        android:layout_height="160dp"
-        android:background="#7777"
+        android:layout_width="91dp"
+        android:layout_height="0dp"
         android:scaleType="centerCrop"
-        tools:src="@tools:sample/backgrounds/scenic" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintDimensionRatio="h,16:9"
+        tools:src="@tools:sample/backgrounds/scenic"
+        android:adjustViewBounds="true" />
 
     <TextView
         android:id="@+id/title"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginLeft="10dp"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
-        android:textSize="16sp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:textColor="@android:color/black"
+        android:textSize="14sp"
         android:textStyle="bold"
-        tools:text="@tools:sample/lorem/random" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/thumbnail"
+        tools:text="asudaskudyausdyuiasdyiu" />
 
-</LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

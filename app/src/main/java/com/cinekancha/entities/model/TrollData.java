@@ -4,11 +4,13 @@ import com.cinekancha.utils.Constants;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
+import java.io.Serializable;
 
-public class TrollData extends RealmObject {
-@PrimaryKey
+import androidx.room.PrimaryKey;
+
+
+public class TrollData implements Serializable {
+    @PrimaryKey
     @SerializedName("id")
     @Expose
     private Integer id;

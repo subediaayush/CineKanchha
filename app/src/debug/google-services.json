@@ -67,6 +67,14 @@
           }
         },
         {
+          "client_id": "414490802515-ft23r707llrsaiv55vmp9vpqjlbej4lb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cinekancha.debug",
+            "certificate_hash": "86eafc6a44d19df753fefa113d9c976f0e3a8d6e"
+          }
+        },
+        {
           "client_id": "414490802515-qognauqe4ookc2c7hajsc143kqlgfhhn.apps.googleusercontent.com",
           "client_type": 3
         }

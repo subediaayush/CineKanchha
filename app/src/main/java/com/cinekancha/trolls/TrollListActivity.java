@@ -1,12 +1,12 @@
 package com.cinekancha.trolls;
 
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProviders;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.widget.NestedScrollView;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.Nullable;
+import androidx.core.widget.NestedScrollView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.Toast;
 
@@ -16,10 +16,7 @@ import com.cinekancha.activities.base.PaginationNestedOnScrollListener;
 import com.cinekancha.adapters.base.RecyclerViewClickListener;
 import com.cinekancha.entities.model.Troll;
 import com.cinekancha.entities.model.TrollData;
-import com.cinekancha.entities.rest.GetDataRepository;
 import com.cinekancha.entities.rest.RestAPI;
-import com.cinekancha.entities.rest.SetDataRepository;
-import com.cinekancha.utils.Connectivity;
 import com.cinekancha.view.CineTrollViewModel;
 import com.stfalcon.frescoimageviewer.ImageViewer;
 
@@ -54,11 +51,7 @@ public class TrollListActivity extends BaseNavigationActivity implements Recycle
         if (mCineTrollViewModel.getTrollDataList() == null) {
             requestArticles();
         } else {
-            try {
-                renderData();
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
+            renderData();
         }
     }
 
@@ -88,7 +81,7 @@ public class TrollListActivity extends BaseNavigationActivity implements Recycle
         super.onResume();
     }
 
-    private void renderData() throws MalformedURLException {
+    private void renderData() {
         if (mCineTrollViewModel.isToAppend()) {
             mTrollAdapter.addTrollList(mCineTrollViewModel.getAppendTrollDataList());
             mCineTrollViewModel.setToAppend(false);
@@ -99,29 +92,17 @@ public class TrollListActivity extends BaseNavigationActivity implements Recycle
     }
 
     private void requestArticles() {
-        if (Connectivity.isConnected(this))
             compositeDisposable.add(RestAPI.getInstance().getTroll(mCineTrollViewModel.getCurrentPage())
                     .doOnSubscribe(disposable -> {
                         swipeRefreshLayout.setRefreshing(true);
                     })
                     .doFinally(() -> swipeRefreshLayout.setRefreshing(false))
                     .subscribe(this::handleDatabase, this::handleMovieFetchError));
-        else
-            compositeDisposable.add(GetDataRepository.getInstance().getTroll()
-                    .doOnSubscribe(disposable -> {
-                        swipeRefreshLayout.setRefreshing(true);
-                    })
-                    .doFinally(() -> swipeRefreshLayout.setRefreshing(false))
-                    .subscribe(this::handleTrollData, this::handleMovieFetchError));
+
     }
 
-    private void handleDatabase(Troll data) {
-        compositeDisposable.add(SetDataRepository.getInstance().setTroll(data).toObservable()
-                .doOnSubscribe(disposable -> {
-                })
-                .doFinally(() -> {
-                })
-                .subscribe(this::handleTrollData, this::handleMovieFetchError));
+    private void handleDatabase(Troll data) throws MalformedURLException {
+        handleTrollData(data);
     }
 
 

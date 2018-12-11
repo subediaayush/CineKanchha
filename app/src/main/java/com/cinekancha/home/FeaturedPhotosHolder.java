@@ -2,10 +2,8 @@ package com.cinekancha.home;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
@@ -13,10 +11,11 @@ import com.cinekancha.R;
 import com.cinekancha.actor.ActorDetailActivity;
 import com.cinekancha.actor.ActorListActivity;
 import com.cinekancha.adapters.base.BaseRecyclerAdapter;
-import com.cinekancha.entities.model.GalleryItem;
 import com.cinekancha.entities.ThumbWrapper;
 import com.cinekancha.entities.ThumbnailConverter;
+import com.cinekancha.entities.model.GalleryItem;
 import com.cinekancha.listener.OnClickListener;
+import com.cinekancha.utils.EqualSpacingItemDecoration;
 import com.cinekancha.utils.GlobalUtils;
 
 import java.util.List;
@@ -75,10 +74,7 @@ public class FeaturedPhotosHolder extends HomeItemHolder {
         Context context = view.getContext();
         upcomingMoviesList.setNestedScrollingEnabled(false);
         upcomingMoviesList.setLayoutManager(manager);
-        DividerItemDecoration decoration = new DividerItemDecoration(upcomingMoviesList.getContext(), DividerItemDecoration.HORIZONTAL);
-        decoration.setDrawable(ContextCompat.getDrawable(context, R.drawable.divider_transparent));
-        upcomingMoviesList.addItemDecoration(decoration);
-
+        upcomingMoviesList.addItemDecoration(new EqualSpacingItemDecoration(16, EqualSpacingItemDecoration.HORIZONTAL));
         title.setText("Photo Gallery");
     }
 

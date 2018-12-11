@@ -1,13 +1,13 @@
 package com.cinekancha.actor;
 
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.widget.NestedScrollView;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import androidx.core.widget.NestedScrollView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.widget.Toast;
 
 import com.cinekancha.R;
@@ -15,11 +15,10 @@ import com.cinekancha.activities.base.BaseNavigationActivity;
 import com.cinekancha.activities.base.PaginationNestedOnScrollListener;
 import com.cinekancha.entities.model.Actor;
 import com.cinekancha.entities.model.ActorGallery;
-import com.cinekancha.entities.rest.GetDataRepository;
 import com.cinekancha.entities.rest.RestAPI;
-import com.cinekancha.entities.rest.SetDataRepository;
 import com.cinekancha.listener.OnClickListener;
-import com.cinekancha.utils.Connectivity;
+import com.cinekancha.utils.CharacterItemDecoration;
+import com.cinekancha.utils.ScreenUtils;
 import com.cinekancha.view.CineActorViewModel;
 
 import java.net.MalformedURLException;
@@ -62,11 +61,15 @@ public class ActorListActivity extends BaseNavigationActivity implements OnClick
         getSupportActionBar().setTitle(R.string.photoGallery);
         homeSwipeRefreshLayout.setOnRefreshListener(this);
         adapter = new ActorAdapter(this);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
-        paginationNestedOnScrollListener = new PaginationNestedOnScrollListener(recyclerView, (LinearLayoutManager) recyclerView.getLayoutManager(), cineActorViewModel) {
+        int spanCount = 2; // 3 columns
+        int spacing = ScreenUtils.dpToPx(this, 16); // 50px
+        boolean includeEdge = true;
+        recyclerView.addItemDecoration(new CharacterItemDecoration(spanCount, spacing, includeEdge));
+        paginationNestedOnScrollListener = new PaginationNestedOnScrollListener(recyclerView, (GridLayoutManager) recyclerView.getLayoutManager(), cineActorViewModel) {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
                 requestMovie();
@@ -101,29 +104,16 @@ public class ActorListActivity extends BaseNavigationActivity implements OnClick
     }
 
     private void requestMovie() {
-        if (Connectivity.isConnected(this))
             compositeDisposable.add(RestAPI.getInstance().getActorList(cineActorViewModel.getCurrentPage())
                     .doOnSubscribe(disposable -> {
                         homeSwipeRefreshLayout.setRefreshing(true);
                     })
                     .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
                     .subscribe(this::handleDatabase, this::handleMovieFetchError));
-        else
-            compositeDisposable.add(GetDataRepository.getInstance().getActorGallery()
-                    .doOnSubscribe(disposable -> {
-                        homeSwipeRefreshLayout.setRefreshing(true);
-                    })
-                    .doFinally(() -> homeSwipeRefreshLayout.setRefreshing(false))
-                    .subscribe(this::handleMovieData, this::handleMovieFetchError));
     }
 
-    private void handleDatabase(ActorGallery data) {
-        compositeDisposable.add(SetDataRepository.getInstance().setActorList(data).toObservable()
-                .doOnSubscribe(disposable -> {
-                })
-                .doFinally(() -> {
-                })
-                .subscribe(this::handleMovieData, this::handleMovieFetchError));
+    private void handleDatabase(ActorGallery data) throws MalformedURLException {
+        handleMovieData(data);
     }
 
     private void handleMovieFetchError(Throwable throwable) {

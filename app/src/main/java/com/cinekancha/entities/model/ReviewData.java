@@ -6,10 +6,12 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
+import java.io.Serializable;
 
-public class ReviewData extends RealmObject implements Parcelable {
+import androidx.room.PrimaryKey;
+
+
+public class ReviewData implements Serializable,Parcelable {
     @PrimaryKey
     @SerializedName("id")
     @Expose

@@ -1,20 +1,20 @@
 package com.cinekancha.entities.model;
 
-import java.util.List;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import io.realm.RealmList;
-import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
+import java.io.Serializable;
+import java.util.List;
 
-public class Poll extends RealmObject {
+import androidx.room.PrimaryKey;
+
+
+public class Poll implements Serializable {
     @PrimaryKey
     private int id = 0;
     @SerializedName("data")
     @Expose
-    private RealmList<PollData> data = null;
+    private List<PollData> data = null;
     @SerializedName("links")
     @Expose
     private PageLink links;
@@ -22,11 +22,11 @@ public class Poll extends RealmObject {
     @Expose
     private Meta meta;
 
-    public RealmList<PollData> getData() {
+    public List<PollData> getData() {
         return data;
     }
 
-    public void setData(RealmList<PollData> data) {
+    public void setData(List<PollData> data) {
         this.data = data;
     }
 

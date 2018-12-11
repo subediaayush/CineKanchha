@@ -1,15 +1,9 @@
 package com.cinekancha.home;
 
 import android.annotation.SuppressLint;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,13 +21,18 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 
 /**
  * Created by aayushsubedi on 3/13/18.
  */
 
-public class SlideShowAdapter extends FragmentPagerAdapter {
+public class SlideShowAdapter extends FragmentStatePagerAdapter {
 
     private static final int MESSAGE_SLIDE_CHANGE = 123654;
     private static final String TAG = "SlideShowAdapter";
@@ -85,7 +84,7 @@ public class SlideShowAdapter extends FragmentPagerAdapter {
             Log.d(TAG, "Remove old dispatch");
             mSlideChangeHandler.removeMessages(MESSAGE_SLIDE_CHANGE);
         }
-        boolean sent = mSlideChangeHandler.sendEmptyMessageDelayed(MESSAGE_SLIDE_CHANGE, 1000);
+        boolean sent = mSlideChangeHandler.sendEmptyMessageDelayed(MESSAGE_SLIDE_CHANGE, 8000);
         Log.d(TAG, "Slide " + (sent ? "" : " not ") + " resumed");
     }
 
@@ -122,10 +121,7 @@ public class SlideShowAdapter extends FragmentPagerAdapter {
 
         private FeaturedContent mFeaturedItem;
         private OnSlideClickListener mListener;
-        private int[] colors = new int[]{
-                Color.BLUE, Color.RED, Color.YELLOW, Color.GRAY, Color.GREEN
-        };
-
+    
         public static SlideFragment newInstance(FeaturedContent item, OnSlideClickListener listener) {
             SlideFragment fragment = new SlideFragment();
             fragment.setFeaturedItem(item);
@@ -143,13 +139,11 @@ public class SlideShowAdapter extends FragmentPagerAdapter {
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             View view = super.onCreateView(inflater, container, savedInstanceState);
 
-
+            if (mFeaturedItem == null) return view;
             if (!TextUtils.isEmpty(mFeaturedItem.getImageUrl())) {
                 String newString = mFeaturedItem.getImageUrl().replace("\\", "");
                 Picasso.with(getContext()).load(Constants.imageUrl + newString).into(mImage);
             }
-
-            mImage.setBackgroundColor(getRandomColor());
 
             mTitle.setText(mFeaturedItem.getTitle());
             if (TextUtils.isEmpty(mFeaturedItem.getSubtitle())) {
@@ -174,11 +168,7 @@ public class SlideShowAdapter extends FragmentPagerAdapter {
         protected int getLayoutId() {
             return R.layout.fragment_featured_slide;
         }
-
-        private int getRandomColor() {
-            return colors[(int) (Math.random() * colors.length) % colors.length];
-        }
-
+        
         public void setListener(OnSlideClickListener listener) {
             this.mListener = listener;
         }

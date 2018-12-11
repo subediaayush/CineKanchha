@@ -1,24 +1,19 @@
 package com.cinekancha.boxOffice;
 
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.widget.Toast;
 
 import com.cinekancha.R;
 import com.cinekancha.activities.base.BaseNavigationActivity;
 import com.cinekancha.entities.model.BoxOfficeItem;
-import com.cinekancha.entities.model.Movie;
-import com.cinekancha.entities.model.UpcomingMovie;
-import com.cinekancha.entities.rest.GetDataRepository;
 import com.cinekancha.entities.rest.RestAPI;
-import com.cinekancha.entities.rest.SetDataRepository;
 import com.cinekancha.listener.OnClickListener;
 import com.cinekancha.movieDetail.MoviePostDetailActivity;
-import com.cinekancha.utils.Connectivity;
 import com.cinekancha.view.CineBoxOfficeViewModel;
 
 import java.util.List;
@@ -76,28 +71,11 @@ public class BoxOfficeActivity extends BaseNavigationActivity implements OnClick
     }
 
     private void requestBoxOffice() {
-        if (Connectivity.isConnected(this))
-            compositeDisposable.add(RestAPI.getInstance().getBOxOffice()
-                    .doOnSubscribe(disposable -> {
-                        swipeRefreshLayout.setRefreshing(true);
-                    })
-                    .doFinally(() -> swipeRefreshLayout.setRefreshing(false))
-                    .subscribe(this::handleDatabase, this::handleMovieFetchError));
-        else
-            compositeDisposable.add(GetDataRepository.getInstance().getBoxOffice()
-                    .doOnSubscribe(disposable -> {
-                        swipeRefreshLayout.setRefreshing(true);
-                    })
-                    .doFinally(() -> swipeRefreshLayout.setRefreshing(false))
-                    .subscribe(this::handleBoxOfficeData, this::handleMovieFetchError));
-    }
-
-    private void handleDatabase(List<BoxOfficeItem> boxOffice) {
-        compositeDisposable.add(SetDataRepository.getInstance().setBoxOffice(boxOffice)
+        compositeDisposable.add(RestAPI.getInstance().getBOxOffice()
                 .doOnSubscribe(disposable -> {
+                    swipeRefreshLayout.setRefreshing(true);
                 })
-                .doFinally(() -> {
-                })
+                .doFinally(() -> swipeRefreshLayout.setRefreshing(false))
                 .subscribe(this::handleBoxOfficeData, this::handleMovieFetchError));
     }
 

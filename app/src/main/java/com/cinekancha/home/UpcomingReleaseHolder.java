@@ -2,10 +2,6 @@ package com.cinekancha.home;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
@@ -16,9 +12,12 @@ import com.cinekancha.entities.ThumbnailConverter;
 import com.cinekancha.entities.model.Movie;
 import com.cinekancha.listener.OnClickListener;
 import com.cinekancha.movieDetail.MoviePostDetailActivity;
+import com.cinekancha.utils.EqualSpacingItemDecoration;
 
 import java.util.List;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 
 /**
@@ -69,9 +68,7 @@ public class UpcomingReleaseHolder extends HomeItemHolder {
         Context context = view.getContext();
         upcomingMoviesList.setNestedScrollingEnabled(false);
         upcomingMoviesList.setLayoutManager(manager);
-        DividerItemDecoration decoration = new DividerItemDecoration(upcomingMoviesList.getContext(), DividerItemDecoration.HORIZONTAL);
-        decoration.setDrawable(ContextCompat.getDrawable(context, R.drawable.divider_transparent));
-        upcomingMoviesList.addItemDecoration(decoration);
+        upcomingMoviesList.addItemDecoration(new EqualSpacingItemDecoration(16, EqualSpacingItemDecoration.HORIZONTAL));
     }
 
     public void setMovies(List<Movie> movies) {

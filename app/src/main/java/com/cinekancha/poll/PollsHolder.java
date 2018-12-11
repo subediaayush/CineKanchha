@@ -1,7 +1,7 @@
 package com.cinekancha.poll;
 
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -10,11 +10,7 @@ import android.widget.TextView;
 
 import com.cinekancha.R;
 import com.cinekancha.adapters.base.BaseRecyclerAdapter;
-import com.cinekancha.entities.model.Option;
 import com.cinekancha.home.HomeItemHolder;
-import com.cinekancha.listener.OnClickListener;
-
-import java.util.List;
 
 import butterknife.BindView;
 

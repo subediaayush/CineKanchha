@@ -1,15 +1,14 @@
 package com.cinekancha.movieDetail;
 
 import android.annotation.SuppressLint;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,10 +21,8 @@ import com.cinekancha.R;
 import com.cinekancha.entities.model.Links;
 import com.cinekancha.fragments.base.BaseFragment;
 import com.cinekancha.home.OnSlideClickListener;
-import com.cinekancha.utils.GlobalUtils;
 import com.squareup.picasso.Picasso;
 
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -122,10 +119,7 @@ public class SlideaYoutubeAdapter extends FragmentPagerAdapter {
 
         private Links mFeaturedItem;
         private OnSlideClickListener mListener;
-        private int[] colors = new int[]{
-                Color.BLUE, Color.RED, Color.YELLOW, Color.GRAY, Color.GREEN
-        };
-
+        
         public static SlideFragment newInstance(Links item, OnSlideClickListener listener) {
             SlideFragment fragment = new SlideFragment();
             fragment.setFeaturedItem(item);
@@ -146,7 +140,6 @@ public class SlideaYoutubeAdapter extends FragmentPagerAdapter {
                 Log.d("ImageUrl", mFeaturedItem.getYoutubeImageUrl());
                 Picasso.with(getContext()).load(mFeaturedItem.getYoutubeImageUrl()).placeholder(R.drawable.placeholder_movie).into(mImage);
             }
-            mImage.setBackgroundColor(getRandomColor());
             String type = (mFeaturedItem.getType() == null) ? "" : mFeaturedItem.getType();
 
             mTitle.setText(type);
@@ -166,11 +159,7 @@ public class SlideaYoutubeAdapter extends FragmentPagerAdapter {
         protected int getLayoutId() {
             return R.layout.adapter_youtube_pager;
         }
-
-        private int getRandomColor() {
-            return colors[(int) (Math.random() * colors.length) % colors.length];
-        }
-
+        
         public void setListener(OnSlideClickListener listener) {
             this.mListener = listener;
         }

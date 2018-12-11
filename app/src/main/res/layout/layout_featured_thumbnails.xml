@@ -7,40 +7,45 @@
     android:layout_margin="8dp"
     android:background="@drawable/bg_card"
     android:clipToPadding="false"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        >
 
         <TextView
             android:id="@+id/label"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:paddingBottom="16dp"
             android:textAllCaps="true"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:padding="16dp"
             tools:text="New Releases" />
 
         <TextView
+            style="@style/BorderlessButton"
             android:id="@+id/txtViewAll"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingBottom="16dp"
-            android:text="View All>"
+            android:layout_height="match_parent"
+            android:text="View All"
             android:textColor="@color/colorPrimary"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:textAllCaps="true"
+            tools:visibility="visible"
+            android:gravity="center"
+            android:padding="16dp"/>
 
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/layout_featured_movie" />
 </LinearLayout>

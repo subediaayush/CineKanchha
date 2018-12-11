@@ -1,27 +1,26 @@
 package com.cinekancha.entities.model;
 
-import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
 
-public class PollDatabase extends RealmObject {
-    @PrimaryKey
-    private long pollId;
-    private long optionId;
+import android.content.Context;
 
-    public long getOptionId() {
-        return optionId;
+import androidx.room.Database;
+import androidx.room.Room;
+import androidx.room.RoomDatabase;
+
+@Database(entities = UserPoll.class, version = 1)
+public abstract class PollDatabase extends RoomDatabase {
+    
+    private static PollDatabase sInstance;
+    
+    public abstract PollDao dao();
+    
+    public static void init(Context context) {
+        sInstance = Room.databaseBuilder(context.getApplicationContext(), PollDatabase.class, "polls")
+                .fallbackToDestructiveMigration()
+                .build();
     }
-
-    public void setOptionId(long optionId) {
-        this.optionId = optionId;
-    }
-
-    public long getPollId() {
-
-        return pollId;
-    }
-
-    public void setPollId(long pollId) {
-        this.pollId = pollId;
+    
+    public static PollDatabase getDatabase() {
+        return sInstance;
     }
 }

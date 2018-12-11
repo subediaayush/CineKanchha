@@ -1,13 +1,6 @@
 package com.cinekancha.activities.base;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.internal.NavigationMenuView;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.cinekancha.R;
@@ -25,7 +18,14 @@ import com.cinekancha.trivia.TriviaListActivity;
 import com.cinekancha.trolls.TrollListActivity;
 import com.cinekancha.upcomingMovies.UpcomingMovieActivity;
 import com.cinekancha.utils.GlobalUtils;
+import com.google.android.material.internal.NavigationMenuView;
+import com.google.android.material.navigation.NavigationView;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import butterknife.BindView;
 
 

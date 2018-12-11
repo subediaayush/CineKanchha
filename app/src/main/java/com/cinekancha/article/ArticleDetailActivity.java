@@ -1,10 +1,11 @@
 package com.cinekancha.article;
 
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.os.Parcelable;
+import androidx.annotation.Nullable;
 import android.text.TextUtils;
 import android.webkit.WebView;
 import android.widget.ImageView;
@@ -37,7 +38,7 @@ public class ArticleDetailActivity extends BaseNavigationActivity {
 
     public static void startActivity(Context context, Article article) {
         Intent intent = new Intent(context, ArticleDetailActivity.class);
-        intent.putExtra("article", article);
+        intent.putExtra("article", (Parcelable) article);
         context.startActivity(intent);
     }
 

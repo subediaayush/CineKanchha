@@ -3,18 +3,18 @@ package com.cinekancha.entities.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
-import io.realm.RealmList;
-import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
+import androidx.room.PrimaryKey;
 
-public class UpcomingMovie extends RealmObject {
+
+public class UpcomingMovie implements Serializable {
     @PrimaryKey
     private int id = 0;
     @SerializedName("data")
     @Expose
-    private RealmList<Movie> data = null;
+    private List<Movie> data = null;
     @SerializedName("links")
     @Expose
     private PageLink links;
@@ -22,11 +22,11 @@ public class UpcomingMovie extends RealmObject {
     @Expose
     private Meta meta;
 
-    public RealmList<Movie> getData() {
+    public List<Movie> getData() {
         return data;
     }
 
-    public void setData(RealmList<Movie> data) {
+    public void setData(List<Movie> data) {
         this.data = data;
     }
 

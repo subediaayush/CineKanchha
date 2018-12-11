@@ -1,20 +1,20 @@
 package com.cinekancha.entities.model;
 
-import java.util.List;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import io.realm.RealmList;
-import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
+import java.io.Serializable;
+import java.util.List;
 
-public class Troll extends RealmObject {
+import androidx.room.PrimaryKey;
+
+
+public class Troll implements Serializable {
     @PrimaryKey
     private int id = 0;
     @SerializedName("data")
     @Expose
-    private RealmList<TrollData> data = null;
+    private List<TrollData> data = null;
     @SerializedName("links")
     @Expose
     private PageLink links;
@@ -22,11 +22,11 @@ public class Troll extends RealmObject {
     @Expose
     private Meta meta;
 
-    public RealmList<TrollData> getData() {
+    public List<TrollData> getData() {
         return data;
     }
 
-    public void setData(RealmList<TrollData> data) {
+    public void setData(List<TrollData> data) {
         this.data = data;
     }
 

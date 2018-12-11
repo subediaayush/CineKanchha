@@ -3,11 +3,12 @@ package com.cinekancha.entities.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import io.realm.RealmList;
-import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
+import java.io.Serializable;
 
-public class Actor extends RealmObject {
+import androidx.room.PrimaryKey;
+
+
+public class Actor implements Serializable {
     @PrimaryKey
     @SerializedName("id")
     @Expose

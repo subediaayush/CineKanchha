@@ -2,10 +2,6 @@ package com.cinekancha.home;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
@@ -16,9 +12,14 @@ import com.cinekancha.entities.ThumbnailConverter;
 import com.cinekancha.entities.model.Movie;
 import com.cinekancha.listener.OnClickListener;
 import com.cinekancha.movieDetail.MoviePostDetailActivity;
+import com.cinekancha.utils.EqualSpacingItemDecoration;
 
 import java.util.List;
 
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 
 /**
@@ -72,6 +73,7 @@ public class AllMoviesHolder extends HomeItemHolder {
         DividerItemDecoration decoration = new DividerItemDecoration(allMoviesList.getContext(), DividerItemDecoration.HORIZONTAL);
         decoration.setDrawable(ContextCompat.getDrawable(context, R.drawable.divider_transparent));
         allMoviesList.addItemDecoration(decoration);
+        allMoviesList.addItemDecoration(new EqualSpacingItemDecoration(16, EqualSpacingItemDecoration.HORIZONTAL));
     }
 
     public void setMovies(List<Movie> movies) {

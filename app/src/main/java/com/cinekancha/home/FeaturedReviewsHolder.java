@@ -2,10 +2,9 @@ package com.cinekancha.home;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.os.Parcelable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
@@ -18,7 +17,7 @@ import com.cinekancha.entities.model.ReviewData;
 import com.cinekancha.listener.OnClickListener;
 import com.cinekancha.movieReview.ReviewDetailActivity;
 import com.cinekancha.movieReview.ReviewListActivity;
-import com.cinekancha.trolls.TrollListActivity;
+import com.cinekancha.utils.EqualSpacingItemDecoration;
 import com.cinekancha.utils.GlobalUtils;
 
 import java.util.List;
@@ -66,7 +65,7 @@ public class FeaturedReviewsHolder extends HomeItemHolder {
                 reviewData.setName(movie.getName());
                 reviewData.setReview(movie.getReview());
                 Intent intent = new Intent(itemView.getContext(), ReviewDetailActivity.class);
-                intent.putExtra("review", reviewData);
+                intent.putExtra("review", (Parcelable) reviewData);
                 itemView.getContext().startActivity(intent);
             }
         });
@@ -81,10 +80,7 @@ public class FeaturedReviewsHolder extends HomeItemHolder {
         Context context = view.getContext();
         upcomingMoviesList.setNestedScrollingEnabled(false);
         upcomingMoviesList.setLayoutManager(manager);
-        DividerItemDecoration decoration = new DividerItemDecoration(upcomingMoviesList.getContext(), DividerItemDecoration.HORIZONTAL);
-        decoration.setDrawable(ContextCompat.getDrawable(context, R.drawable.divider_transparent));
-        upcomingMoviesList.addItemDecoration(decoration);
-
+        upcomingMoviesList.addItemDecoration(new EqualSpacingItemDecoration(16, EqualSpacingItemDecoration.HORIZONTAL));
         title.setText("Movie Reviews");
     }
 

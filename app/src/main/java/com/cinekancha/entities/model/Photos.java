@@ -4,10 +4,12 @@ import com.cinekancha.utils.Constants;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
+import java.io.Serializable;
 
-public class Photos extends RealmObject {
+import androidx.room.PrimaryKey;
+
+
+public class Photos implements Serializable {
     @PrimaryKey
     private int id = 0;
     @SerializedName("url")

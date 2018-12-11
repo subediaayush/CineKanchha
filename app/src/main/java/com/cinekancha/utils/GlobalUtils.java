@@ -2,13 +2,16 @@ package com.cinekancha.utils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.cinekancha.R;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -83,6 +86,19 @@ public class GlobalUtils {
             transaction.addToBackStack(null);
 
         transaction.commit();
+    }
+
+    public static void savePref(String name, String value, Context context) {
+        SharedPreferences.Editor editor = context.getSharedPreferences(context.getString(R.string.PREF_TOKEN), Context.MODE_PRIVATE).edit();
+        editor.putString(name, value);
+        editor.apply();
+    }
+
+    public static String getFromPref(String name, Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(context.getString(R.string.PREF_TOKEN), Context.MODE_PRIVATE);
+        String value;
+        value = prefs.getString(name, "");
+        return value;
     }
 
     public static boolean isNetworkAvailable(Context mContext) {

@@ -1,26 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp">
+    android:orientation="vertical"
+    android:foreground="?android:attr/selectableItemBackground">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imgActor"
-        android:layout_width="120dp"
-        android:layout_height="136dp"
-        android:padding="8dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="8dp"
         android:scaleType="centerCrop"
+        android:elevation="20dp"
+        android:layout_gravity="center_horizontal"
         tools:src="@tools:sample/backgrounds/scenic" />
 
     <TextView
         android:id="@+id/txtActor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_toRightOf="@id/imgActor"
+        android:gravity="center"
+        android:paddingTop="8dp"
         android:textColor="@color/colorPrimary"
         android:textSize="16sp" />
 
-</RelativeLayout>
+</LinearLayout>
