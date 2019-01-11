@@ -244,7 +244,6 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
 	public void onSlideClicked(FeaturedContent item) {
 		Log.d(TAG, "clicked on item " + new Gson().toJson(item));
 		String deeplink = item.getDeeplink();
-		
 		if (TextUtils.isEmpty(deeplink)) {
 			Article article = new Article();
 			article.setId(item.getId());

@@ -93,7 +93,7 @@ public class DeeplinkActivity extends AppCompatActivity {
 	private void handlePathLinks(List<String> segments, Bundle params) {
 		String root = segments.remove(0);
 		switch (root) {
-			case "article": {
+			case "news": {
 				handleNewsLink(segments, params);
 				return;
 			}
@@ -106,6 +106,7 @@ public class DeeplinkActivity extends AppCompatActivity {
 		Intent intent = new Intent(this, ArticleDetailActivity.class);
 		intent.putExtras(params);
 		intent.putExtra("articleId", newsId);
+		startActivity(intent);
 	}
 	
 	private void startMainActivity(Bundle params) {
@@ -113,7 +114,7 @@ public class DeeplinkActivity extends AppCompatActivity {
 	}
 	
 	private Uri convertToHttpScheme(Uri uri) {
-		uri.buildUpon().scheme("https").authority("www.fifu.com").build();
+		uri = uri.buildUpon().scheme("https").authority("www.fifu.com").build();
 		return uri;
 	}
 	

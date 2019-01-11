@@ -81,7 +81,7 @@ public interface ApiService {
     Observable<Trivia> getTrivia(@Query("page") int currentPage);
     
     @GET("api/article/{id}")
-    Observable<Article> getArticle(@Query("id") int articleId);
+    Observable<Article> getArticle(@Path("id") int articleId);
     
     
     @GET("bins/19gt0m")
