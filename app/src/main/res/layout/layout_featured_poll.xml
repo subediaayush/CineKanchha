@@ -24,10 +24,9 @@
             android:id="@+id/txtViewAll"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="16dp"
-            android:text="View All>"
+            android:text="View All"
             android:textColor="@color/colorPrimary"
-            android:visibility="gone" />
+             />
 
     </LinearLayout>
 

@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/background"
     android:orientation="vertical"
-    android:paddingBottom="10dp"
-    >
+    android:paddingBottom="10dp">
 
     <LinearLayout
         android:id="@+id/lytYoutube"
@@ -18,14 +17,15 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            ><androidx.viewpager.widget.ViewPager
-            android:id="@+id/viewPagerYoutube"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintDimensionRatio="h,16:9"
-            />
+            android:layout_height="wrap_content">
+
+            <com.cinekancha.view.ViewPagerCustomDuration
+                android:id="@+id/viewPagerYoutube"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintDimensionRatio="h,16:9" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
         <com.cinekancha.view.CircleIndicator
             android:id="@+id/indicator"
             android:layout_width="match_parent"
@@ -41,8 +41,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:visibility="gone"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:visibility="gone">
 
             <FrameLayout
                 android:id="@+id/lytShare"
@@ -70,26 +70,54 @@
 
         </LinearLayout>
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-            <Button
-                android:id="@+id/btnReview"
-                style="@style/Base.Widget.AppCompat.Button.Colored"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/llRatingReview"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="30dp"
-                android:paddingRight="30dp"
-                android:text="Reviews"
-                android:textColor="@color/white"
-                android:visibility="gone" />
+                android:visibility="gone"
+                tools:visibility="visible"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:text="Fifu Ratings : "/>
+                <RatingBar
+                    android:id="@+id/rbRating"
+                    style="?android:attr/ratingBarStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:numStars="5"
+                    android:rating="0" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <Button
+                    android:id="@+id/btnReview"
+                    style="@style/Base.Widget.AppCompat.Button.Colored"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="30dp"
+                    android:paddingRight="30dp"
+                    android:text="Fifu Review"
+                    android:textColor="@color/white"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/lytDays"
                 android:layout_width="wrap_content"
                 android:layout_height="36dp"
+                android:layout_gravity="right|center_vertical"
                 android:visibility="gone"
                 tools:visibility="visible">
 
@@ -121,7 +149,7 @@
                     android:textSize="16sp" />
 
             </LinearLayout>
-        </RelativeLayout>
+        </FrameLayout>
     </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView

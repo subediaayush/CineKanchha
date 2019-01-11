@@ -21,6 +21,8 @@ import com.cinekancha.R;
 import com.cinekancha.entities.model.Links;
 import com.cinekancha.fragments.base.BaseFragment;
 import com.cinekancha.home.OnSlideClickListener;
+import com.cinekancha.view.ParallaxPagerTransformer;
+import com.cinekancha.view.ViewPagerCustomDuration;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -37,7 +39,7 @@ public class SlideaYoutubeAdapter extends FragmentPagerAdapter {
     private static final int MESSAGE_SLIDE_CHANGE = 123654;
     private static final String TAG = "SlideShowAdapter";
 
-    private final ViewPager mPager;
+    private final ViewPagerCustomDuration mPager;
     private List<Links> linksList;
     private Handler mSlideChangeHandler;
 
@@ -48,7 +50,10 @@ public class SlideaYoutubeAdapter extends FragmentPagerAdapter {
         super(fm);
 
         linksList = new ArrayList<>();
-        mPager = pager;
+        mPager = (ViewPagerCustomDuration) pager;
+        ParallaxPagerTransformer transformer = new ParallaxPagerTransformer(R.id.imgBanner);
+        transformer.setSpeed(0.1f);
+        pager.setPageTransformer(false, transformer);
 
         mSlideChangeHandler = new Handler() {
             @Override
@@ -84,7 +89,7 @@ public class SlideaYoutubeAdapter extends FragmentPagerAdapter {
             Log.d(TAG, "Remove old dispatch");
             mSlideChangeHandler.removeMessages(MESSAGE_SLIDE_CHANGE);
         }
-        boolean sent = mSlideChangeHandler.sendEmptyMessageDelayed(MESSAGE_SLIDE_CHANGE, 1000);
+        boolean sent = mSlideChangeHandler.sendEmptyMessageDelayed(MESSAGE_SLIDE_CHANGE, 3000);
         Log.d(TAG, "Slide " + (sent ? "" : " not ") + " resumed");
     }
 

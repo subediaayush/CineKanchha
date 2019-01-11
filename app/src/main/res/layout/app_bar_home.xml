@@ -46,7 +46,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     >
-                <androidx.viewpager.widget.ViewPager
+                <com.cinekancha.view.ViewPagerCustomDuration
                     android:id="@+id/featured_pager"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
