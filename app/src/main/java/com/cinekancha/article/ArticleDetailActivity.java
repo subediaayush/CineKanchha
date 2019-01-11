@@ -56,7 +56,7 @@ public class ArticleDetailActivity extends BaseNavigationActivity {
         mSwipeRefreshLayout.setEnabled(false);
 
         mCineArticleViewModel = ViewModelProviders.of(this).get(CineArticleViewModel.class);
-        getSupportActionBar().setTitle("News Gossip");
+        getSupportActionBar().setTitle(R.string.app_name);
 
         if (getIntent() != null) {
             mCineArticleViewModel.setArticle(getIntent().getExtras().getParcelable("article"));

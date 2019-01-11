@@ -11,8 +11,8 @@ android {
         applicationId "com.cinekancha"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 2
-        versionName "1.1"
+        versionCode 3
+        versionName "1.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -54,6 +54,12 @@ android {
 //            proguardFiles fileTree('proguard').asList().toArray()
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        android.applicationVariants.all { variant ->
+            variant.outputs.all {
+                outputFileName = "Filmy Fuche-${variant.name}-v${variant.versionName}-c${variant.versionCode}.apk"
+            }
         }
     }
     compileOptions {

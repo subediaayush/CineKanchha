@@ -29,3 +29,5 @@
 -dontpreverify
 -verbose
 -optimizations !code/simplification/arithmetic,!field/*,!class/merging/*
+
+-keep class com.cinekancha.view.ViewPagerCustomDuration { *; }

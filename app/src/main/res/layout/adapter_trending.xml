@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
-        android:foreground="@drawable/readable_shadow_inv"
+        android:foreground="@drawable/readable_shadow"
         />
 
     <ImageView
@@ -29,8 +29,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:maxLines="2"
+        android:textStyle="bold"
         android:padding="16dp"
         android:textColor="@color/white"
+        android:layout_gravity="bottom"
         android:textSize="16sp" />
 
     <LinearLayout
