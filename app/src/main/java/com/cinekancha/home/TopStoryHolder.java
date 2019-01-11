@@ -6,6 +6,7 @@ import android.widget.TextView;
 
 import com.cinekancha.R;
 import com.cinekancha.adapters.base.BaseRecyclerAdapter;
+import com.cinekancha.view.FadingTextView;
 
 import butterknife.BindView;
 
@@ -15,7 +16,7 @@ import butterknife.BindView;
 
 public class TopStoryHolder extends HomeItemHolder {
     @BindView(R.id.txtTopStories)
-    public TextView txtTopStories;
+    public FadingTextView txtTopStories;
 
     @BindView(R.id.imgArrow)
     public ImageView imgArrow;

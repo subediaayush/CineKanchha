@@ -2,11 +2,11 @@ package com.cinekancha.home;
 
 import android.util.SparseIntArray;
 
-import com.cinekancha.entities.model.GalleryItem;
-import com.cinekancha.entities.model.Video;
 import com.cinekancha.entities.model.BoxOfficeItem;
+import com.cinekancha.entities.model.GalleryItem;
 import com.cinekancha.entities.model.HomeData;
 import com.cinekancha.entities.model.Movie;
+import com.cinekancha.entities.model.Video;
 import com.cinekancha.utils.ListUtils;
 
 import java.util.ArrayList;
@@ -46,7 +46,9 @@ public class HomeDataWrapper {
 
         wrapper.add(data.getHotNews(), FEATURED_ARTICLE);
 
-        if (data.getTopStory() != null && data.getTopStory().getSummary() != null) {
+        if (data.getTopStories() != null && !data.getTopStories().isEmpty()) {
+            wrapper.add(data.getTopStories(), FEATURED_TOP_STORIES);
+        } else if (data.getTopStory() != null && data.getTopStory().getSummary() != null) {
             wrapper.add(data.getTopStory(), FEATURED_TOP_STORIES);
         }
 

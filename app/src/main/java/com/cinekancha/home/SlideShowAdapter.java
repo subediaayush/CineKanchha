@@ -16,6 +16,8 @@ import com.cinekancha.R;
 import com.cinekancha.entities.model.FeaturedContent;
 import com.cinekancha.fragments.base.BaseFragment;
 import com.cinekancha.utils.Constants;
+import com.cinekancha.view.ParallaxPagerTransformer;
+import com.cinekancha.view.ViewPagerCustomDuration;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -37,7 +39,7 @@ public class SlideShowAdapter extends FragmentStatePagerAdapter {
     private static final int MESSAGE_SLIDE_CHANGE = 123654;
     private static final String TAG = "SlideShowAdapter";
 
-    private final ViewPager mPager;
+    private final ViewPagerCustomDuration mPager;
     private List<FeaturedContent> mFeaturedItems;
     private Handler mSlideChangeHandler;
 
@@ -48,7 +50,10 @@ public class SlideShowAdapter extends FragmentStatePagerAdapter {
         super(fm);
 
         mFeaturedItems = new ArrayList<>();
-        mPager = pager;
+        mPager = (ViewPagerCustomDuration) pager;
+        ParallaxPagerTransformer transformer = new ParallaxPagerTransformer(R.id.image);
+        transformer.setSpeed(0.1f);
+        pager.setPageTransformer(false, transformer);
 
         mSlideChangeHandler = new Handler() {
             @Override
@@ -84,7 +89,7 @@ public class SlideShowAdapter extends FragmentStatePagerAdapter {
             Log.d(TAG, "Remove old dispatch");
             mSlideChangeHandler.removeMessages(MESSAGE_SLIDE_CHANGE);
         }
-        boolean sent = mSlideChangeHandler.sendEmptyMessageDelayed(MESSAGE_SLIDE_CHANGE, 8000);
+        boolean sent = mSlideChangeHandler.sendEmptyMessageDelayed(MESSAGE_SLIDE_CHANGE, 3000);
         Log.d(TAG, "Slide " + (sent ? "" : " not ") + " resumed");
     }
 
@@ -121,7 +126,7 @@ public class SlideShowAdapter extends FragmentStatePagerAdapter {
 
         private FeaturedContent mFeaturedItem;
         private OnSlideClickListener mListener;
-    
+
         public static SlideFragment newInstance(FeaturedContent item, OnSlideClickListener listener) {
             SlideFragment fragment = new SlideFragment();
             fragment.setFeaturedItem(item);
@@ -168,7 +173,7 @@ public class SlideShowAdapter extends FragmentStatePagerAdapter {
         protected int getLayoutId() {
             return R.layout.fragment_featured_slide;
         }
-        
+
         public void setListener(OnSlideClickListener listener) {
             this.mListener = listener;
         }

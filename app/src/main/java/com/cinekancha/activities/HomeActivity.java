@@ -21,6 +21,7 @@ import com.cinekancha.entities.service.TestService;
 import com.cinekancha.home.HomeDataAdapter;
 import com.cinekancha.home.OnSlideClickListener;
 import com.cinekancha.home.SlideShowAdapter;
+import com.cinekancha.view.ViewPagerCustomDuration;
 import com.cinekancha.listener.OnPollClickListener;
 import com.cinekancha.view.CineHomeViewModel;
 import com.cinekancha.view.CircleIndicator;

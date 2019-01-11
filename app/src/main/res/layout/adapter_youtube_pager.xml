@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/relativelayout"
     android:layout_width="match_parent"
     android:layout_height="205dp">
@@ -9,7 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
-        android:scaleType="centerCrop" />
+        android:foreground="@drawable/readable_shadow"
+        android:scaleType="centerCrop"
+        tools:src="@tools:sample/avatars" />
 
     <ImageView
         android:layout_width="wrap_content"

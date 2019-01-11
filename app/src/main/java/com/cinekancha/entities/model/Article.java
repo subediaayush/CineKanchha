@@ -49,6 +49,10 @@ public class Article implements Serializable, Parcelable {
 
     }
 
+    public Article(String title) {
+        this.title = title;
+    }
+
     protected Article(Parcel in) {
         id = in.readInt();
         image = in.readString();

@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -106,6 +107,14 @@ public class MoviePostDetailActivity extends BaseNavigationActivity implements O
 
     @BindView(R.id.recylerView)
     public RecyclerView recylerView;
+
+    @BindView(R.id.rbRating)
+    RatingBar rbRating;
+
+    @BindView(R.id.llRatingReview)
+    LinearLayout llRatingReview;
+
+
 
     private CinePostMovieViewModel mCinePostMovieModel;
 
@@ -234,13 +243,18 @@ public class MoviePostDetailActivity extends BaseNavigationActivity implements O
             if (data.getReleaseDate() != null)
                 releaseType = compareDate(data.getReleaseDate());
             if (!TextUtils.isEmpty(releaseType) && releaseType.equals("pre")) {
-                btnReview.setVisibility(View.GONE);
+                llRatingReview.setVisibility(View.GONE);
                 lytDays.setVisibility(View.VISIBLE);
                 txtDays.setText(days);
             } else if (!TextUtils.isEmpty(releaseType) && releaseType.equals("post")) {
-                btnReview.setVisibility(View.VISIBLE);
+                llRatingReview.setVisibility(View.VISIBLE);
                 lytDays.setVisibility(View.GONE);
             }
+
+            if (!TextUtils.isEmpty(data.getReview())){
+                btnReview.setVisibility(View.VISIBLE);
+            }
+
             if (data.getLinks().size() > 0 && data.getLinks() != null)
                 lytYoutube.setVisibility(View.VISIBLE);
             else
@@ -281,6 +295,7 @@ public class MoviePostDetailActivity extends BaseNavigationActivity implements O
             txtDirector.setText("Director: " + director);
             txtProducer.setText("Producer: " + producer);
             txtMusic.setText("Music: " + music);
+            rbRating.setRating(Float.parseFloat(data.getRating()));
         }
     }
 

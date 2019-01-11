@@ -38,6 +38,7 @@ import com.stfalcon.frescoimageviewer.ImageViewer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static com.cinekancha.home.HomeDataWrapper.ALL_MOVIES;
 import static com.cinekancha.home.HomeDataWrapper.FEATURED_ARTICLE;
@@ -101,11 +102,7 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
                 return new TrollHolder(this, view);
             }
             case FEATURED_TOP_STORIES: {
-                TopStoryHolder topStoryHolder = new TopStoryHolder(this, view);
-                topStoryHolder.itemView.setOnClickListener(view1 -> {
-                    ArticleDetailActivity.startActivity(topStoryHolder.itemView.getContext(), mData.getItem(topStoryHolder.getAdapterPosition()));
-                });
-                return topStoryHolder;
+                return new TopStoryHolder(this, view);
             }
             case FEATURED_MOVIE: {
                 return new ThumbnailViewHolder<>(
@@ -252,8 +249,21 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
     @Override
     protected void setViewOfEleven(BaseViewHolder baseHolder, int position) {
         TopStoryHolder holder = (TopStoryHolder) baseHolder;
-        Article topStory = mData.getItem(position);
-        holder.txtTopStories.setText(topStory.getTitle());
+        List<Article> topStories = new ArrayList<>();
+        if (mData.getItem(position) instanceof List) {
+            topStories.addAll(mData.getItem(position));
+        } else {
+            topStories.add(mData.getItem(position));
+        }
+        String[] topStoryTitles = new String[topStories.size()];
+        for (int i = 0; i < topStories.size(); i++) {
+            topStoryTitles[i] = topStories.get(i).getTitle();
+        }
+        holder.txtTopStories.setTimeout(3, TimeUnit.SECONDS);
+        holder.txtTopStories.setTexts(topStoryTitles);
+        holder.itemView.setOnClickListener(view1 -> {
+            ArticleDetailActivity.startActivity(holder.itemView.getContext(), topStories.get(holder.txtTopStories.getPosition()));
+        });
     }
 
     @Override
@@ -271,6 +281,7 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
         layoutParams.setMargins(dp, dp, dp, dp);
         holder.lytMain.setLayoutParams(layoutParams);
         holder.lytTitle.setVisibility(View.VISIBLE);
+        holder.txtViewAll.setVisibility(View.VISIBLE);
         holder.txtViewAll.setOnClickListener(view -> GlobalUtils.navigateActivity(holder.itemView.getContext(), false, PollsActivity.class));
         PollData poll = mData.getItem(position);
         holder.txtQuestion.setText(poll.getQuestion());
@@ -345,7 +356,7 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
 
     public void setHomeData(HomeData data) {
         if (data == null) return;
-        
+
         this.mData = HomeDataWrapper.wrap(data);
         Log.i(TAG, "Total items in home: " + mData.getItemCount());
         notifyDataSetChanged();

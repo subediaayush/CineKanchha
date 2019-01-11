@@ -54,6 +54,9 @@ public class HomeData implements Serializable {
     @SerializedName("top_story")
     @Expose
     private Article topStory;
+    @SerializedName("top_stories")
+    @Expose
+    private List<Article> topStories;
     @SerializedName("photo_gallery")
     @Expose
     private List<GalleryItem> photoGallery = new ArrayList<>();
@@ -180,5 +183,12 @@ public class HomeData implements Serializable {
     public void setUpComingMovies(List<Movie> upComingMovies) {
         this.upComingMovies = upComingMovies;
     }
-    
+
+    public List<Article> getTopStories() {
+        return topStories;
+    }
+
+    public void setTopStories(List<Article> topStories) {
+        this.topStories = topStories;
+    }
 }
