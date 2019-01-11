@@ -6,6 +6,7 @@ import com.cinekancha.BuildConfig;
 import com.cinekancha.MyApplication;
 import com.cinekancha.entities.model.ActorGallery;
 import com.cinekancha.entities.model.ActorPhoto;
+import com.cinekancha.entities.model.Article;
 import com.cinekancha.entities.model.BoxOfficeItem;
 import com.cinekancha.entities.model.FullMovies;
 import com.cinekancha.entities.model.HomeData;
@@ -19,7 +20,6 @@ import com.cinekancha.entities.model.TrendingData;
 import com.cinekancha.entities.model.Trivia;
 import com.cinekancha.entities.model.Troll;
 import com.cinekancha.entities.model.UpcomingMovie;
-import com.google.gson.JsonElement;
 
 import java.io.File;
 import java.util.List;
@@ -30,12 +30,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
-import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.Result;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -210,6 +208,13 @@ public class RestAPI {
 
     public Observable<Trivia> getTrivia(int currentPage) {
         return getApiService().getTrivia(currentPage)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .retry(1);
+    }
+    
+    public Observable<Article> getArticle(int articleId) {
+        return getApiService().getArticle(articleId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .retry(1);

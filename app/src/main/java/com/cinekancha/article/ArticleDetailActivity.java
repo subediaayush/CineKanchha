@@ -1,23 +1,27 @@
 package com.cinekancha.article;
 
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import androidx.annotation.Nullable;
 import android.text.TextUtils;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.cinekancha.BuildConfig;
 import com.cinekancha.R;
 import com.cinekancha.activities.base.BaseNavigationActivity;
 import com.cinekancha.entities.model.Article;
+import com.cinekancha.entities.rest.RestAPI;
 import com.cinekancha.utils.Constants;
 import com.cinekancha.view.CineArticleViewModel;
 import com.squareup.picasso.Picasso;
 
+import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 
 /**
@@ -33,6 +37,9 @@ public class ArticleDetailActivity extends BaseNavigationActivity {
 
     @BindView(R.id.article)
     public WebView mArticle;
+    
+    @BindView(R.id.swipeRefreshLayout)
+    public SwipeRefreshLayout mSwipeRefreshLayout;
 
     private CineArticleViewModel mCineArticleViewModel;
 
@@ -45,19 +52,51 @@ public class ArticleDetailActivity extends BaseNavigationActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        mSwipeRefreshLayout.setEnabled(false);
 
         mCineArticleViewModel = ViewModelProviders.of(this).get(CineArticleViewModel.class);
         getSupportActionBar().setTitle("News Gossip");
 
         if (getIntent() != null) {
-            mCineArticleViewModel.setArticle((Article) getIntent().getExtras().getParcelable("article"));
+            mCineArticleViewModel.setArticle(getIntent().getExtras().getParcelable("article"));
         }
 
         if (mCineArticleViewModel.getArticle() != null) {
             renderArticle(mCineArticleViewModel.getArticle());
+        } else {
+            requestArticle();
         }
     }
-
+    
+    private void requestArticle() {
+        compositeDisposable.add(RestAPI.getInstance().getArticle(getArticleId())
+                .doOnSubscribe(disposable -> {
+                    mSwipeRefreshLayout.setRefreshing(true);
+                })
+                .doFinally(() -> mSwipeRefreshLayout.setRefreshing(false))
+                .subscribe(this::loadAndRenderArticle, this::finish));
+    }
+    
+    private void loadAndRenderArticle(Article article) {
+        mCineArticleViewModel.setArticle(article);
+        renderArticle(mCineArticleViewModel.getArticle());
+    }
+    
+    private void finish(Throwable throwable) {
+        if (BuildConfig.DEBUG) {
+            Toast.makeText(this, "error " + throwable.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Unknown error occured", Toast.LENGTH_SHORT).show();
+        }
+        finish();
+    }
+    
+    private int getArticleId() {
+        return Integer.parseInt(getIntent().getStringExtra("articleId"));
+    }
+    
+    
     @Override
     protected int getLayoutId() {
         return R.layout.activity_article_detail;

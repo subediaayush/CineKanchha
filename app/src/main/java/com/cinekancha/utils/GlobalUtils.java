@@ -1,17 +1,18 @@
 package com.cinekancha.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Build;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
 
 import com.cinekancha.R;
+import com.cinekancha.activities.DeeplinkActivity;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -24,6 +25,10 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 
 /**
@@ -43,6 +48,18 @@ public class GlobalUtils {
         ((AppCompatActivity) mContext).overridePendingTransition(enterAnim, exitAnim);
         if (finish)
             ((AppCompatActivity) mContext).finish();
+    }
+    
+    public static void navigateActivity(Context context, Class<? extends Activity> clazz, Bundle data) {
+        Intent intent = new Intent(context, clazz);
+        intent.putExtras(data);
+        context.startActivity(intent);
+    }
+    
+    public static void navigate(Context context, Uri uri) {
+        Intent intent = new Intent(context, DeeplinkActivity.class);
+        intent.setData(uri);
+        context.startActivity(intent);
     }
 
     public static void navigateActivitywithData(Context mContext, Boolean finish, Class className, String data, int enterAnim, int exitAnim) {

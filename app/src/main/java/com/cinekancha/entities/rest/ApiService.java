@@ -2,6 +2,7 @@ package com.cinekancha.entities.rest;
 
 import com.cinekancha.entities.model.ActorGallery;
 import com.cinekancha.entities.model.ActorPhoto;
+import com.cinekancha.entities.model.Article;
 import com.cinekancha.entities.model.BoxOfficeItem;
 import com.cinekancha.entities.model.FullMovies;
 import com.cinekancha.entities.model.HomeData;
@@ -15,14 +16,11 @@ import com.cinekancha.entities.model.TrendingData;
 import com.cinekancha.entities.model.Trivia;
 import com.cinekancha.entities.model.Troll;
 import com.cinekancha.entities.model.UpcomingMovie;
-import com.google.gson.JsonElement;
 
 import java.util.List;
 
 import io.reactivex.Observable;
-import okhttp3.ResponseBody;
 import retrofit2.Response;
-import retrofit2.adapter.rxjava2.Result;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -81,7 +79,11 @@ public interface ApiService {
 
     @GET("api/trivia")
     Observable<Trivia> getTrivia(@Query("page") int currentPage);
-
+    
+    @GET("api/article/{id}")
+    Observable<Article> getArticle(@Query("id") int articleId);
+    
+    
     @GET("bins/19gt0m")
     Observable<HomeData> getHomeTestData();
 }

@@ -1,7 +1,9 @@
 package com.cinekancha.activities;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -22,6 +24,7 @@ import com.cinekancha.home.HomeDataAdapter;
 import com.cinekancha.home.OnSlideClickListener;
 import com.cinekancha.home.SlideShowAdapter;
 import com.cinekancha.listener.OnPollClickListener;
+import com.cinekancha.utils.GlobalUtils;
 import com.cinekancha.view.CineHomeViewModel;
 import com.cinekancha.view.CircleIndicator;
 import com.firebase.jobdispatcher.Constraint;
@@ -240,12 +243,18 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
 	@Override
 	public void onSlideClicked(FeaturedContent item) {
 		Log.d(TAG, "clicked on item " + new Gson().toJson(item));
-		Article article = new Article();
-		article.setId(item.getId());
-		article.setTitle(item.getTitle());
-		article.setContent(item.getSubtitle());
-		article.setImage(item.getImageUrl());
-		ArticleDetailActivity.startActivity(this, article);
+		String deeplink = item.getDeeplink();
+		
+		if (TextUtils.isEmpty(deeplink)) {
+			Article article = new Article();
+			article.setId(item.getId());
+			article.setTitle(item.getTitle());
+			article.setContent(item.getSubtitle());
+			article.setImage(item.getImageUrl());
+			ArticleDetailActivity.startActivity(this, article);
+		} else {
+			GlobalUtils.navigate(this, Uri.parse(deeplink));
+		}
 	}
 	
 	@Override
