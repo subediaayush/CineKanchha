@@ -52,7 +52,8 @@ public class SlideShowAdapter extends FragmentStatePagerAdapter {
         mFeaturedItems = new ArrayList<>();
         mPager = (ViewPagerCustomDuration) pager;
         ParallaxPagerTransformer transformer = new ParallaxPagerTransformer(R.id.image);
-        transformer.setSpeed(0.1f);
+        transformer.setSpeed(0.3f);
+        transformer.setAlpha(.7f);
         pager.setPageTransformer(false, transformer);
 
         mSlideChangeHandler = new Handler() {

@@ -37,7 +37,7 @@ public class ArticleDetailActivity extends BaseNavigationActivity {
 
     @BindView(R.id.article)
     public WebView mArticle;
-    
+
     @BindView(R.id.swipeRefreshLayout)
     public SwipeRefreshLayout mSwipeRefreshLayout;
 
@@ -52,7 +52,7 @@ public class ArticleDetailActivity extends BaseNavigationActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         mSwipeRefreshLayout.setEnabled(false);
 
         mCineArticleViewModel = ViewModelProviders.of(this).get(CineArticleViewModel.class);
@@ -68,7 +68,7 @@ public class ArticleDetailActivity extends BaseNavigationActivity {
             requestArticle();
         }
     }
-    
+
     private void requestArticle() {
         compositeDisposable.add(RestAPI.getInstance().getArticle(getArticleId())
                 .doOnSubscribe(disposable -> {
@@ -77,12 +77,12 @@ public class ArticleDetailActivity extends BaseNavigationActivity {
                 .doFinally(() -> mSwipeRefreshLayout.setRefreshing(false))
                 .subscribe(this::loadAndRenderArticle, this::finish));
     }
-    
+
     private void loadAndRenderArticle(Article article) {
         mCineArticleViewModel.setArticle(article);
         renderArticle(mCineArticleViewModel.getArticle());
     }
-    
+
     private void finish(Throwable throwable) {
         if (BuildConfig.DEBUG) {
             Toast.makeText(this, "error " + throwable.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
@@ -91,12 +91,12 @@ public class ArticleDetailActivity extends BaseNavigationActivity {
         }
         finish();
     }
-    
+
     private int getArticleId() {
         return Integer.parseInt(getIntent().getStringExtra("articleId"));
     }
-    
-    
+
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_article_detail;
@@ -112,6 +112,8 @@ public class ArticleDetailActivity extends BaseNavigationActivity {
                 .load(Constants.imageUrl + article.getImage())
                 .into(mArticleImage);
         mTitle.setText(article.getTitle());
+        mArticle.getSettings().setJavaScriptEnabled(true);
+
         if (article.getContent() != null)
             mArticle.loadData(article.getContent(), "text/html", "utf-8");
         else

@@ -7,10 +7,10 @@ import android.view.View;
 import androidx.viewpager.widget.ViewPager;
 
 public class ParallaxPagerTransformer implements ViewPager.PageTransformer {
-    private static final float MIN_ALPHA = 0.3f;
     private int id;
     private int border = 0;
     private float speed = 0.2f;
+    private float minAlpha = 0.3f;
 
     public ParallaxPagerTransformer(int id) {
         this.id = id;
@@ -34,6 +34,8 @@ public class ParallaxPagerTransformer implements ViewPager.PageTransformer {
                     view.setScaleX(1);
                     view.setScaleY(1);
                 } else {
+                    if (sc == Float.NaN)
+                        sc = 1f;
                     view.setScaleX(sc);
                     view.setScaleY(sc);
                 }
@@ -45,7 +47,7 @@ public class ParallaxPagerTransformer implements ViewPager.PageTransformer {
             view.setAlpha(0);
 
         } else if (position <= 1) { // [-1,1]
-            view.setAlpha(Math.max(MIN_ALPHA, 1 - Math.abs(position)));
+            view.setAlpha(Math.max(minAlpha, 1 - Math.abs(position)));
         } else {  // (1,+Infinity]
             // This page is way off-screen to the right.
             view.setAlpha(0);
@@ -58,5 +60,9 @@ public class ParallaxPagerTransformer implements ViewPager.PageTransformer {
 
     public void setSpeed(float speed) {
         this.speed = speed;
+    }
+
+    public void setAlpha(float alpha) {
+        minAlpha = alpha;
     }
 }
