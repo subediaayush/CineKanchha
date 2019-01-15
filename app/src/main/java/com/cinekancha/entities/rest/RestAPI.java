@@ -7,7 +7,7 @@ import com.cinekancha.MyApplication;
 import com.cinekancha.entities.model.ActorGallery;
 import com.cinekancha.entities.model.ActorPhoto;
 import com.cinekancha.entities.model.Article;
-import com.cinekancha.entities.model.BoxOfficeItem;
+import com.cinekancha.entities.model.BoxOfficeData;
 import com.cinekancha.entities.model.FullMovies;
 import com.cinekancha.entities.model.HomeData;
 import com.cinekancha.entities.model.MovieData;
@@ -22,7 +22,6 @@ import com.cinekancha.entities.model.Troll;
 import com.cinekancha.entities.model.UpcomingMovie;
 
 import java.io.File;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -84,7 +83,7 @@ public class RestAPI {
     }
 
     public static ApiService getApiService() {
-        return getInstance().service;
+        return service;
     }
     
     public Cache createCache(Context context) {
@@ -126,7 +125,7 @@ public class RestAPI {
                 .retry(1);
     }
 
-    public Observable<List<BoxOfficeItem>> getBOxOffice() {
+    public Observable<BoxOfficeData> getBOxOffice() {
         return getApiService().getBoxOffice()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -213,8 +212,15 @@ public class RestAPI {
                 .retry(1);
     }
     
-    public Observable<Article> getArticle(int articleId) {
+    public Observable<Article> getArticle(long articleId) {
         return getApiService().getArticle(articleId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .retry(1);
+    }
+    
+    public Observable<Article> getNews(long newsId) {
+        return getApiService().getNews(newsId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .retry(1);

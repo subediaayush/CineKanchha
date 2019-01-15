@@ -7,16 +7,17 @@ import com.cinekancha.R;
 import com.cinekancha.adapters.base.BaseRecyclerAdapter;
 import com.cinekancha.adapters.base.BaseViewHolder;
 import com.cinekancha.adapters.base.RecyclerViewClickListener;
-import com.cinekancha.entities.model.BoxOfficeItem;
+import com.cinekancha.entities.model.MovieBoxOffice;
 import com.cinekancha.utils.ListUtils;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 import butterknife.BindView;
 
 public class FeatureBoxOfficeAdapter extends BaseRecyclerAdapter<FeatureBoxOfficeAdapter.BoxOfficeItemHolder> {
 
-    private List<BoxOfficeItem> items;
+    private List<MovieBoxOffice> items;
 
     @Override
     public BoxOfficeItemHolder onCreateView(int viewType, View view) {
@@ -33,9 +34,9 @@ public class FeatureBoxOfficeAdapter extends BaseRecyclerAdapter<FeatureBoxOffic
     @Override
     protected void setViewOfTypeZero(BaseViewHolder baseHolder, int position) {
         BoxOfficeItemHolder holder = (BoxOfficeItemHolder) baseHolder;
-        BoxOfficeItem item = items.get(position);
+        MovieBoxOffice item = items.get(position);
         holder.movie.setText(item.getMovieName());
-        holder.sum.setText(item.getTotalCollected() + " Crore");
+        holder.sum.setText(MessageFormat.format("$ {0} crore", item.getInternational() + item.getDomestic()));
     }
 
     @Override
@@ -43,7 +44,7 @@ public class FeatureBoxOfficeAdapter extends BaseRecyclerAdapter<FeatureBoxOffic
         return ListUtils.getSize(items);
     }
 
-    public void setBoxOfficeItems(List<BoxOfficeItem> items) {
+    public void setBoxOfficeItems(List<MovieBoxOffice> items) {
         this.items = items;
         notifyDataSetChanged();
     }

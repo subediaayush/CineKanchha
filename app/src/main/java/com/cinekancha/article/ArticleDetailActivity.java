@@ -23,6 +23,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
+import io.reactivex.Observable;
 
 /**
  * Created by aayushsubedi on 3/19/18.
@@ -70,14 +71,21 @@ public class ArticleDetailActivity extends BaseNavigationActivity {
     }
 
     private void requestArticle() {
-        compositeDisposable.add(RestAPI.getInstance().getArticle(getArticleId())
+        compositeDisposable.add(getApi()
                 .doOnSubscribe(disposable -> {
                     mSwipeRefreshLayout.setRefreshing(true);
                 })
                 .doFinally(() -> mSwipeRefreshLayout.setRefreshing(false))
                 .subscribe(this::loadAndRenderArticle, this::finish));
     }
-
+    
+    private Observable<Article> getApi() {
+        if (getIntent().hasExtra("articleId"))
+            return RestAPI.getInstance().getArticle(getContentId());
+        else
+            return RestAPI.getInstance().getNews(getContentId());
+    }
+    
     private void loadAndRenderArticle(Article article) {
         mCineArticleViewModel.setArticle(article);
         renderArticle(mCineArticleViewModel.getArticle());
@@ -92,8 +100,11 @@ public class ArticleDetailActivity extends BaseNavigationActivity {
         finish();
     }
 
-    private int getArticleId() {
-        return Integer.parseInt(getIntent().getStringExtra("articleId"));
+    private long getContentId() {
+        if (getIntent().hasExtra("articleId"))
+            return Long.parseLong(getIntent().getStringExtra("articleId"));
+        else
+            return Long.parseLong(getIntent().getStringExtra("newsId"));
     }
 
 

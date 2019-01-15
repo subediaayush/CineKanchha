@@ -8,13 +8,13 @@ public class ThumbWrapper {
     private int imageRes = -1;
     private String caption;
     private String subCaption;
-    private int id;
+    private long id;
 
-    public ThumbWrapper(String imageUrl, String caption, String subCaption, int id) {
+    public ThumbWrapper(String imageUrl, String caption, String subCaption, long id) {
         this(imageUrl, -1, caption, subCaption, id);
     }
 
-    public ThumbWrapper(String imageUrl, String caption, int id) {
+    public ThumbWrapper(String imageUrl, String caption, long id) {
         this(imageUrl, -1, caption, "", id);
     }
 
@@ -26,7 +26,7 @@ public class ThumbWrapper {
         this("", imageRes, caption, "", -1);
     }
 
-    private ThumbWrapper(String imageUrl, int imageRes, String caption, String subCaption, int id) {
+    private ThumbWrapper(String imageUrl, int imageRes, String caption, String subCaption, long id) {
         this.imageUrl = imageUrl;
         this.imageRes = imageRes;
         this.caption = caption;
@@ -50,7 +50,7 @@ public class ThumbWrapper {
         return subCaption;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 }

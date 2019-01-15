@@ -1,9 +1,10 @@
 package com.cinekancha.entities.rest;
 
+import com.cinekancha.boxOffice.BoxOfficeHolder;
 import com.cinekancha.entities.model.ActorGallery;
 import com.cinekancha.entities.model.ActorPhoto;
 import com.cinekancha.entities.model.Article;
-import com.cinekancha.entities.model.BoxOfficeItem;
+import com.cinekancha.entities.model.BoxOfficeData;
 import com.cinekancha.entities.model.FullMovies;
 import com.cinekancha.entities.model.HomeData;
 import com.cinekancha.entities.model.MovieData;
@@ -17,8 +18,6 @@ import com.cinekancha.entities.model.Trivia;
 import com.cinekancha.entities.model.Troll;
 import com.cinekancha.entities.model.UpcomingMovie;
 
-import java.util.List;
-
 import io.reactivex.Observable;
 import retrofit2.Response;
 import retrofit2.http.GET;
@@ -31,8 +30,7 @@ import retrofit2.http.Query;
 
 public interface ApiService {
     @GET("api/movie/{movieId}")
-    Observable<MovieDetail> getMovie(
-            @Path("movieId") int movieId);
+    Observable<MovieDetail> getMovie(@Path("movieId") long movieId);
 
     @GET("api/movie")
     Observable<MovieData> getMovieList(@Query("page") int currentPage);
@@ -47,7 +45,7 @@ public interface ApiService {
     Observable<Response<HomeData>> getHomeData();
 
     @GET("api/boxOffice")
-    Observable<List<BoxOfficeItem>> getBoxOffice();
+    Observable<BoxOfficeData> getBoxOffice();
 
     @GET("api/news")
     Observable<NewsGossip> getNewsGossip(@Query("page") int currentPage);
@@ -65,8 +63,7 @@ public interface ApiService {
     Observable<Reviews> getReviews(@Query("page") int currentPage);
 
     @GET("api/actorGallery/{actorId}")
-    Observable<ActorPhoto> getActorPhoto(
-            @Path("actorId") int actorId);
+    Observable<ActorPhoto> getActorPhoto(@Path("actorId") long actorId);
 
     @GET("api/full_movies")
     Observable<FullMovies> getFullMovies(@Query("page") int currentPage);
@@ -81,7 +78,10 @@ public interface ApiService {
     Observable<Trivia> getTrivia(@Query("page") int currentPage);
     
     @GET("api/article/{id}")
-    Observable<Article> getArticle(@Path("id") int articleId);
+    Observable<Article> getArticle(@Path("id") long articleId);
+    
+    @GET("api/news/{id}")
+    Observable<Article> getNews(@Path("id") long newsId);
     
     
     @GET("bins/19gt0m")

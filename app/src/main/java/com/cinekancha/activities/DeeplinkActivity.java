@@ -3,11 +3,29 @@ package com.cinekancha.activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 
 import com.cinekancha.BuildConfig;
+import com.cinekancha.actor.ActorDetailActivity;
+import com.cinekancha.actor.ActorListActivity;
 import com.cinekancha.article.ArticleDetailActivity;
+import com.cinekancha.boxOffice.BoxOfficeActivity;
+import com.cinekancha.movieDetail.MoviePostDetailActivity;
+import com.cinekancha.movieReview.ReviewListActivity;
+import com.cinekancha.movies.MovieActivity;
+import com.cinekancha.newRelease.NewReleaseActivity;
+import com.cinekancha.newsGossips.NewsGossipsActivity;
+import com.cinekancha.poll.PollsActivity;
+import com.cinekancha.trending.FullMoviesActivity;
+import com.cinekancha.trending.TrendingActivity;
+import com.cinekancha.trivia.TriviaListActivity;
+import com.cinekancha.trolls.TrollListActivity;
+import com.cinekancha.upcomingMovies.UpcomingMovieActivity;
 import com.cinekancha.utils.GlobalUtils;
 
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -16,10 +34,24 @@ import java.util.Set;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+/*
+
+ fifu://app/
+              articles            [/{article_id}]
+              news                [/{news_id}]
+              movies              [&new=true] [&upcoming=true] [/{movie_id}]
+              trolls
+              reviews
+              polls
+              trivia
+              gallery             [/{actor_id}]
+              trending_videos     [&video={utf8(videoUrl)}]
+              watch_movies        [&video={utf8(videoUrl)}]
+              box_office
+
+*/
+
 public class DeeplinkActivity extends AppCompatActivity {
-	private String id = null;
-	private Intent intent = null;
-	private Uri uri = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -86,27 +118,197 @@ public class DeeplinkActivity extends AppCompatActivity {
 		if (segments.isEmpty()) {
 			startMainActivity(params);
 		} else {
-			handlePathLinks(segments, params);
+			if (!handlePathLinks(segments, params)) startMainActivity(params);
 		}
 	}
 	
-	private void handlePathLinks(List<String> segments, Bundle params) {
+	private boolean handlePathLinks(List<String> segments, Bundle params) {
 		String root = segments.remove(0);
 		switch (root) {
-			case "news": {
-				handleNewsLink(segments, params);
-				return;
+			case "articles": {
+				return handleArticleLink(segments, params);
 			}
+			case "news": {
+				return handleNewsLink(segments, params);
+			}
+			case "movies": {
+				return handleMovieLink(segments, params);
+			}
+			case "trolls": {
+				return handleTrollLink(segments, params);
+			}
+			case "reviews": {
+				return handleReviewLink(segments, params);
+			}
+			case "polls": {
+				return handlePollLink(segments, params);
+			}
+			case "trivia": {
+				return handleTriviaLink(segments, params);
+			}
+			case "gallery": {
+				return handleGalleryLink(segments, params);
+			}
+			case "trending_videos": {
+				return handleTrendingVideos(segments, params);
+			}
+			case "watch_movies": {
+				return handleFullMovies(segments, params);
+			}
+			case "box_office": {
+				return handleBoxOffice(segments, params);
+			}
+		}
+		return false;
+	}
+	
+	private boolean handleArticleLink(List<String> segments, Bundle params) {
+		Intent intent = createParamIntent(params);
+		if (segments.isEmpty()) {
+			intent.setClass(this, NewsGossipsActivity.class);
+		} else {
+			intent.setClass(this, ArticleDetailActivity.class);
+			String newsId = segments.remove(0);
+			intent.putExtra("articleId", newsId);
+		}
+		startActivity(intent);
+		return true;
+		
+	}
+	
+	private boolean handleBoxOffice(List<String> segments, Bundle params) {
+		Intent intent = createParamIntent(params);
+		intent.setClass(this, BoxOfficeActivity.class);
+		startActivity(intent);
+		return true;
+	}
+	
+	private boolean handleFullMovies(List<String> segments, Bundle params) {
+		Intent intent = createParamIntent(params);
+		String videoUrl = params.getString("video");
+		if (TextUtils.isEmpty(videoUrl)) {
+			intent.setClass(this, FullMoviesActivity.class);
+			startActivity(intent);
+			return true;
+		} else {
+			try {
+				String videoId = GlobalUtils.extractYoutubeId(URLDecoder.decode(videoUrl, "utf-8"));
+				intent.setAction(Intent.ACTION_VIEW);
+				intent.setData(Uri.parse("vnd.youtube://" + videoId));
+				startActivity(intent);
+			} catch (MalformedURLException|UnsupportedEncodingException e) {
+				e.printStackTrace();
+				return false;
+			}
+			
+			return true;
 		}
 	}
 	
-	private void handleNewsLink(List<String> segments, Bundle params) {
-		String newsId = segments.remove(0);
-		
-		Intent intent = new Intent(this, ArticleDetailActivity.class);
-		intent.putExtras(params);
-		intent.putExtra("articleId", newsId);
+	private boolean handleTrendingVideos(List<String> segments, Bundle params) {
+		Intent intent = createParamIntent(params);
+		String videoUrl = params.getString("video");
+		if (TextUtils.isEmpty(videoUrl)) {
+			intent.setClass(this, TrendingActivity.class);
+			startActivity(intent);
+			return true;
+		} else {
+			try {
+				String videoId = GlobalUtils.extractYoutubeId(URLDecoder.decode(videoUrl, "utf-8"));
+				intent.setAction(Intent.ACTION_VIEW);
+				intent.setData(Uri.parse("vnd.youtube://" + videoId));
+				startActivity(intent);
+			} catch (MalformedURLException|UnsupportedEncodingException e) {
+				e.printStackTrace();
+				return false;
+			}
+			
+			return true;
+		}
+	}
+	
+	private boolean handleGalleryLink(List<String> segments, Bundle params) {
+		Intent intent = createParamIntent(params);
+		if (segments.isEmpty()) {
+			intent.setClass(this, ActorListActivity.class);
+		} else {
+			intent.setClass(this, ActorDetailActivity.class);
+			String actorId = segments.remove(0);
+			intent.putExtra("actor", actorId);
+		}
 		startActivity(intent);
+		return true;
+	}
+	
+	
+	private boolean handleTriviaLink(List<String> segments, Bundle params) {
+		Intent intent = createParamIntent(params);
+		intent.setClass(this, TriviaListActivity.class);
+		startActivity(intent);
+		return true;
+	}
+	
+	private boolean handlePollLink(List<String> segments, Bundle params) {
+		Intent intent = createParamIntent(params);
+		intent.setClass(this, PollsActivity.class);
+		startActivity(intent);
+		return true;
+	}
+	
+	private boolean handleReviewLink(List<String> segments, Bundle params) {
+		Intent intent = createParamIntent(params);
+		intent.setClass(this, ReviewListActivity.class);
+		startActivity(intent);
+		return true;
+	}
+	
+	private boolean handleTrollLink(List<String> segments, Bundle params) {
+		Intent intent = createParamIntent(params);
+		intent.setClass(this, TrollListActivity.class);
+		
+		startActivity(intent);
+		return true;
+	}
+	
+	private boolean handleMovieLink(List<String> segments, Bundle params) {
+		Intent intent = createParamIntent(params);
+		if (segments.isEmpty()) {
+			boolean isUpcoming = Boolean.parseBoolean(params.getString("upcoming"));
+			boolean isNewReleases = Boolean.parseBoolean(params.getString("new"));
+			if (isUpcoming) {
+				intent.setClass(this, UpcomingMovieActivity.class);
+			} else if (isNewReleases) {
+				intent.setClass(this, NewReleaseActivity.class);
+			} else {
+				intent.setClass(this, MovieActivity.class);
+			}
+		} else {
+			intent.setClass(this, MoviePostDetailActivity.class);
+			String movieId = segments.remove(0);
+			intent.putExtra("movie", movieId);
+		}
+		
+		startActivity(intent);
+		return true;
+	}
+	
+	private Intent createParamIntent(Bundle params) {
+		Intent intent = new Intent();
+		intent.putExtras(params);
+		return intent;
+	}
+	
+	private boolean handleNewsLink(List<String> segments, Bundle params) {
+		Intent intent = createParamIntent(params);
+		if (segments.isEmpty()) {
+			intent.setClass(this, NewsGossipsActivity.class);
+		} else {
+			intent.setClass(this, ArticleDetailActivity.class);
+			String newsId = segments.remove(0);
+			intent.putExtra("newsId", newsId);
+		}
+		startActivity(intent);
+		return true;
 	}
 	
 	private void startMainActivity(Bundle params) {

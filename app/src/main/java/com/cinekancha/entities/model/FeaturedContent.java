@@ -11,7 +11,7 @@ public class FeaturedContent implements Serializable {
     @PrimaryKey
     @SerializedName("id")
     @Expose
-    private Integer id;
+    private Long id;
     @SerializedName("title")
     @Expose
     private String title;
@@ -25,11 +25,11 @@ public class FeaturedContent implements Serializable {
     @Expose
     private String deeplink;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

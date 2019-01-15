@@ -15,7 +15,7 @@ public class ReviewData implements Serializable,Parcelable {
     @PrimaryKey
     @SerializedName("id")
     @Expose
-    private Integer id;
+    private Long id;
     @SerializedName("name")
     @Expose
     private String name;
@@ -33,7 +33,7 @@ public class ReviewData implements Serializable,Parcelable {
         if (in.readByte() == 0) {
             id = null;
         } else {
-            id = in.readInt();
+            id = in.readLong();
         }
         name = in.readString();
         review = in.readString();
@@ -46,7 +46,7 @@ public class ReviewData implements Serializable,Parcelable {
             dest.writeByte((byte) 0);
         } else {
             dest.writeByte((byte) 1);
-            dest.writeInt(id);
+            dest.writeLong(id);
         }
         dest.writeString(name);
         dest.writeString(review);
@@ -70,11 +70,11 @@ public class ReviewData implements Serializable,Parcelable {
         }
     };
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

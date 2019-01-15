@@ -1,6 +1,5 @@
 package com.cinekancha.poll;
 
-import androidx.core.content.ContextCompat;
 import android.view.View;
 import android.widget.RadioButton;
 
@@ -15,6 +14,8 @@ import com.cinekancha.utils.PollUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.core.content.ContextCompat;
 
 /**
  * Created by aayushsubedi on 3/19/18.
@@ -101,8 +102,8 @@ public class PollAdapter extends BaseRecyclerAdapter<PollsHolder> {
         for (int i = 0; i < options.size(); i++) {
             Option option = options.get(i);
             RadioButton optionButton = new RadioButton((holder.itemView.getContext()));
-            optionButton.setId(options.get(i).getId());
-            optionButton.setTag(i);
+            optionButton.setId(i);
+            optionButton.setTag(options.get(i).getId());
             optionButton.setText(option.getText());
             holder.answerContainer.addView(optionButton);
 
@@ -116,7 +117,7 @@ public class PollAdapter extends BaseRecyclerAdapter<PollsHolder> {
             holder.answerContainer.setEnabled(true);
             holder.submitButton.setEnabled(true);
             holder.submitButton.setOnClickListener(view ->
-                    listener.onClick(holder.answerContainer.getCheckedRadioButtonId(), poll.getId()));
+                    listener.onClick((Long) holder.answerContainer.findViewById(holder.answerContainer.getCheckedRadioButtonId()).getTag(), poll.getId()));
         }
     }
 

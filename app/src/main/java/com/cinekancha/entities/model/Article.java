@@ -16,7 +16,7 @@ import androidx.room.PrimaryKey;
 public class Article implements Serializable, Parcelable {
     @PrimaryKey
     @SerializedName("id")
-    private int id;
+    private long id;
 
     @SerializedName("banner_url")
     private String image;
@@ -54,7 +54,7 @@ public class Article implements Serializable, Parcelable {
     }
 
     protected Article(Parcel in) {
-        id = in.readInt();
+        id = in.readLong();
         image = in.readString();
         title = in.readString();
         summary = in.readString();
@@ -68,7 +68,7 @@ public class Article implements Serializable, Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
+        dest.writeLong(id);
         dest.writeString(image);
         dest.writeString(title);
         dest.writeString(summary);
@@ -97,7 +97,7 @@ public class Article implements Serializable, Parcelable {
         }
     };
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -113,7 +113,7 @@ public class Article implements Serializable, Parcelable {
         return summary;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
