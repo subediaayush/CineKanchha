@@ -2,6 +2,7 @@ package com.cinekancha.activities.base;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.ImageView;
 
 import com.cinekancha.R;
 import com.cinekancha.activities.HomeActivity;
@@ -20,6 +21,7 @@ import com.cinekancha.upcomingMovies.UpcomingMovieActivity;
 import com.cinekancha.utils.GlobalUtils;
 import com.google.android.material.internal.NavigationMenuView;
 import com.google.android.material.navigation.NavigationView;
+import com.squareup.picasso.Picasso;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -43,7 +45,11 @@ public abstract class BaseNavigationActivity extends BaseActivity implements Nav
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+    
+        ImageView navigationImage = navigationView.getHeaderView(0).findViewById(R.id.imageView);
+        Picasso.with(this).load(R.drawable.ic_filmy_fuche).into(navigationImage);
+        
         navigationView.setNavigationItemSelectedListener(this);
         disableNavigationViewScrollbars(navigationView);
     }
