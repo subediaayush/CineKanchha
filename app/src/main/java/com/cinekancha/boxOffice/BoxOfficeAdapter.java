@@ -5,10 +5,8 @@ import android.view.View;
 import com.cinekancha.R;
 import com.cinekancha.adapters.base.BaseRecyclerAdapter;
 import com.cinekancha.adapters.base.BaseViewHolder;
-import com.cinekancha.entities.model.BoxOfficeItem;
-import com.cinekancha.entities.model.Movie;
+import com.cinekancha.entities.model.MovieBoxOffice;
 import com.cinekancha.listener.OnClickListener;
-import com.cinekancha.movies.MovieHolder;
 import com.cinekancha.utils.Constants;
 import com.squareup.picasso.Picasso;
 
@@ -19,10 +17,10 @@ import java.util.List;
  */
 
 public class BoxOfficeAdapter extends BaseRecyclerAdapter<BoxOfficeHolder> {
-    private List<BoxOfficeItem> boxOfficeList;
+    private List<MovieBoxOffice> boxOfficeList;
     private OnClickListener listener;
 
-    public BoxOfficeAdapter(List<BoxOfficeItem> boxOfficeList, OnClickListener listener) {
+    public BoxOfficeAdapter(List<MovieBoxOffice> boxOfficeList, OnClickListener listener) {
         this.boxOfficeList = boxOfficeList;
         this.listener = listener;
     }
@@ -42,9 +40,15 @@ public class BoxOfficeAdapter extends BaseRecyclerAdapter<BoxOfficeHolder> {
     @Override
     protected void setViewOfTypeZero(BaseViewHolder baseHolder, int position) {
         BoxOfficeHolder holder = (BoxOfficeHolder) baseHolder;
-        BoxOfficeItem boxOfficeItem = boxOfficeList.get(position);
-        holder.txtGross.setText(boxOfficeItem.getTotalCollected() + " Crore");
-        holder.txtWeekend.setText(boxOfficeItem.getTotalCollected() + " Crore");
+        MovieBoxOffice boxOfficeItem = boxOfficeList.get(position);
+        
+        Float total = boxOfficeItem.getDomestic() + boxOfficeItem.getInternational();
+        Float oDay = boxOfficeItem.getOpeningDay();
+        Float oWeek = boxOfficeItem.getOpeningWeekend();
+        
+        holder.total.setText(total + " Crore");
+        holder.oDay.setText(oDay + " Crore");
+        holder.oWeek.setText(oWeek + " Crore");
         holder.txtMovieName.setText(boxOfficeItem.getMovieName());
         holder.itemView.setOnClickListener(view -> {
             listener.onClick(position);

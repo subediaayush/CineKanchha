@@ -16,17 +16,24 @@ import butterknife.BindView;
  */
 
 public class BoxOfficeHolder extends HomeItemHolder {
-
-    @BindView(R.id.txtMovieName)
-    public TextView txtMovieName;
-    @BindView(R.id.txtWeekend)
-    public TextView txtWeekend;
-    @BindView(R.id.txtGross)
-    public TextView txtGross;
-    @BindView(R.id.txtWeek)
-    public TextView txtWeek;
+    
     @BindView(R.id.imgBoxOffice)
     public ImageView imgBoxOffice;
+    @BindView(R.id.txtMovieName)
+    public TextView txtMovieName;
+    @BindView(R.id.totalLabel)
+    public TextView totalLabel;
+    @BindView(R.id.oDayLabel)
+    public TextView oDayLabel;
+    @BindView(R.id.oWeekLabel)
+    public TextView oWeekLabel;
+    @BindView(R.id.total)
+    public TextView total;
+    @BindView(R.id.oDay)
+    public TextView oDay;
+    @BindView(R.id.oWeek)
+    public TextView oWeek;
+    
 
     public BoxOfficeHolder(BaseRecyclerAdapter baseRecyclerAdapter, View view, OnClickListener listener) {
         super(baseRecyclerAdapter, view);

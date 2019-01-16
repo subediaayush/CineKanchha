@@ -13,7 +13,7 @@ public class Photo implements Serializable {
     @PrimaryKey
     @SerializedName("id")
     @Expose
-    private Integer id;
+    private Long id;
     @SerializedName("url")
     @Expose
     private String url;
@@ -27,11 +27,11 @@ public class Photo implements Serializable {
     @Expose
     private String movieId;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

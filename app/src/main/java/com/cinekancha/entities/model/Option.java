@@ -12,7 +12,7 @@ public class Option implements Serializable {
     @PrimaryKey
     @SerializedName("id")
     @Expose
-    private Integer id;
+    private Long id;
     @SerializedName("text")
     @Expose
     private String text;
@@ -20,11 +20,11 @@ public class Option implements Serializable {
     @Expose
     private Integer vote;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

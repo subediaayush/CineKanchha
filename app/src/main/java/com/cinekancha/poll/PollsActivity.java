@@ -64,7 +64,7 @@ public class PollsActivity extends BaseNavigationActivity implements OnPollClick
         getSupportActionBar().setTitle(R.string.poll);
         homeSwipeRefreshLayout.setOnRefreshListener(this);
         adapter = new PollAdapter(this);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
@@ -154,7 +154,7 @@ public class PollsActivity extends BaseNavigationActivity implements OnPollClick
 
 
     @Override
-    public void onClick(int optionId, int pollId) {
+    public void onClick(Long optionId, Long pollId) {
         this.pollId = pollId;
         this.optionId = optionId;
         compositeDisposable.add(RestAPI.getInstance().postPoll(optionId)

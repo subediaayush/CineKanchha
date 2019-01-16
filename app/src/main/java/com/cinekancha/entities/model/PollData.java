@@ -13,7 +13,7 @@ public class PollData implements Serializable {
     @PrimaryKey
     @SerializedName("id")
     @Expose
-    private Integer id;
+    private Long id;
     @SerializedName("question")
     @Expose
     private String question;
@@ -27,11 +27,11 @@ public class PollData implements Serializable {
     @Expose
     private Integer totalVotes;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

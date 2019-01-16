@@ -402,8 +402,8 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
         for (int i = 0; i < options.size(); i++) {
             Option option = options.get(i);
             RadioButton optionButton = new RadioButton((holder.itemView.getContext()));
-            optionButton.setId(options.get(i).getId());
-            optionButton.setTag(i);
+            optionButton.setId(i);
+            optionButton.setTag(options.get(i).getId());
             optionButton.setText(option.getText());
             holder.answerContainer.addView(optionButton);
 
@@ -417,7 +417,7 @@ public class HomeDataAdapter extends BaseRecyclerAdapter<HomeItemHolder> {
             holder.answerContainer.setEnabled(true);
             holder.submitButton.setEnabled(true);
             holder.submitButton.setOnClickListener(view ->
-                    listener.onClick(holder.answerContainer.getCheckedRadioButtonId(), poll.getId()));
+                    listener.onClick((Long) holder.answerContainer.findViewById(holder.answerContainer.getCheckedRadioButtonId()).getTag(), poll.getId()));
         }
     }
 }

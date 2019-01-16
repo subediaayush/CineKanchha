@@ -23,7 +23,6 @@ import com.cinekancha.entities.service.TestService;
 import com.cinekancha.home.HomeDataAdapter;
 import com.cinekancha.home.OnSlideClickListener;
 import com.cinekancha.home.SlideShowAdapter;
-import com.cinekancha.view.ViewPagerCustomDuration;
 import com.cinekancha.listener.OnPollClickListener;
 import com.cinekancha.utils.GlobalUtils;
 import com.cinekancha.view.CineHomeViewModel;
@@ -268,7 +267,7 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
 	}
 	
 	@Override
-	public void onClick(int optionId, int pollId) {
+	public void onClick(Long optionId, Long pollId) {
 		this.pollId = pollId;
 		this.optionId = optionId;
 		compositeDisposable.add(RestAPI.getInstance().postPoll(optionId)

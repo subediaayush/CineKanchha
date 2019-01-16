@@ -1,139 +1,153 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:background="@color/background"
-	android:orientation="vertical"
-	android:foreground="?android:attr/selectableItemBackground"
 	android:paddingTop="8dp"
 	android:paddingBottom="8dp"
 	>
 
-	<LinearLayout
-		android:layout_width="match_parent"
+
+	<ImageView
+		android:id="@+id/imgBoxOffice"
+		android:layout_width="90dp"
+		android:layout_height="0dp"
+		android:scaleType="centerCrop"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintDimensionRatio="h,3:4"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		tools:src="@tools:sample/backgrounds/scenic"
+		/>
+
+
+	<TextView
+		android:id="@+id/txtMovieName"
+		android:layout_width="0dp"
 		android:layout_height="wrap_content"
-		android:orientation="horizontal"
-		>
+		android:layout_marginLeft="8dp"
+		android:layout_marginTop="8dp"
+		android:layout_marginRight="8dp"
+		android:textColor="@color/white"
+		android:textSize="18sp"
+		app:layout_constraintBottom_toTopOf="@id/totalLabel"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toEndOf="@id/imgBoxOffice"
+		app:layout_constraintTop_toTopOf="parent"
+		/>
 
-		<androidx.constraintlayout.widget.ConstraintLayout
-			android:layout_width="wrap_content"
-			android:layout_height="match_parent"
-			>
 
-			<ImageView
-				android:id="@+id/imgBoxOffice"
-				android:layout_width="90dp"
-				android:layout_height="0dp"
-				android:scaleType="centerCrop"
-				app:layout_constraintStart_toStartOf="parent"
-				app:layout_constraintEnd_toEndOf="parent"
-				app:layout_constraintDimensionRatio="h,3:4"
-				/>
-		</androidx.constraintlayout.widget.ConstraintLayout>
+	<TextView
+		android:id="@+id/totalLabel"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="8dp"
+		android:layout_marginLeft="8dp"
+		android:layout_marginTop="8dp"
+		android:text="Total"
+		android:textColor="@color/white"
+		android:textSize="14dp"
+		android:textStyle="bold"
+		app:layout_constraintBottom_toTopOf="@+id/oDayLabel"
+		app:layout_constraintStart_toEndOf="@+id/imgBoxOffice"
+		app:layout_constraintTop_toBottomOf="@+id/txtMovieName"
+		/>
 
-		<RelativeLayout
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_gravity="center"
-			android:paddingLeft="10dp"
-			>
+	<TextView
+		android:id="@+id/oDayLabel"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="8dp"
+		android:layout_marginLeft="8dp"
+		android:layout_marginTop="8dp"
+		android:text="Opening Day"
+		android:textColor="@color/white"
+		android:textSize="14dp"
+		app:layout_constraintBottom_toTopOf="@+id/oWeekLabel"
+		app:layout_constraintStart_toEndOf="@+id/imgBoxOffice"
+		app:layout_constraintTop_toBottomOf="@+id/totalLabel"
+		/>
 
-			<TextView
-				android:id="@+id/txtMovieName"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:textColor="@color/white"
-				android:textSize="16sp"
-				/>
 
-			<LinearLayout
-				android:id="@+id/lytWeekend"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_below="@+id/txtMovieName"
-				android:orientation="horizontal"
-				android:paddingTop="10dp"
-				>
+	<TextView
+		android:id="@+id/oWeekLabel"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="8dp"
+		android:layout_marginLeft="8dp"
+		android:layout_marginTop="8dp"
+		android:layout_marginBottom="8dp"
+		android:text="Opening Weekend"
+		android:textColor="@color/white"
+		android:textSize="14dp"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintStart_toEndOf="@+id/imgBoxOffice"
+		app:layout_constraintTop_toBottomOf="@+id/oDayLabel"
+		/>
 
-				<TextView
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:text="Weekend:"
-					android:textColor="@color/white"
-					android:textSize="14dp"
-					/>
+	<TextView
+		android:id="@+id/total"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginRight="8dp"
+		android:layout_marginLeft="8dp"
+		android:textColor="@color/white"
+		android:textSize="14dp"
+		android:textStyle="bold"
+		app:layout_constraintBottom_toBottomOf="@id/totalLabel"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintHorizontal_bias="0"
+		app:layout_constraintStart_toEndOf="@id/barrier"
+		app:layout_constraintTop_toTopOf="@id/totalLabel"
+		tools:text="1223234"
+		/>
 
-				<TextView
-					android:id="@+id/txtWeekend"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:paddingLeft="5dp"
-					android:text="Weekend:"
-					android:textColor="@color/white"
-					android:textSize="14dp"
-					/>
 
-			</LinearLayout>
+	<TextView
+		android:id="@+id/oDay"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginLeft="8dp"
+		android:layout_marginRight="8dp"
+		android:textColor="@color/white"
+		android:textSize="14dp"
+		app:layout_constraintBottom_toBottomOf="@id/oDayLabel"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintHorizontal_bias="0"
+		app:layout_constraintStart_toEndOf="@id/barrier"
+		app:layout_constraintTop_toTopOf="@id/oDayLabel"
+		tools:text="1223234"
+		/>
 
-			<LinearLayout
-				android:id="@+id/lytGross"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_below="@+id/lytWeekend"
-				android:orientation="horizontal"
-				android:paddingTop="10dp"
-				>
 
-				<TextView
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:text="Gross:"
-					android:textColor="@color/white"
-					android:textSize="14dp"
-					/>
+	<TextView
+		android:id="@+id/oWeek"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginLeft="8dp"
+		android:layout_marginRight="8dp"
+		android:textColor="@color/white"
+		android:textSize="14dp"
+		app:layout_constraintBottom_toBottomOf="@id/oWeekLabel"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintHorizontal_bias="0"
+		app:layout_constraintStart_toEndOf="@id/barrier"
+		app:layout_constraintTop_toTopOf="@id/oWeekLabel"
+		tools:text="1223234"
+		/>
 
-				<TextView
-					android:id="@+id/txtGross"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:paddingLeft="5dp"
-					android:text="Weekend:"
-					android:textColor="@color/white"
-					android:textSize="14dp"
-					/>
+	<androidx.constraintlayout.widget.Barrier
+		android:id="@+id/barrier"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		app:barrierDirection="right"
+		app:constraint_referenced_ids="oWeekLabel,oDayLabel,totalLabel"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		/>
 
-			</LinearLayout>
 
-			<LinearLayout
-				android:id="@+id/lytWeek"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_below="@+id/lytGross"
-				android:orientation="horizontal"
-				android:paddingTop="10dp"
-				>
-
-				<TextView
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:text="Week Since Release:"
-					android:textColor="@color/white"
-					android:textSize="14dp"
-					/>
-
-				<TextView
-					android:id="@+id/txtWeek"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:paddingLeft="5dp"
-					android:text="Weekend:"
-					android:textColor="@color/white"
-					android:textSize="14dp"
-					/>
-
-			</LinearLayout>
-		</RelativeLayout>
-	</LinearLayout>
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

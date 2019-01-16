@@ -17,7 +17,7 @@ import androidx.room.PrimaryKey;
 
 public class HomeData implements Serializable {
     @PrimaryKey
-    private int id;
+    private long id;
     @SerializedName("featuredContents")
     @Expose
     private List<FeaturedContent> featuredContents = null;
@@ -27,9 +27,9 @@ public class HomeData implements Serializable {
     @SerializedName("movies")
     @Expose
     private List<Movie> movies = null;
-    @SerializedName("box_office_list")
+    @SerializedName("box_offices")
     @Expose
-    private List<BoxOfficeItem> boxOfficeList = null;
+    private List<MovieBoxOffice> boxOfficeList = null;
     @SerializedName("hot_news")
     @Expose
     private List<Article> hotNews = null;
@@ -68,11 +68,11 @@ public class HomeData implements Serializable {
         return featuredContents;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -96,11 +96,11 @@ public class HomeData implements Serializable {
         this.movies = movies;
     }
 
-    public List<BoxOfficeItem> getBoxOfficeList() {
+    public List<MovieBoxOffice> getBoxOfficeList() {
         return boxOfficeList;
     }
 
-    public void setBoxOfficeList(List<BoxOfficeItem> boxOfficeList) {
+    public void setBoxOfficeList(List<MovieBoxOffice> boxOfficeList) {
         this.boxOfficeList = boxOfficeList;
     }
 

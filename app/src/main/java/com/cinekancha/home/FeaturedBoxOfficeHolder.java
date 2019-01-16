@@ -1,17 +1,17 @@
 package com.cinekancha.home;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
 import com.cinekancha.R;
 import com.cinekancha.boxOffice.BoxOfficeActivity;
-import com.cinekancha.entities.model.BoxOfficeItem;
+import com.cinekancha.entities.model.MovieBoxOffice;
 import com.cinekancha.utils.GlobalUtils;
 
 import java.util.List;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 
 class FeaturedBoxOfficeHolder extends HomeItemHolder {
@@ -50,7 +50,7 @@ class FeaturedBoxOfficeHolder extends HomeItemHolder {
         boxOffice.setNestedScrollingEnabled(false);
     }
 
-    public void setBoxOffice(List<BoxOfficeItem> items) {
+    public void setBoxOffice(List<MovieBoxOffice> items) {
         adapter.setBoxOfficeItems(items);
     }
 }

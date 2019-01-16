@@ -10,7 +10,7 @@ import androidx.room.PrimaryKey;
 
 public class Crew implements Serializable {
     @PrimaryKey
-    private int id;
+    private long id;
     @SerializedName("directed_by")
     @Expose
     private String directedBy;
@@ -42,11 +42,11 @@ public class Crew implements Serializable {
     @Expose
     private String choreographer;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

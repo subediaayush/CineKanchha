@@ -14,6 +14,7 @@
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
+        android:minHeight="200dp"
         android:foreground="@drawable/readable_shadow"
         />
 

@@ -2,10 +2,10 @@ package com.cinekancha.home;
 
 import android.util.SparseIntArray;
 
-import com.cinekancha.entities.model.BoxOfficeItem;
 import com.cinekancha.entities.model.GalleryItem;
 import com.cinekancha.entities.model.HomeData;
 import com.cinekancha.entities.model.Movie;
+import com.cinekancha.entities.model.MovieBoxOffice;
 import com.cinekancha.entities.model.Video;
 import com.cinekancha.utils.ListUtils;
 
@@ -55,7 +55,7 @@ public class HomeDataWrapper {
         wrapper.add(data.getMovies(), ALL_MOVIES);
         wrapper.add(data.getUpComingMovies(), UPCOMING_MOVIES);
 
-        List<BoxOfficeItem> boxOfficeItems = data.getBoxOfficeList();
+        List<MovieBoxOffice> boxOfficeItems = data.getBoxOfficeList();
         if (!ListUtils.isEmpty(boxOfficeItems)) {
             wrapper.add(boxOfficeItems, FEATURED_BOX_OFFICE);
         }

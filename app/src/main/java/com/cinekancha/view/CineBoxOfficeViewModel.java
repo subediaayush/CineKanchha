@@ -1,13 +1,14 @@
 package com.cinekancha.view;
 
 import android.app.Application;
-import androidx.lifecycle.AndroidViewModel;
-import androidx.annotation.NonNull;
 
-import com.cinekancha.entities.model.BoxOfficeItem;
+import com.cinekancha.entities.model.MovieBoxOffice;
 import com.cinekancha.entities.model.MovieDetail;
 
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 
 /**
  * Created by aayushsubedi on 3/8/18.
@@ -15,7 +16,7 @@ import java.util.List;
 
 public class CineBoxOfficeViewModel extends AndroidViewModel {
 
-    private List<BoxOfficeItem> boxOffice;
+    private List<MovieBoxOffice> boxOffice;
     private String movieId;
     private MovieDetail mMovie;
 
@@ -24,11 +25,11 @@ public class CineBoxOfficeViewModel extends AndroidViewModel {
         super(application);
     }
 
-    public List<BoxOfficeItem> getBoxOffice() {
+    public List<MovieBoxOffice> getBoxOffice() {
         return boxOffice;
     }
 
-    public void setBoxOffice(List<BoxOfficeItem> boxOffice) {
+    public void setBoxOffice(List<MovieBoxOffice> boxOffice) {
         this.boxOffice = boxOffice;
     }
 }
