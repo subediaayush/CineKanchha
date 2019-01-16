@@ -124,7 +124,7 @@ public class HomeActivity extends BaseNavigationActivity implements OnSlideClick
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		getSupportActionBar().setTitle(R.string.home);
+		getSupportActionBar().setTitle(R.string.app_name);
 //        cancelJob(this);
 //        scheduleJob(this);
 		
