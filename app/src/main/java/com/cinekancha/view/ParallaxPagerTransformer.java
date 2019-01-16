@@ -28,14 +28,13 @@ public class ParallaxPagerTransformer implements ViewPager.PageTransformer {
         if (parallaxView != null && Build.VERSION.SDK_INT > Build.VERSION_CODES.HONEYCOMB) {
             if (position > -1 && position < 1) {
                 float width = parallaxView.getWidth();
+                float viewWidth = view.getWidth();
                 parallaxView.setTranslationX(-(position * width * speed));
-                float sc = ((float) view.getWidth() - border) / view.getWidth();
+                float sc = width != 0 ? ((float) viewWidth - border) / view.getWidth() : 1f;
                 if (position == 0) {
                     view.setScaleX(1);
                     view.setScaleY(1);
                 } else {
-                    if (sc == Float.NaN)
-                        sc = 1f;
                     view.setScaleX(sc);
                     view.setScaleY(sc);
                 }

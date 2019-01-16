@@ -19,7 +19,7 @@ public class MovieDetail implements Serializable {
     private String name;
     @SerializedName("rating")
     @Expose
-    private String rating;
+    private Float rating;
     @SerializedName("synopsis")
     @Expose
     private String synopsis;
@@ -70,11 +70,11 @@ public class MovieDetail implements Serializable {
         this.name = name;
     }
 
-    public String getRating() {
+    public Float getRating() {
         return rating;
     }
 
-    public void setRating(String rating) {
+    public void setRating(Float rating) {
         this.rating = rating;
     }
 
