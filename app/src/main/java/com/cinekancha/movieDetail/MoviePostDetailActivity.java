@@ -53,78 +53,55 @@ import butterknife.BindView;
 public class MoviePostDetailActivity extends BaseNavigationActivity implements OnSlideClickListener, SwipeRefreshLayout.OnRefreshListener, RecyclerViewClickListener, OnClickListener {
     @BindView(R.id.imgFeature)
     public ImageView imgFeature;
-
-    @BindView(R.id.viewPagerYoutube)
-    protected ViewPager viewPagerYoutube;
-
-    @BindView(R.id.indicator)
-    protected CircleIndicator mIndicator;
-
-    @BindView(R.id.toolbar)
-    protected Toolbar toolbar;
-
     @BindView(R.id.txtTitle)
     public TextView txtTitle;
-
     @BindView(R.id.txtSubTitle)
     public TextView txtSubTitle;
-
     @BindView(R.id.txtCasts)
     public TextView txtCasts;
-
     @BindView(R.id.txtDirector)
     public TextView txtDirector;
-
     @BindView(R.id.txtProducer)
     public TextView txtProducer;
-
     @BindView(R.id.btnReview)
     public Button btnReview;
-
     @BindView(R.id.txtDays)
     public TextView txtDays;
-
     @BindView(R.id.txtMusic)
     public TextView txtMusic;
-
     @BindView(R.id.txtDescription)
     public TextView txtDescription;
-
     @BindView(R.id.swipeRefreshLayout)
     public SwipeRefreshLayout swipeRefreshLayout;
-
     @BindView(R.id.lytDays)
     public LinearLayout lytDays;
-
     @BindView(R.id.lytYoutube)
     public LinearLayout lytYoutube;
-
     @BindView(R.id.recycleViewRating)
     public RecyclerView recyclerViewRating;
-
     @BindView(R.id.recylerViewPhotos)
     public RecyclerView recylerViewPhotos;
-
     @BindView(R.id.recylerView)
     public RecyclerView recylerView;
-
+    @BindView(R.id.viewPagerYoutube)
+    protected ViewPager viewPagerYoutube;
+    @BindView(R.id.indicator)
+    protected CircleIndicator mIndicator;
+    @BindView(R.id.toolbar)
+    protected Toolbar toolbar;
     @BindView(R.id.rbRating)
     RatingBar rbRating;
-
+    @BindView(R.id.tvRating)
+    TextView tvRating;
     @BindView(R.id.llRatingReview)
     LinearLayout llRatingReview;
-
-
-
+    String days = "";
     private CinePostMovieViewModel mCinePostMovieModel;
-
     private RatingAdapter adapter;
     private PhotoAdapter photoAdapter;
     private MovieArticleAdapter articleAdapter;
-
     private String videoId = "";
     private SlideaYoutubeAdapter mSlideAdapter;
-    String days = "";
     private MovieDetail data;
 
     @Override
@@ -251,7 +228,7 @@ public class MoviePostDetailActivity extends BaseNavigationActivity implements O
                 lytDays.setVisibility(View.GONE);
             }
 
-            if (!TextUtils.isEmpty(data.getReview())){
+            if (!TextUtils.isEmpty(data.getReview())) {
                 btnReview.setVisibility(View.VISIBLE);
             }
 
@@ -295,7 +272,11 @@ public class MoviePostDetailActivity extends BaseNavigationActivity implements O
             txtDirector.setText("Director: " + director);
             txtProducer.setText("Producer: " + producer);
             txtMusic.setText("Music: " + music);
-            rbRating.setRating(Float.parseFloat(data.getRating()));
+            if (data.getRating() > 0) {
+                rbRating.setVisibility(View.VISIBLE);
+                tvRating.setVisibility(View.VISIBLE);
+                rbRating.setRating(data.getRating());
+            }
         }
     }
 
@@ -356,6 +337,12 @@ public class MoviePostDetailActivity extends BaseNavigationActivity implements O
     @Override
     public void onClick(int id) {
         Article article = mCinePostMovieModel.getMovie().getArticles().get(id);
-        ArticleDetailActivity.startActivity(this, article);
+
+        String deeplink = article.getDeeplink();
+        if (TextUtils.isEmpty(deeplink)) {
+            ArticleDetailActivity.startActivity(this, article);
+        } else {
+            GlobalUtils.navigate(this, Uri.parse(deeplink));
+        }
     }
 }
