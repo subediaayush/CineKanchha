@@ -119,7 +119,7 @@ public class MoviePostDetailActivity extends BaseNavigationActivity implements O
 
         recylerViewPhotos.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         recylerViewPhotos.setNestedScrollingEnabled(false);
-        recylerViewPhotos.setHasFixedSize(true);
+        recylerViewPhotos.setHasFixedSize(false);
 
 
         recylerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
