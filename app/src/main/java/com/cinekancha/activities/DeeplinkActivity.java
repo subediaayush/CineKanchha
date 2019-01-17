@@ -106,6 +106,7 @@ public class DeeplinkActivity extends AppCompatActivity {
 			intent.setData(uri);
 			
 			startActivity(intent);
+			return;
 		}
 		
 		if (isAppScheme(uri)) {
