@@ -42,13 +42,13 @@ public class BoxOfficeAdapter extends BaseRecyclerAdapter<BoxOfficeHolder> {
         BoxOfficeHolder holder = (BoxOfficeHolder) baseHolder;
         MovieBoxOffice boxOfficeItem = boxOfficeList.get(position);
         
-        Float total = boxOfficeItem.getDomestic() + boxOfficeItem.getInternational();
-        Float oDay = boxOfficeItem.getOpeningDay();
-        Float oWeek = boxOfficeItem.getOpeningWeekend();
+        String total = MovieBoxOffice.formatCollection(boxOfficeItem.getCategory(), boxOfficeItem.getDomestic() + boxOfficeItem.getInternational());
+        String oDay = MovieBoxOffice.formatCollection(boxOfficeItem.getCategory(), boxOfficeItem.getOpeningDay());
+        String oWeek = MovieBoxOffice.formatCollection(boxOfficeItem.getCategory(), boxOfficeItem.getOpeningWeekend());
         
-        holder.total.setText(total + " Crore");
-        holder.oDay.setText(oDay + " Crore");
-        holder.oWeek.setText(oWeek + " Crore");
+        holder.total.setText(total);
+        holder.oDay.setText(oDay);
+        holder.oWeek.setText(oWeek);
         holder.txtMovieName.setText(boxOfficeItem.getMovieName());
         holder.itemView.setOnClickListener(view -> {
             listener.onClick(position);

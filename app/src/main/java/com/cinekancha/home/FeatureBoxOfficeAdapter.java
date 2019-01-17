@@ -10,7 +10,6 @@ import com.cinekancha.adapters.base.RecyclerViewClickListener;
 import com.cinekancha.entities.model.MovieBoxOffice;
 import com.cinekancha.utils.ListUtils;
 
-import java.text.MessageFormat;
 import java.util.List;
 
 import butterknife.BindView;
@@ -36,7 +35,7 @@ public class FeatureBoxOfficeAdapter extends BaseRecyclerAdapter<FeatureBoxOffic
         BoxOfficeItemHolder holder = (BoxOfficeItemHolder) baseHolder;
         MovieBoxOffice item = items.get(position);
         holder.movie.setText(item.getMovieName());
-        holder.sum.setText(MessageFormat.format("$ {0} crore", item.getInternational() + item.getDomestic()));
+        holder.sum.setText(MovieBoxOffice.formatCollection(item.getCategory(), item.getInternational() + item.getDomestic()));
     }
 
     @Override
