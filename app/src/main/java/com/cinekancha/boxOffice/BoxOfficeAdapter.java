@@ -1,5 +1,6 @@
 package com.cinekancha.boxOffice;
 
+import android.text.TextUtils;
 import android.view.View;
 
 import com.cinekancha.R;
@@ -50,6 +51,8 @@ public class BoxOfficeAdapter extends BaseRecyclerAdapter<BoxOfficeHolder> {
         holder.oDay.setText(oDay);
         holder.oWeek.setText(oWeek);
         holder.txtMovieName.setText(boxOfficeItem.getMovieName());
+        if (TextUtils.isEmpty(boxOfficeItem.getVerdict())) holder.oVerdict.setText("-");
+        else holder.oVerdict.setText(boxOfficeItem.getVerdict());
         holder.itemView.setOnClickListener(view -> {
             listener.onClick(position);
         });

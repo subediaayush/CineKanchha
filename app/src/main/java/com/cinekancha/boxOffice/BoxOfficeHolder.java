@@ -33,6 +33,8 @@ public class BoxOfficeHolder extends HomeItemHolder {
     public TextView oDay;
     @BindView(R.id.oWeek)
     public TextView oWeek;
+    @BindView(R.id.oVerdict)
+    public TextView oVerdict;
     
 
     public BoxOfficeHolder(BaseRecyclerAdapter baseRecyclerAdapter, View view, OnClickListener listener) {
